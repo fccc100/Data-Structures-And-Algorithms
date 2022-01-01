@@ -2,8 +2,8 @@
  * 二分搜索树
  */
 class Node {
-  constructor(e) {
-    this.e = e;
+  constructor(val) {
+    this.val = val;
     this.left = null;
     this.right = null;
   }
@@ -23,39 +23,80 @@ class BST {
     return this.size == 0;
   }
 
-  add(e) {
-    this.root = this._add(this.root, e);
+  add(val) {
+    this.root = this._add(this.root, val);
   }
 
-  _add(node, e) {
+  _add(node, val) {
     if (node == null) {
       this.size ++;
-      return new Node(e);
+      return new Node(val);
     }
 
-    if (e < node.e) {
-      node.left = this._add(node.left, e);
-    } else if (e > node.e) {
-      node.right = this._add(node.right, e);
+    if (val < node.val) {
+      node.left = this._add(node.left, val);
+    } else if (val > node.val) {
+      node.right = this._add(node.right, val);
     }
     return node;
   }
 
-  contains(e) {
-    return this._contains(this.root, e);
+  contains(val) {
+    return this._contains(this.root, val);
   }
 
-  _contains(root, e) {
+  _contains(root, val) {
     if (root == null) {
       return false;
     }
 
-    if (root.val == e) {
+    if (root.val == val) {
       return true;
-    } else if (root.val > e) {
-      return this._contains(root.left, e);
+    } else if (root.val > val) {
+      return this._contains(root.left, val);
     } else {
-      return this._contains(root.right, e);
+      return this._contains(root.right, val);
     }
+  }
+
+  preorder() {
+    this._preorder(this.root);
+  }
+
+  _preorder(root) {
+    if (root == null) {
+      return;
+    }
+    console.log(root.val);
+    this._preorder(root.left);
+    this._preorder(root.right);
+  }
+
+  inorder() {
+    this._inorder(root);
+  }
+
+  _inorder(root) {
+    if (root == null) {
+      return;
+    }
+
+    this._inorder(root.left);
+    console.log(root.val);
+    this._inorder(root.right);
+  }
+
+  postorder() {
+    this._postorder(root);
+  }
+
+  _postorder(root) {
+    if (root == null) {
+      return;
+    }
+
+    this._postorder(root.left);
+    this._postorder(root.right);
+    console.log(root.val);
   }
 }
