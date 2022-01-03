@@ -99,4 +99,16 @@ class BST {
     this._postorder(root.right);
     console.log(root.val);
   }
+
+  minimum() {
+    return this._minimum(this.root);
+  }
+
+  _minimum(node) {
+    if (node == null) return null;
+    if (node.left == null) {
+      return node;
+    }
+    return this._minimum(node.left);
+  }
 }
