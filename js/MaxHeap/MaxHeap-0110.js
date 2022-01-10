@@ -79,4 +79,19 @@ class MaxHeap {
       index = maxIndex;
     }
   }
+
+  // 取出堆中最大元素，并替换成传入的值
+  replace(val) {
+    let max = this.findMax();
+    this.data[0] = val;
+    this.siftDown(0);
+    return max;
+  }
+
+  heapify(arr) {
+    this.data = arr;
+    for (let i = this.parent(this.data.length - 1); i >= 0;  i--) {
+      this.siftDown(i);
+    }
+  }
 }
