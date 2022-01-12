@@ -88,7 +88,7 @@ class MaxHeap {
     return max;
   }
 
-  // 将arr数组转化为堆
+  // 将数组arr转换为堆
   heapify(arr) {
     this.data = arr;
     for (let i = this.parent(this.data.length - 1); i >= 0;  i--) {
