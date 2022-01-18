@@ -15,6 +15,7 @@ function mergeSort(nums, l, r) {
   }
 }
 
+// 合并两个有序数组
 function merge(nums, l, mid, r) {
   let temp = nums.slice(l, r + 1);
   let i = l;
