@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Main {
@@ -14,5 +16,12 @@ public class Main {
         for (int i = 0; i < nums.length; i++) {
             System.out.println(nums[i]);
         }
+
+        String[] letterMap = new String[]{ "df",};
+        String s = "sfsf";
+        s.isEmpty();
+
+        List<Integer> res = new ArrayList<Integer>();
+        res.remove()
     }
 }
