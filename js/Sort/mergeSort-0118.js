@@ -36,3 +36,27 @@ function merge(nums, l, mid, r) {
     }
   }
 }
+
+function sort1(nums) {
+  mergeSort1(nums, 0, nums.length - 1);
+}
+
+function mergeSort1(nums, l, r) {
+  if (l >= r) return;
+  let mid = l + Math.floor((r - l) / 2);
+  mergeSort1(nums, l, mid);
+  mergeSort1(nums, mid + 1, r);
+
+  if (nums[mid] > nums[mid + 1]) {
+    merge1(nums, l, mid, r);
+  }
+}
+
+function merge1(nums, l, mid, r) {
+  let temp = nums.slice(l, r + 1);
+  let i = l;
+  let j = mid + 1;
+  for (let k = l; k <= r; k++) {
+    
+  }
+}
