@@ -9,5 +9,21 @@
 // 解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
 
 function lengthOfLIS(nums) {
-  
+  let dp = Array(nums.length);
+  dp.fill(1);
+  let max = dp[0];
+
+  // dp[i]表示以第i个元素为结尾的子序列的最长递增子序列的长度
+  for (let i = 1; i < nums.length; i++) {
+
+    // dp[i]取dp[i]或者i前面比nums[i]小位置的最长递增子序列 + 1
+    for (let j = 0; j < i; j++) {
+      if (nums[j] < nums[i]) {
+        dp[i] = Math.max(dp[i], dp[j] + 1);
+        max = Math.max(max, dp[i]);
+      }
+    }
+  }
+
+  return max;
 }
