@@ -60,6 +60,36 @@ function longestCommonSubsequence(text1, text2) {
 
 // 3.动态规划
 function longestCommonSubsequence(text1, text2) {
+  let m = text1.length;
+  let n = text2.length;
+  // 状态定义：dp[i][j]表示text1，text2在i，j处的最长公共子序列
+  let dp = [];
+
+  // 状态初始化时多初始化一行一列，初始状态为0
+  for (let i = 0; i <= m; i++) {
+    dp[i] = [];
+    dp[i][0] = 0;
+  }
+
+  for (let j = 0; j <= n; j++) {
+    dp[0][j] = 0;
+  }
+
+  for (let i = 1; i <= text1.length; i++) {
+    for (let j = 1; j <= text2.length; j++) {
+      // 因为多初始化了一行，所以取字符时要使用i - 1， j - 1.
+      if (text1[i - 1] == text2[j - 1]) {
+
+        // 如果i，j位置字符相等，则dp[i][j]为dp[i - 1][j - 1] + 1
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+
+  return dp[m][n];
+
 
   // dp[i][j]表示text1, text2 在[0, i], [0, j]处的最长公共子序列
   // let dp = Array(text1.length);
