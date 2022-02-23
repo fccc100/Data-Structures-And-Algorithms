@@ -61,5 +61,31 @@ function maxUncrossedLines(nums1, nums2) {
 
 // 3.动态规划
 function maxUncrossedLines(nums1, nums2) {
-  
+  // 状态定义：dp[i][j]表示nums1[0, i], nums2[0, j]的最长公共子序列
+  let dp = [];
+
+  // 状态初始化
+  let m = nums1.length;
+  let n = nums2.length;
+  for (let i = 0; i <= m; i++) {
+    dp[i] = [];
+    dp[i][0] = 0;
+  }
+
+  for (let i = 0; i <= n; i++) {
+    dp[0][i] = 0;
+  }
+
+  // 状态转移
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (nums1[i - 1] == nums2[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+
+  return dp[m][n];
 }
