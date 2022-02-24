@@ -10,10 +10,58 @@ function coinChange(coins, amount) {
 
   // 递归函数定义：coins凑成amount所需的最少硬币个数
   function _coinChange(coins, amount) {
+    if (amount < 0) {
+      return -1;
+    }
+    if (amount == 0) {
+      return 0;
+    }
     
+    let res = Infinity;
+    for (let i = 0; i < coins.length; i++) {
+      if (coins[i] <= amount) {
+        res = Math.min(res, 1 + _coinChange(coins, amount - coins[i]));
+      }
+    }
+
+    return res;
   }
+
+  let min = _coinChange(coins, amount);
+  return min > amount ? -1 : min;
 }
 
+// 记忆化搜索
+function coinChange(coins, amount) {
+  // 使用memo数组记录凑成amount需要的最小硬币个数
+  let memo = Array(amount + 1);
+  function _coinChange(coins, amount) {
+    if (amount < 0) {
+      return -1;
+    }
+    if (amount == 0) {
+      return 0;
+    }
+
+    if (memo[amount] !== undefined) {
+      return memo[amount];
+    }
+
+    let res = Infinity;
+    for (let i = 0; i < coins.length; i++) {
+      if (coins[i] <= amount) {
+        res = Math.min(res, 1 + _coinChange(coins, amount - coins[i]));
+      }
+    }
+
+    return memo[amount] = res;
+  }
+
+  let min = _coinChange(coins, amount);
+  return min > amount ? -1 : min;
+}
+
+// 动态规划
 function coinChange(coins, amount) {
   // 状态定义：dp[i]表示使用coins凑成amount = i的最少硬币个数
   let dp = Array(amount + 1);
