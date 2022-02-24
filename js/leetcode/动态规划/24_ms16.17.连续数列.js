@@ -9,6 +9,49 @@
 // 解释： 连续子数组 [4,-1,2,1] 的和最大，为 6。
 
 // 与53.最大子数组和相同
+
+// 递归
+function maxSubArray(nums) {
+  // 递归函数定义：nums数组以index位置结尾的数组的最大子数组和
+  function _maxSubArray(nums, index) {
+    if (index == 0) {
+      return nums[0];
+    }
+
+    return Math.max(nums[index], _maxSubArray(nums, index - 1) + nums[index]);
+  }
+
+  let max = nums[0];
+  for (let i = 1; i < nums.length; i++) {
+    max = Math.max(max, _maxSubArray(nums, i));
+  }
+
+  return max;
+}
+
+// 记忆化搜索
+function maxSubArray(nums) {
+  let memo = Array(nums.length);
+  function _maxSubArray(nums, index) {
+    if (index == 0) {
+      return nums[0];
+    }
+
+    if (memo[index] !== undefined) {
+      return memo[index];
+    }
+
+    return memo[index] = Math.max(nums[index], _maxSubArray(nums, index - 1) + nums[index]);
+  }
+
+  let max = nums[0];
+  for (let i = 1; i < nums.length; i++) {
+    max = Math.max(max, _maxSubArray(nums, i));
+  }
+
+  return max;
+}
+
 // 动态规划
 function maxSubArray(nums) {
   // 状态定义：dp[i]表示以i结尾的最大子数组和

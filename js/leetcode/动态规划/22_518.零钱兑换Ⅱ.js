@@ -30,25 +30,25 @@
 // }
 
 function change(amount, coins) {
-  function _change(amount, coins) {
-    if (amount == 0) {
-      return 0;
-    }
-    if (amount < 0) {
-      return -1;
-    }
+  // function _change(amount, coins) {
+  //   if (amount == 0) {
+  //     return 0;
+  //   }
+  //   if (amount < 0) {
+  //     return -1;
+  //   }
 
-    let res = 0;
-    for (let i = 0; i < coins.length; i++) {
-      if (coins[i] <= amount) {
+  //   let res = 0;
+  //   for (let i = 0; i < coins.length; i++) {
+  //     if (coins[i] <= amount) {
         
-      }
-    }
+  //     }
+  //   }
 
-    return res;
-  }
+  //   return res;
+  // }
 
-  return _change(amount, coins);
+  // return _change(amount, coins);
 }
 
 // 动态规划
