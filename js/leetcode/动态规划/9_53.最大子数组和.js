@@ -8,8 +8,45 @@
 // 输出：6
 // 解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
 
+// 1.递归
 function maxSubArray(nums) {
-  
+  function _maxSubArray(nums, index) {
+    if (index == 0) {
+      return nums[0];
+    }
+
+    return Math.max(nums[index], _maxSubArray(nums, index - 1) + nums[index]);
+  }
+
+  let max = nums[0];
+  for (let i = 1; i < nums.length; i++) {
+    max = Math.max(max, _maxSubArray(nums, i));
+  }
+
+  return max;
+}
+
+// 2.记忆化搜索
+function maxSubArray(nums) {
+  let memo = Array(nums.length);
+  function _maxSubArray(nums, index) {
+    if (index == 0) {
+      return nums[0];
+    }
+
+    if (memo[index] !== undefined) {
+      return memo[index];
+    }
+
+    return memo[index] = Math.max(nums[index], _maxSubArray(nums, index - 1) + nums[index]);
+  }
+
+  let max = nums[0];
+  for (let i = 1; i < nums.length; i++) {
+    max = Math.max(max, _maxSubArray(nums, i));
+  }
+
+  return max;
 }
 
 // 2.动态规划求解
