@@ -21,25 +21,12 @@
 // 1, 2, 3, 4, 5, 6
 // 1, 2, 3, 4, 5, 6
 
+
 // 递归
 function numRollsToTarget(n, k, target) {
   // 函数定义：n个骰子，k个面
   function _numRollsToTarget(n, k, target) {
-    if (n <= 0 || k <= 0) {
-      return 0;
-    }
-
-
-    if (n * k == target) {
-      return 1 + _numRollsToTarget(n, k - 1, target);
-    } else {
-      return _numRollsToTarget()
-    }
-    // for (let i = 1; i <= n; i++) {
-    //   if (n * k == target) {
-    //     return 1 + _numRollsToTarget(n, k - 1, target);
-    //   }
-    // }
+    
   }
 
   return _numRollsToTarget(n, k, target);
