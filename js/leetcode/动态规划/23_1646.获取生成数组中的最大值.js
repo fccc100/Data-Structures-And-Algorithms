@@ -23,27 +23,27 @@
 
 // 递归
 function getMaximumGenerated(n) {
-  // let max = -Infinity;
-  // function _getMaximumGenerated(n) {
-  //   if (n == 0) {
-  //     return 0;
-  //   }
-  //   if (n == 1) {
-  //     return 1;
-  //   }
+  function _getMaximumGenerated(n) {
+    if (n == 0) {
+      return 0;
+    }
+    if (n == 1) {
+      return 1;
+    }
 
-  //   if (n % 2 == 0) {
-  //     let res = _getMaximumGenerated(n / 2);
-  //     max = Math.max(max, res)
-  //     return res;
-  //   } else {
-  //     let res = _getMaximumGenerated(Math.floor(n / 2)) + _getMaximumGenerated(Math.floor(n / 2) + 1);
-  //     max = Math.max(max, res);
-  //     return res;
-  //   }
-  // }
-  // _getMaximumGenerated(n);
-  // return max;
+    if (n % 2 == 0) {
+      return _getMaximumGenerated(n / 2);
+    } else {
+      return _getMaximumGenerated(Math.floor(n / 2)) + _getMaximumGenerated(Math.floor(n / 2) + 1);
+    }
+  }
+
+  let max = 0;
+  for (let i = 0; i <= n; i++) {
+    max = Math.max(max, _getMaximumGenerated(i));
+  }
+
+  return max;
 }
 
 // 动态规划
