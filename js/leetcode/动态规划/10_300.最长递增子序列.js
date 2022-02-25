@@ -8,6 +8,22 @@
 // 输出：4
 // 解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
 
+// 递归
+function lengthOfLIS(nums) {
+
+  // 递归函数定义：nums数组以index位置结尾的最长递增子序列的长度
+  function _lengthOfLIS(nums, index) {
+    if (index == 0) {
+      return 1;
+    }
+
+    
+  }
+
+  return _lengthOfLIS(nums, nums.length - 1);
+}
+
+// 动态规划
 function lengthOfLIS(nums) {
   let dp = Array(nums.length);
   dp.fill(1);
