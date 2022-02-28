@@ -7,8 +7,6 @@
 // 输入: word1 = "sea", word2 = "eat"
 // 输出: 2
 // 解释: 第一步将 "sea" 变为 "ea" ，第二步将 "eat "变为 "ea"
-[ [ 0, 0, 0, 0 ], [ 0, 1, 1, 1 ], [ 0, 0, 1, 2 ], [ 0, 1, 0, 1 ] ]
-
 
 // 递归
 function minDistance(word1, word2) {
@@ -65,6 +63,7 @@ function minDistance(word1, word2) {
 
 // 动态规划
 function minDistance(word1, word2) {
+  // 状态定义：dp[i][j]表示word1从[0, i]和word2从[0, j]所需的最小步数
   let dp = Array(word1.length + 1);
   for (let i = 0; i < dp.length; i++) {
     dp[i] = Array(word2.length + 1);
