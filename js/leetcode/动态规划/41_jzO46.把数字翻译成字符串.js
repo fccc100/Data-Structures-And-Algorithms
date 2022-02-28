@@ -65,7 +65,7 @@ function translateNum(num) {
     dp[i] += dp[i - 1];
     if (i > 1 && num[i - 2] != 0 && ((num[i - 2] - '0') * 10 + (num[i - 1] - '0')) <= 25) {
       dp[i] += dp[i - 2];
-    }
+    } 
   }
 
   return dp[num.length];
