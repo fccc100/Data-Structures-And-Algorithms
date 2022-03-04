@@ -32,3 +32,28 @@ function trap(height) {
 
   return res;
 }
+
+/**
+ * 先求[0, i]每个位置及其左边的最高位置，再求每个位置及其右边的最高位置
+ * 结果为这两者的较小值 - 当前的高度
+ */
+function trap(height) {
+  let leftMax = Array(height.length);
+  leftMax[0] = height[0];
+  for (let i = 1; i < height.length; i++) {
+    leftMax[i] = Math.max(leftMax[i - 1], height[i]);
+  }
+
+  let rightMax = Array(height.length);
+  rightMax[height.length - 1] = height[height.length - 1];
+  for (let i = height.length - 2; i >= 0; i--) {
+    rightMax[i] = Math.max(rightMax[i + 1], height[i]);
+  }
+
+  let res = 0;
+  for (let i = 0; i < height.length; i++) {
+    res += Math.min(leftMax[i], rightMax[i]) - height[i];
+  }
+
+  return res;
+}
