@@ -18,7 +18,7 @@
 
 function lastStoneWeightII(stones) {
   function _lastStoneWeightII(stones, index, target) {
-
+    
   }
 
   let sum = 0;
