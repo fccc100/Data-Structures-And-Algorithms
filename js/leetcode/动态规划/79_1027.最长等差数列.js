@@ -10,26 +10,24 @@
 // 最长的等差子序列是 [20,15,10,5]。
 
 function longestArithSeqLength(nums) {
-  // let map = new Map();
-  // for (let i = 0; i < nums.length; i++) {
-  //   map.set(nums[i], i);
-  // }
+  let map = new Map();
 
-  // let dp = Array(nums.length);
-  // for (let i = 0; i < dp.length; i++) {
-  //   dp[i] = Array(nums.length).fill(0);
-  // }
+  let dp = Array(nums.length);
+  for (let i = 0; i < dp.length; i++) {
+    dp[i] = Array(nums.length).fill(2);
+  }
 
-  // let max = 2;
-  // for (let i = 0; i < nums.length; i++) {
-  //   for (let j = i + 1; j < nums.length; j++) {
-  //     if (map.has(nums[j] + (nums[j] - nums[i]))) {
-  //       let k = map.get(nums[j] + nums[j] - nums[i]);
-  //       dp[j][k] = dp[i][j] + 1;
-  //       max = Math.max(max, dp[j][k] + 1);
-  //     }
-  //   }
-  // }
+  let max = 2;
+  for (let i = 0; i < nums.length; i++) {
+    for (let j = i + 1; j < nums.length; j++) {
+      if (map.has(nums[i] + (nums[i] - nums[j]))) {
+        let k = map.get(nums[i] + nums[i] - nums[j]);
+        dp[i][j] = dp[k][i] + 1;
+        max = Math.max(max, dp[i][j]);
+      }
+    }
+    map.set(nums[i], i);
+  }
 
-  // return max;
+  return max;
 }
