@@ -6,42 +6,32 @@
 function longestIncreasingPath(matrix) {
   let m = matrix.length;
   let n = matrix[0].length;
-  let visited = Array(m);
-  for (let i = 0; i < m; i++) {
-    visited[i] = Array(n);
-  }
-  function _longestIncreasingPath(matrix, i, j, val) {
-    if (i >= m || j >= n) {
-      return 0;
-    }
-    if (i < 0 || j < 0) {
-      return 0;
-    }
-    if (visited[i][j]) {
-      return 0;
-    }
-    if (matrix[i][j] < val) {
+  let dir = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+
+  // 递归函数定义：以i，j为起点的最长递增路径
+  function _longestIncreasingPath(matrix, i, j) {
+    if (i < 0 || i >= m || j < 0 || j >= n) {
       return 0;
     }
 
-    visited[i][j] = true;
-    return Math.max(
-      1 + _longestIncreasingPath(matrix, i - 1, j, matrix[i][j]),
-      Math.max(1 + _longestIncreasingPath(matrix, i, j + 1, matrix[i][j]),
-      Math.max(1 + _longestIncreasingPath(matrix, i + 1, j, matrix[i][j]),
-      1 + _longestIncreasingPath(matrix, i, j - 1, matrix[i][j]))
-      )
-    )
+    let max = 1;
+    for (let k = 0; k < dir.length; k++) {
+      let i1 = i + dir[k][0];
+      let j1 = j + dir[k][1];
+      if (i1 >= 0 && i1 < m && j1 >= 0 && j1 < n && matrix[i1][j1] > matrix[i][j]) {
+        max = Math.max(max, 1 + _longestIncreasingPath(matrix, i1, j1));
+      }
+    }
+    
+    return max;
   }
 
-  let res = 0;
+  let max = 0;
   for (let i = 0; i < m; i++) {
     for (let j = 0; j < n; j++) {
-      visited.forEach(item => {
-        item.fill(false)
-      })
-      res = Math.max(res, _longestIncreasingPath(matrix, i, j, -Infinity));
+      max = Math.max(max, _longestIncreasingPath(matrix, i, j));
     }
   }
-  return res;
+
+  return max;
 }
