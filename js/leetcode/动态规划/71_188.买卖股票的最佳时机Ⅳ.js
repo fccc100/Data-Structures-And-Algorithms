@@ -7,5 +7,8 @@
 
 // 动态规划
 function maxProfit(k, prices) {
+  let buy = Array(k);
+  let sell = Array(k);
+
   
 }
