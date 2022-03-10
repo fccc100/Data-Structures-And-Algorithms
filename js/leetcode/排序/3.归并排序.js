@@ -213,3 +213,41 @@ function sortArray(nums) {
     }
   }
 }
+
+// 2022-03-10
+function sortArray(nums) {
+  mergeSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+// 对数组[l, r]区间进行排序
+function mergeSort(nums, l, r) {
+  if (l >= r) return;
+  let mid = Math.floor(l + (r - l) / 2);
+  mergeSort(nums, l, mid);
+  mergeSort(nums, mid + 1, r);
+
+  // 对nums数组[l, mid], [mid + 1, r]区间进行归并
+  merge(nums, l, mid, r);
+}
+
+function merge(nums, l, mid, r) {
+  let temp = nums.slice(l, r + 1);
+  let i = l;
+  let j = mid + 1;
+  for (let k = l; k <= r; k++) {
+    if (i > mid) {
+      nums[k] = temp[j - l];
+      j++;
+    } else if (j > r) {
+      nums[k] = temp[i - l];
+      i++;
+    } else if (temp[i - l] <= temp[j - l]) {
+      nums[k] = temp[i - l];
+      i++;
+    } else {
+      nums[k] = temp[j - l];
+      j++;
+    }
+  }
+}
