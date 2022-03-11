@@ -1,5 +1,5 @@
-// 148. 排序链表
-// 给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
+// 剑指 Offer II 077. 链表排序
+// 给定链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
 
 /**
  * Definition for singly-linked list.
@@ -8,8 +8,12 @@
  *     this.next = (next===undefined ? null : next)
  * }
  */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
 
-// 使用归并排序
+// 归并排序
 function sortList(head) {
   if (head == null || head.next == null) {
     return head;
@@ -25,7 +29,7 @@ function sortList(head) {
   let head2 = slow.next;
   slow.next = null;
   return merge(sortList(head), sortList(head2));
-}
+};
 
 function merge(head1, head2) {
   let dummyHead = new ListNode(-1);
@@ -46,6 +50,5 @@ function merge(head1, head2) {
   if (head2 != null) {
     temp.next = head2;
   }
-
   return dummyHead.next;
 }
