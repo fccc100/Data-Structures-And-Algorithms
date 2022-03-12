@@ -326,3 +326,78 @@ function merge(nums, l, mid, r) {
     }
   }
 }
+
+/**
+ * 20220312
+ */
+
+function sortArray(nums) {
+  let temp = Array(nums.length);
+  mergeSort(nums, 0, nums.length - 1, temp);
+  return nums;
+}
+
+function mergeSort(nums, l, r, temp) {
+  if (l >= r) return;
+  let mid = Math.floor(l + (r - l >> 1));
+
+  mergeSort(nums, l, mid, temp);
+  mergeSort(nums, mid + 1, r, temp);
+  if (nums[mid] > nums[mid + 1]) {
+    merge(nums, l, mid, r, temp);
+  }
+}
+
+function merge(nums, l, mid, r, temp) {
+  for (let i = l; i <= r; i++) {
+    temp[i] = nums[i];
+  }
+
+  let i = l;
+  let j = mid + 1;
+  for (let k = l; k <= r; k++) {
+    if (i > mid) {
+      nums[k] = temp[j];
+      j++;
+    } else if (j > r) {
+      nums[k] = temp[i];
+      i++;
+    } else if (temp[i] <= temp[j]) {
+      nums[k] = temp[i];
+      i++;
+    } else {
+      nums[k] = temp[j];
+      j++;
+    }
+  }
+}
+
+// 自底向上的归并排序
+function sortArray(nums) {
+  let n = nums.length;
+
+  // 遍历每次合并区间的大小
+  for (let i = 1; i < n; i += i) {
+
+    // 合并[j, j + i - 1], [j + i, j + i + i - 1]
+    for (let j = 0; j + i < n; j += i + i ) {
+      merge(nums, j, j + i - 1, Math.min(j + i + i - 1, n - 1));
+    }
+  }
+}
+
+function sortArray(nums) {
+  let n = nums.length;
+  let temp = Array(n);
+
+  for (let size = 1; size < n; size += size) {
+
+    // [i, i + size - 1], [i + size, i + size + size - 1];
+    for (let i = 0; i + size < n; i += size + size) {
+      if (nums[i + size - 1] > nums[i + size]) {
+        merge(nums, i, i + size - 1, Math.min(i + size + size - 1, n - 1), temp);
+      }
+    }
+  }
+  return nums;
+}
