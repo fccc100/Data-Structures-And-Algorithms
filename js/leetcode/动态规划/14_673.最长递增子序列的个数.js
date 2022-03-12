@@ -37,3 +37,32 @@ function findNumberOfLIS(nums) {
 
   return count;
 }
+
+// 动态规划
+findNumberOfLIS(nums) {
+  let dp = Array(nums.length).fill(1);
+
+  let counts = Array(nums.length).fill(1);
+  let count = counts[0];
+  let max = dp[0];
+  for (let i = 1; i < nums.length; i++) {
+    for (let j = 0; j < i; j++) {
+      if (nums[j] < nums[i]) {
+        if (dp[j] + 1 > dp[i]) {
+          dp[i] = dp[j] + 1;
+          counts[i] = counts[j];
+        } else if (dp[j] + 1 == dp[i]) {
+          counts[i] += counts[j]
+        }
+      }
+    }
+    if (dp[i] > max) {
+      max = dp[i];
+      count = counts[i];
+    } else if (dp[i] == max) {
+      count += counts[i];
+    }
+  }
+
+  return count;
+}
