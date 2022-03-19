@@ -477,3 +477,7 @@ function merge(nums, l, mid, r) {
     }
   }
 }
+
+function sortArray() {
+  
+}
