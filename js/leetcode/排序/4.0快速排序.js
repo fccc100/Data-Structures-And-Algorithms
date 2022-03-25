@@ -279,3 +279,170 @@ function swap(nums, i, j) {
   nums[i] = nums[j];
   nums[j] = temp;
 }
+
+// 20220325
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p - 1);
+  quickSort(nums, p + 1, r);
+}
+
+function partition(nums, l, r) {
+  let p = l + Math.round(Math.random() * (r - l));
+  swap(nums, p, l);
+
+  let i = l + 1;
+  let j = r;
+  while(true) {
+    while(i <= j && nums[i] < nums[l]) {
+      i++;
+    }
+    while(j >= i && nums[j] > nums[l]) {
+      j--;
+    }
+    if (i >= j) {
+      break;
+    }
+    swap(nums, i, j);
+    i++;
+    j--;
+  }
+  swap(nums, l, j);
+  return j;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+
+// 第一版快速排序,使用第一个元素作为标定点
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p - 1);
+  quickSort(nums, p + 1, r);
+}
+
+function partition(nums, l, r) {
+  let j = l;
+  for (let i = l + 1; i <= r; i++) {
+    if (nums[i] < nums[l]) {
+      j++;
+      swap(nums, i, j);
+    }
+  }
+
+  swap(nums, j, l);
+  return j;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+// 使用第一个元素作为标定点存在问题:对于有序数组的排序时间复杂度退化为O(n^2)
+// 第二版快速排序:随机标定点
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p - 1);
+  quickSort(nums, p + 1, r);
+}
+
+function partition(nums, l, r) {
+  let p = l + Math.round(Math.random() * (r - l));
+  swap(nums, p, l);
+
+  let j = l;
+  for (let i = l + 1; i <= r; i++) {
+    if (nums[i] < nums[l]) {
+      j++;
+      swap(nums, i, j);
+    }
+  }
+
+  swap(nums, j, l);
+  return j;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+// 使用随机标定点存在问题:所有元素相等时时间复杂度退化为O(n^2)
+// 第三版快速排序:双路快排
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p - 1);
+  quickSort(nums, p + 1, r);
+}
+
+function partition(nums, l, r) {
+  let p = l + Math.round(Math.random() * (r - l));
+  swap(nums, p, l);
+
+  let i = l + 1;
+  let j = r;
+  while(true) {
+    while(i <= j && nums[i] < nums[l]) {
+      i++;
+    }
+    while(j >= i && nums[j] > nums[l]) {
+      j--;
+    }
+    if (i >= j) {
+      break;
+    }
+
+    swap(nums, i, j);
+    i++;
+    j--;
+  }
+
+  swap(nums, j, l);
+  return j;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
