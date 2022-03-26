@@ -446,3 +446,166 @@ function swap(nums, i, j) {
   nums[i] = nums[j];
   nums[j] = temp;
 }
+
+// 20220326
+// 第一版快速排序
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p - 1);
+  quickSort(nums, p + 1, r);
+}
+
+function partition(nums, l, r) {
+  let j = l;
+  for (let i = l + 1; i <= r; i++) {
+    if (nums[i] < nums[l]) {
+      j++;
+      swap(nums, i, j);
+    }
+  }
+
+  swap(nums, j, l);
+  return j;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+// 第二版快速排序：随机标定点
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p - 1);
+  quickSort(nums, p + 1, r);
+}
+
+function partition(nums, l, r) {
+  let p = l + Math.round(Math.random() * (r - l));
+  swap(nums, l, p);
+
+  let j = l;
+  for (let i = l + 1; i <= r; i++) {
+    if (nums[i] < nums[l]) {
+      j++;
+      swap(nums, i, j);
+    }
+  }
+  swap(nums, j, l);
+  return j;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+// 第三版快速排序：双路快排
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p - 1);
+  quickSort(nums, p + 1, r);
+}
+
+function partition(nums, l, r) {
+  let p = l + Math.round(Math.random() * (r - l));
+  swap(nums, p, l);
+
+  let i = l + 1;
+  let j = r;
+  while(true) {
+    while(i <= j && nums[i] < nums[l]) {
+      i++;
+    }
+    while(j >= i && nums[j] > nums[l]) {
+      j--;
+    }
+    if (i >= j) {
+      break;
+    }
+
+    swap(nums, i, j);
+    i++;
+    j--;
+  }
+  swap(nums, j, l);
+  return j;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+// 第四版快速排序：三路快排
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p[0]);
+  quickSort(nums, p[1], r);
+}
+
+function partition(nums, l, r) {
+  let p = l + Math.round(Math.random() * (r - l));
+  swap(nums, l, p);
+
+  // 小于标定点的元素放左边，等于标定点的元素放中间，大于标定点的元素放右边
+  let lt = l;
+  let i = l + 1;
+  let gt = r + 1;
+  while(i < gt) {
+    if (nums[i] < nums[l]) {
+      lt++;
+      swap(nums, lt, i);
+      i++;
+    } else if (nums[i] > nums[l]) {
+      gt--;
+      swap(nums, gt, i)
+    } else {
+      i++;
+    }
+  }
+  swap(nums, lt, l);
+  return [lt - 1, gt];
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
