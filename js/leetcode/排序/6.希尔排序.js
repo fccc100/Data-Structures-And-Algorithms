@@ -22,8 +22,19 @@ function sortArray(nums) {
   return nums;
 }
 
-function swap(nums, i, j) {
-  let temp = nums[i];
-  nums[i] = nums[j];
-  nums[j] = temp;
+// 第二版希尔排序：无需依次处理每个分组，直接依次处理每个元素即可
+function sortArray(nums) {
+  let h = nums.length >> 1;
+  while(h >= 1) {
+    for (let i = h; i < nums.length; i++) {
+      let t = nums[i];
+      let j;
+      for (j = i; j - h >= 0 && t < nums[j - h]; j -= h) {
+        nums[j] = nums[j - h];
+      }
+      nums[j] = t;
+    }
+    h = h >> 1;
+  }
+  return nums;
 }
