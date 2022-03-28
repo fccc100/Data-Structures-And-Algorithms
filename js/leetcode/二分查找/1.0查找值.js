@@ -39,3 +39,22 @@ function binarySearch(nums, target) {
 
   return -1;
 }
+
+// 递归的二分查找
+function binarySearch(nums, target) {
+  function _binarySearch(nums, l, r, target) {
+    if (l > r) {
+      return -1;
+    }
+
+    let mid = l + (r - l >> 1);
+    if (nums[mid] === target) {
+      return mid;
+    } else if (nums[mid] < target) {
+      return _binarySearch(nums, mid + 1, r, target);
+    } else {
+      return _binarySearch(nums, l, mid - 1, target);
+    }
+  }
+  return _binarySearch(nums, 0, nums.length - 1, target);
+}
