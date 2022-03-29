@@ -687,3 +687,119 @@ function swap(nums, i, j) {
   nums[i] = nums[j];
   nums[j] = temp;
 }
+
+// 20220329
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p - 1);
+  quickSort(nums, p + 1, r);
+}
+
+function partition(nums, l, r) {
+  let j = l;
+  for (let i = l + 1; i <= r; i++) {
+    if (nums[i] < nums[l]) {
+      j++;
+      swap(nums, i, j);
+    }
+  }
+  swap(nums, j, l);
+  return j;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+// 随机标定点
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p - 1);
+  quickSort(nums, p + 1, r);
+}
+
+function partition(nums, l, r) {
+  let p = l + Math.round(Math.random() * (r - l));
+  swap(nums, p, l);
+
+  let j = l;
+  for (let i = l + 1; i <= r; i++) {
+    if (nums[i] < nums[l]) {
+      j++;
+      swap(nums, i, j);
+    }
+  }
+  swap(nums, j, l);
+  return j;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+// 双路快排
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p - 1);
+  quickSort(nums, p + 1, r);
+}
+
+function partition(nums, l, r) {
+  let p = l + Math.round(Math.random() * (r - l));
+  swap(nums, p, l);
+
+  let i = l + 1;
+  let j = r;
+  while(true) {
+    while(i <= j && nums[i] < nums[l]) {
+      i++;
+    }
+    while(j >= i && nums[j] > nums[l]) {
+      j--;
+    }
+    if (i >= j) {
+      break;
+    }
+
+    swap(nums, i, j);
+    i++;
+    j--;
+  }
+
+  swap(nums, j, l);
+  return j;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
