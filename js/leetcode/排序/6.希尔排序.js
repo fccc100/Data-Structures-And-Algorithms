@@ -63,3 +63,85 @@ function sortArray(nums) {
   }
   return nums;
 }
+
+// 20220329
+function sortArray(nums) {
+  let h = nums.length >> 1;
+  while(h >= 1) {
+    // 遍历每组元素
+    for (let i = 0; i < h; i++) {
+      for (let j = i + h; j < nums.length; j += h) {
+        for (let k = j; k - h >= 0; k -= h) {
+          if (nums[k - h] > nums[k]) {
+            swap(nums, k, k - h);
+          } else {
+            break;
+          }
+        }
+      }
+    }
+    h = h >> 1;
+  }
+  return nums;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+// 希尔排序
+function sortArray(nums) {
+  // 分组间隔
+  let h = nums.length >> 1;
+  while(h >= 1) {
+    // 遍历每组元素
+    for (let i = 0; i < h; i++) {
+      // 从每组元素的第二个元素开始遍历进行插入排序
+      for (let j = i + h; j < nums.length; j += h) {
+        // 遍历j元素前面的元素进行插入排序
+        for (let k = j; k - h >= 0; k -= h) {
+          if (nums[k - h] > nums[k]) {
+            swap(nums, k - h, k);
+          } else {
+            break;
+          }
+        }
+      }
+    }
+    h = h >> 1;
+  }
+  return nums;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+// 不逐个分组进行插入排序，直接逐个元素进行插入排序
+function sortArray(nums) {
+  let h = nums.length >> 1;
+  while(h >= 1) {
+    // 直接逐个元素进行插入排序
+    for (let i = h; i < nums.length; i++) {
+      for (let j = i; j - h >= 0; j -= h) {
+        if (nums[j - h] > nums[j]) {
+          swap(nums, j - h, j);
+        } else {
+          break;
+        }
+      }
+    }
+    h = h >> 1;
+  }
+  return nums;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
