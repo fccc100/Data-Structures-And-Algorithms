@@ -199,3 +199,57 @@ function swap(nums, i, j) {
   nums[i] = nums[j];
   nums[j] = temp;
 }
+
+// 20220331
+function sortArray(nums) {
+  let h = nums.length >> 1;
+
+  while(h >= 1) {
+    // 遍历分组
+    for (let i = 0; i < h; i++) {
+      // 对分组进行插入排序
+      for (let j = i + h; j < nums.length; j += h) {
+        // 遍历j元素前面的元素
+        for (let k = j; k - h >= 0; k -= h) {
+          if (nums[k - h] > nums[k]) {
+            swap(nums, k - h, k);
+          } else {
+            break;
+          }
+        }
+      }
+    }
+    h = h >> 1;
+  }
+  return nums;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+// 直接遍历元素
+function sortArray(nums) {
+  let h = nums.length >> 1;
+  while(h >= 1) {
+    for (let i = h; i < nums.length; i++) {
+      for (let j = i; j - h >= 0; j -= h) {
+        if (nums[j - h] > nums[j]) {
+          swap(nums, j - h, j);
+        } else {
+          break;
+        }
+      }
+    }
+    h = h >> 1;
+  }
+  return nums;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
