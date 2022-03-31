@@ -882,3 +882,128 @@ function swap(nums, i, j) {
   nums[i] = nums[j];
   nums[j] = temp;
 }
+
+// 20220331
+// 快排1
+// 使用第一个元素作为标定点，在数组本身有序或者数组元素相同时退化为O(n^2)
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p - 1);
+  quickSort(nums, p + 1, r);
+}
+
+function partition(nums, l, r) {
+  let j = l;
+  for (let i = l + 1; i <= r; i++) {
+    if (nums[i] < nums[l]) {
+      j++;
+      swap(nums, i, j);
+    }
+  }
+  swap(nums, j, l);
+  return j;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+// 快排2 使用随机标定点 + 双路快排
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p - 1);
+  quickSort(nums, p + 1, r);
+}
+
+function partition(nums, l, r) {
+  let p = l + Math.round(Math.random() * (r - l));
+  swap(nums, l, p);
+
+  // 左右两路快排
+  let i = l + 1;
+  let j = r;
+  while(true) {
+    while(i <= j && nums[i] < nums[l]) {
+      i++;
+    }
+    while(j >= i && nums[j] > nums[l]) {
+      j--;
+    }
+    if (i >= j) {
+      break;
+    }
+    swap(nums, i, j);
+    i++;
+    j--;
+  }
+  swap(nums, j, l);
+  return j;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
+
+// 快排3. 三路快排
+function sortArray(nums) {
+  quickSort(nums, 0, nums.length - 1);
+  return nums;
+}
+
+function quickSort(nums, l, r) {
+  if (l >= r) {
+    return;
+  }
+  let p = partition(nums, l, r);
+  quickSort(nums, l, p[0]);
+  quickSort(nums, p[1], r);
+}
+
+function partition(nums, l, r) {
+  let p = l + Math.round(Math.random() * (r - l));
+  swap(nums, p, l);
+
+  let left = l;
+  let right = r + 1;
+  let i = l + 1;
+  while(i < right) {
+    if (nums[i] < nums[l]) {
+      left++;
+      swap(nums, i, left);
+      i++;
+    } else if (nums[i] > nums[l]) {
+      right--;
+      swap(nums, i, right);
+    } else {
+      i++;
+    }
+  }
+  swap(nums, left, l);
+  return [left - 1, right]
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
