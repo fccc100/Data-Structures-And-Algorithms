@@ -8,24 +8,30 @@
 // 输出：[[4,6],[4,6,7],[4,6,7,7],[4,7],[4,7,7],[6,7],[6,7,7],[7,7]]
 
 function findSubsequences(nums) {
-  // let res = [];
-  // function _findSubsequences(nums, index, path) {
-  //   if (path.length >= 2) {
-  //     res.push([...path]);
-  //   }
+  let res = [];
+  function _findSubsequences(nums, index, path) {
+    if (path.length >= 2) {
+      if (path[path.length - 1] >= path[path.length - 2]) {
+        res.push([...path]);
+      } else {
+        return;
+      }
+    }
 
-  //   if (index == nums.length) return;
+    if (index == nums.length) return;
 
-  //   if (nums[index] > path[path.length - 1]) {
-  //     path.push(nums[index]);
-  //     _findSubsequences(nums, index + 1, path);
-  //   }
+    let set = new Set();
+    for (let i = index; i < nums.length; i++) {
+      if (set.has(nums[i])) continue;
+      set.add(nums[i]);
+      path.push(nums[i]);
+      _findSubsequences(nums, i + 1, path);
+      path.pop();
+    }
+  }
 
-  //   _findSubsequences(nums, index + 1, path);
-  // }
-
-  // _findSubsequences(nums, 0, []);
-  // return res;
+  _findSubsequences(nums, 0, []);
+  return res;
 
 
   // let res = [];
