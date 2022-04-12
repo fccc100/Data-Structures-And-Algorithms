@@ -302,7 +302,6 @@ function swap(nums, i, j) {
   nums[j] = temp;
 }
 
-// 20220412
 function shellSort(nums) {
   let h = nums.length >> 1;
   while(h >= 1) {
