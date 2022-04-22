@@ -5,6 +5,7 @@ public class Test {
         Test test = new Test();
         test = null;
         test.add();
+        System.out.println("dsfsf");
     }
 
     public static void add() {
