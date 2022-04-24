@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dc18a138-5e66-4a36-847f-0fa24328a654" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../data-structure/src/com/bjpo/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/../data-structure/src/com/bjpo/Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../js/leetcode/排序/6.希尔排序.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../js/leetcode/排序/6.希尔排序.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../js/leetcode/栈/9_225.用队列实现栈.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../js/leetcode/栈/9_225.用队列实现栈.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../02-Stacks-and-Queues/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../02-Stacks-and-Queues/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -115,7 +112,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="761" />
     <option name="y" value="41" />
     <option name="width" value="1447" />
@@ -150,7 +147,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1650613258133" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1650616866803" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -194,7 +191,7 @@
     <option name="totallyTimeSpent" value="2529000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="761" y="41" width="1447" height="969" extended-state="0" />
+    <frame x="761" y="41" width="1447" height="969" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Image Layers" />
