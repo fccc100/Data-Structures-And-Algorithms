@@ -30,8 +30,7 @@
 // stk.top();     // 返回 5，[5] - 栈没有改变
 
 var MaxStack = function() {
-  this.stack = [];
-  this.max = [-Infinity];
+  
 };
 
 /** 
@@ -39,48 +38,35 @@ var MaxStack = function() {
  * @return {void}
  */
 MaxStack.prototype.push = function(x) {
-  this.stack.push(x);
-  this.max.push(Math.max(this.max[this.max.length - 1], x));
+  
 };
 
 /**
  * @return {number}
  */
 MaxStack.prototype.pop = function() {
-  this.max.pop();
-  return this.stack.pop();
+  
 };
 
 /**
  * @return {number}
  */
 MaxStack.prototype.top = function() {
-  return this.stack[this.stack.length - 1];
+  
 };
 
 /**
  * @return {number}
  */
 MaxStack.prototype.peekMax = function() {
-  return this.max[this.max.length - 1];
+  
 };
 
 /**
  * @return {number}
  */
 MaxStack.prototype.popMax = function() {
-  // let max = this.max.pop();
-
-  // let temp = [];
-  // while(this.stack[this.stack.length - 1] != max) {
-  //   temp.push(this.stack.pop());
-  // }
-  // this.stack.pop();
-  // while(temp.length) {
-  //   this.stack.push(temp.pop());
-  // }
-
-  // return max;
+  
 };
 
 /**
