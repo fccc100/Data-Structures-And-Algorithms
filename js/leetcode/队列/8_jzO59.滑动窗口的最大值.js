@@ -27,7 +27,7 @@ var maxSlidingWindow = function(nums, k) {
   for (let i = 0; i < n; i++) {
     if (n - i < k) break;
     let max = nums[i];
-    for (let j = i; j < k; j++) {
+    for (let j = i; j - i + 1 <= k; j++) {
       max = Math.max(max, nums[j]);
     }
     res.push(max);
