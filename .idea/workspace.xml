@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4fda7685-4937-4222-9099-49ba723308e3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/java/01-Array/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/java/01-Array/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/java/02-Stacks-and-Queues/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/java/02-Stacks-and-Queues/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="4fda7685-4937-4222-9099-49ba723308e3" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +102,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/java/02-Stacks-and-Queues/src/LoopQueue.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="882">
+            <state relative-caret-position="666">
               <caret line="60" column="27" selection-start-line="60" selection-start-column="27" selection-end-line="60" selection-end-column="27" />
             </state>
           </provider>
@@ -149,7 +145,7 @@
     <option name="FILTER_DEBUG" value="true" />
     <option name="CUSTOM_FILTER" />
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="750" />
     <option name="y" value="12" />
     <option name="width" value="1447" />
@@ -247,7 +243,7 @@
     <option name="totallyTimeSpent" value="6879000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="641" y="7" width="1447" height="969" extended-state="0" />
+    <frame x="750" y="12" width="1447" height="969" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49760193" visible="true" weight="0.23287672" />
@@ -332,7 +328,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/java/02-Stacks-and-Queues/src/LoopQueue.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="882">
+        <state relative-caret-position="666">
           <caret line="60" column="27" selection-start-line="60" selection-start-column="27" selection-end-line="60" selection-end-column="27" />
         </state>
       </provider>
