@@ -27,19 +27,19 @@
  * @return {number}
  */
 var minFlipsMonoIncr = function(s) {
-  function _minFlipsMonoIncr(s, index, type) {
-    if (index <= 0) {
-      if (type == '0') {
-        return s[index] == '1' ? 1 : 0;
-      } else if (type == '1') {
-        return s[index] == '1' ? 0 : 1;
-      }
-    }
+  // function _minFlipsMonoIncr(s, index, type) {
+  //   if (index <= 0) {
+  //     if (type == '0') {
+  //       return s[index] == '1' ? 1 : 0;
+  //     } else if (type == '1') {
+  //       return s[index] == '1' ? 0 : 1;
+  //     }
+  //   }
 
     
-  }
+  // }
   
-  return Math.min(_minFlipsMonoIncr(s, s.length - 1, '0'), _minFlipsMonoIncr(s, s.length - 1, '1'));
+  // return Math.min(_minFlipsMonoIncr(s, s.length - 1, '0'), _minFlipsMonoIncr(s, s.length - 1, '1'));
 };
 
 /**
