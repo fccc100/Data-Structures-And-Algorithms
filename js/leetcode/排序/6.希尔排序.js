@@ -492,3 +492,28 @@ function swap(nums, i, j) {
   nums[i] = nums[j];
   nums[j] = temp;
 }
+
+// 20220506
+function shellSort(nums) {
+  let h = nums.length >> 1;
+  while(h >= 1) {
+    for (let i = h; i < nums.length; i++) {
+      for (let j = i; j - h >= 0; j -= h) {
+        if (nums[j - h] > nums[j]) {
+          swap(nums, j - h, j);
+        } else {
+          break;
+        }
+      }
+    }
+
+    h = h >> 1;
+  }
+  return nums;
+}
+
+function swap(nums, i, j) {
+  let temp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = temp;
+}
