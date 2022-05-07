@@ -17,6 +17,27 @@
  * @return {number}
  */
 var numWays = function(n, k) {
+  // dp[i]表示[0, i]范围的栅栏柱的涂色方案
+  let dp = Array(n + 1);
+
+  dp[0] = 0;
+  dp[1] = k;
+  dp[2] = k * k;
+
+  for (let i = 3; i <= n; i++) {
+    dp[i] = dp[i - 1] * (k - 1) + dp[i - 2] * 1 * (k - 1);
+  }
+
+  return dp[n];
+};
+
+
+/**
+ * @param {number} n
+ * @param {number} k
+ * @return {number}
+ */
+var numWays = function(n, k) {
   // dp[i] 表示给第i个栅栏涂色的方案数
   let dp = Array(n + 1);
   dp[0] = 0;
@@ -24,7 +45,7 @@ var numWays = function(n, k) {
   // 只有1个栅栏可以有k种涂色方案
   dp[1] = k;
   // 只有2个栅栏时可以有k * k种涂色方案
-  dp[2] = k * dp[i - 1];
+  dp[2] = k * dp[1];
 
   for (let i = 3; i <= n; i++) {
     // 第i个栅栏的涂色方案数：
