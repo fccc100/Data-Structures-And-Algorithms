@@ -87,3 +87,29 @@ var minFallingPathSum = function(grid) {
   }
   return min;
 };
+
+// 461.汉明距离
+// 计算两个数字二进制值不同的位数
+var hammingDistance = function(x, y) {
+  // 分别获取x、y的二进制字符串
+  let s1 = getBinary(x);
+  let s2 = getBinary(y);
+
+  // 求不同位数
+  let res = 0;
+  for (let i = 0; i < s1.length; i++) {
+    if (s1[i] != s2[i]) {
+      res++;
+    }
+  }
+  return res;
+};
+
+function getBinary(n) {
+  let res = '';
+  // 用n 与 上 1 往左移对应位数就能知道这一位是0还是1
+  for (let i = 31; i >= 0; i--) {
+    res += (n & (1 << i)) == 0 ? '0' : '1';
+  }
+  return res;
+}
