@@ -26,7 +26,6 @@ var fib = function(n) {
   return cur;
 };
 
-
 // 70. 爬楼梯
 // 与斐波那契数思路一样
 var climbStairs = function(n) {
