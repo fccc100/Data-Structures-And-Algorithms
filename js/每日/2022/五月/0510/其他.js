@@ -113,3 +113,69 @@ function getBinary(n) {
   }
   return res;
 }
+
+// 21. 合并两个有序链表
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
+ */
+// 归并排序
+var mergeTwoLists = function(list1, list2) {
+  let dummyHead = new ListNode(-1);
+  let cur = dummyHead;
+  while(list1 != null || list2 != null) {
+    if (list1 == null) {
+      cur.next = new ListNode(list2.val);
+      cur = cur.next;
+      list2 = list2.next;
+      continue;
+    }
+    if (list2 == null) {
+      cur.next = new ListNode(list1.val);
+      cur = cur.next;
+      list1 = list1.next;
+      continue;
+    }
+    if (list1.val < list2.val) {
+      cur.next = new ListNode(list1.val);
+      list1 = list1.next;
+    } else {
+      cur.next = new ListNode(list2.val);
+      list2 = list2.next;
+    }
+    cur = cur.next;
+  }
+  return dummyHead.next;
+};
+
+// 3. 无重复字符的最长子串
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+  // let l = 0;
+  // let r = -1;
+  // let set = new Set();
+  // let max = 0;
+  // while(r < s.length) {
+  //   if (r + 1 < s.length && !set.has(s[r + 1])) {
+  //     set.add(s[r + 1]);
+  //     r++;
+  //     max = Math.max(max, r - l + 1);
+  //   }
+  //   if (r + 1 < s.length && set.has(s[r + 1])) {
+  //     set.delete(s[l]);
+  //     l++;
+  //   }
+  // }
+  // return max;
+};
