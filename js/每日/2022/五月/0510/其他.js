@@ -156,26 +156,3 @@ var mergeTwoLists = function(list1, list2) {
   return dummyHead.next;
 };
 
-// 3. 无重复字符的最长子串
-/**
- * @param {string} s
- * @return {number}
- */
-var lengthOfLongestSubstring = function(s) {
-  // let l = 0;
-  // let r = -1;
-  // let set = new Set();
-  // let max = 0;
-  // while(r < s.length) {
-  //   if (r + 1 < s.length && !set.has(s[r + 1])) {
-  //     set.add(s[r + 1]);
-  //     r++;
-  //     max = Math.max(max, r - l + 1);
-  //   }
-  //   if (r + 1 < s.length && set.has(s[r + 1])) {
-  //     set.delete(s[l]);
-  //     l++;
-  //   }
-  // }
-  // return max;
-};
