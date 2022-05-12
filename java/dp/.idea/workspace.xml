@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="98a69d8e-b36c-4c64-ae57-3460dc4e6551" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../js/leetcode/动态规划/95_276.栅栏涂色.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../js/leetcode/动态规划/95_276.栅栏涂色.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../js/每日/2022/五月/0511/动态规划.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../js/每日/2022/五月/0511/动态规划.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -132,7 +133,7 @@
     <property name="SearchEverywhereHistoryKey" value="0&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1651822390945" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1652328957825" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -168,12 +169,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1651807675735</updated>
-      <workItem from="1651807682664" duration="1733000" />
+      <workItem from="1651807682664" duration="2330000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1733000" />
+    <option name="totallyTimeSpent" value="2330000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-41" y="122" width="1447" height="969" extended-state="1" />
