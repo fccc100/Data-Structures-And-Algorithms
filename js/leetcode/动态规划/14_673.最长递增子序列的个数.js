@@ -39,7 +39,7 @@ function findNumberOfLIS(nums) {
 }
 
 // 动态规划
-findNumberOfLIS(nums) {
+function findNumberOfLIS(nums) {
   let dp = Array(nums.length).fill(1);
 
   let counts = Array(nums.length).fill(1);
