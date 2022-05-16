@@ -28,18 +28,39 @@
 var maximumSum = function(arr) {
   // 定义dp[i][0]表示以i位置结尾，不使用删除的最大子数组和
   //     dp[i][1]表示以i位置结尾，使用删除操作的最大子数组和
-  // let dp = Array(arr.length);
-  // dp[0] = Array(2);
-  // // 0位置不使用删除最大和为arr[0]
-  // dp[0][0] = arr[0];
-  // dp[0][1] = 0;
+  let dp = Array(arr.length);
+  dp[0] = Array(2);
+  // 0位置不使用删除最大和为arr[0]
+  dp[0][0] = arr[0];
+  dp[0][1] = 0;
 
-  // let ans = 0;
-  // for (let i = 1; i < arr.length; i++) {
-  //   dp[i] = Array(2);
-  //   dp[i][0] = Math.max(dp[i - 1][0] + arr[i], arr[i]);
-  //   dp[i][1] = Math.max(dp[i - 1][1] + arr[i], dp[i - 1][0] + arr[i] - arr[i]);
-  //   ans = Math.max(ans, dp[i][1]);
-  // }
-  // return ans;
-};
+  let ans = dp[0][0];
+  for (let i = 1; i < arr.length; i++) {
+    dp[i] = Array(2);
+    dp[i][0] = Math.max(dp[i - 1][0] + arr[i], arr[i]);
+    dp[i][1] = Math.max(dp[i - 1][1] + arr[i], dp[i - 1][0] + arr[i] - arr[i]);
+
+    // 因为题目要求可以删除元素，也可以不删除元素，更新最大值时，可以取dp[0][0],也可以取dp[0][1]
+    ans = Math.max(ans, dp[i][1], dp[i][0]);
+  }
+  return ans;
+}
+
+// 滚动数组
+var maximumSum = function(arr) {
+  // dp0表示使用删除
+  let dp0 = arr[0];
+  // dp1表示不使用删除
+  let dp1 = 0;
+
+  let ans = dp0;
+  for (let i = 1; i < arr.length; i++) {
+    dp1 = Math.max(dp1 + arr[i], dp0 + arr[i] - arr[i]);
+
+    // dp0不依赖于dp1，放后面执行
+    dp0 = Math.max(dp0 + arr[i], arr[i]);
+
+    ans = Math.max(dp0, dp1, ans);
+  }
+  return ans;
+}
