@@ -60,6 +60,41 @@ var minimumDeleteSum = function(s1, s2) {
   return sum1 + sum2 - max * 2;
 }
 
+// 5. 最长回文子串
+var longestPalindrome = function(s) {
+  let n = s.length;
+  if (n == 0) return 0;
+
+  // dp[i][j]表示从s[i]到s[j]是否为回文串
+  let dp = Array(n);
+  for (let i = 0; i < n; i++) {
+    dp[i] = Array(n);
+    dp[i][i] = true;
+  }
+  
+  let maxLen = 1;
+  let startIndex = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < i; j++) {
+      if (s[i] != s[j]) {
+        dp[j][i] = false;
+      } else {
+        if (i - j <= 2) {
+          dp[j][i] = true;
+        } else {
+          dp[j][i] = dp[j + 1][i - 1];
+        }
+      }
+      if (dp[j][i] && i - j + 1 > maxLen) {
+        maxLen = i - j + 1;
+        startIndex = j;
+      }
+    }
+  }
+
+  return s.substr(startIndex, maxLen);
+}
+
 /**
  * 0516
  */
@@ -101,4 +136,26 @@ function isMatch(s1, s2) {
     return true;
   }
   return false;
+}
+
+// 516. 最长回文子序列
+var longestPalindromeSubseq = function(s) {
+  let n = s.length;
+  if (n == 0) return 0;
+
+  // dp[i][j]表示s[i, j]范围内的最长回文子序列
+  let dp = Array(n);
+  for (let i = n - 1; i >= 0; i--) {
+    dp[i] = Array(n).fill(0);
+    dp[i][i] = 1;
+
+    for (let j = i + 1; j < n; j++) {
+      if (s[i] == s[j]) {
+        dp[i][j] = dp[i + 1][j - 1] + 2;
+      } else {
+        dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+  return dp[0][n - 1];
 }
