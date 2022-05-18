@@ -35,13 +35,56 @@
  * @param {number[]} costs
  * @return {number}
  */
+// 递归，超时
 var mincostTickets = function(days, costs) {
-  // days从index到最后
-  function __mincostTickets(days, costs, index) {
+  let set = new Set();
+  for (let i = 0; i < days.length; i++) {
+    set.add(days[i]);
+  }
+  
+  function __mincostTickets(day) {
+    if (day > 365) {
+      return 0;
+    }
 
+    if (set.has(day)) {
+      return Math.min(__mincostTickets(day + 1) + costs[0], __mincostTickets(day + 7) + costs[1], __mincostTickets(day + 30) + costs[2]);
+    } else {
+      return __mincostTickets(day + 1);
+    }
   }
 
+  return __mincostTickets(1);
+}
 
+// 记忆化搜索
+var mincostTickets = function(days, costs) {
+  let set = new Set();
+  for (let i = 0; i < days.length; i++) {
+    set.add(days[i]);
+  }
+
+  let memo = Array(365);
+  
+  function __mincostTickets(day) {
+    if (day > 365) {
+      return 0;
+    }
+
+    if (memo[day] !== undefined) {
+      return memo[day];
+    }
+
+    if (set.has(day)) {
+      memo[day] = Math.min(__mincostTickets(day + 1) + costs[0], __mincostTickets(day + 7) + costs[1], __mincostTickets(day + 30) + costs[2]);
+    } else {
+      memo[day] = __mincostTickets(day + 1);
+    }
+
+    return memo[day];
+  }
+
+  return __mincostTickets(1);
 }
 
 // 思路和算法
