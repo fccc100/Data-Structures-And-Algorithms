@@ -107,7 +107,7 @@ var findNumberOfLIS = function(nums) {
 //  5. 最长回文子串
 var longestPalindrome = function(s) {
   let n = s.length;
-  if (n == 0) return 0;
+  if (n == 0) return s;
 
   // dp[i][j]表示字符串s在[i, j]的最长回文子串的长度
   let dp = Array(n);
