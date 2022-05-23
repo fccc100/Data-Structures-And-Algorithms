@@ -85,3 +85,46 @@ var wordBreak = function(s, wordDict) {
   }
   return dp[s.length];
 }
+
+
+// 329. 矩阵中的最长递增路径
+var longestIncreasingPath = function(matrix) {
+  let m = matrix.length;
+  let n = matrix[0].length;
+  let dir = [[-1, 0], [1, 0], [0, 1], [0, -1]]
+  let memo = Array(m);
+  for (let i = 0; i < memo.length; i++) {
+    memo[i] = Array(n);
+  }
+
+  // 从i，j点出发的最长递增路径
+  function _longestIncreasingPath(matrix, i, j) {
+    if (i < 0 || i >= m || j < 0 || j >= n) {
+      return 0;
+    }
+    if (memo[i][j] !== undefined) {
+      return memo[i][j];
+    }
+
+    let max = 1;
+    for (let k = 0; k < dir.length; k++) {
+      let i1 = i + dir[k][0];
+      let j1 = j + dir[k][1];
+
+      if (i1 >= 0 && i1 < m && j1 >= 0 && j1 < n && matrix[i1][j1] > matrix[i][j]) {
+        max = Math.max(max, _longestIncreasingPath(matrix, i1, j1) + 1);
+      }
+    }
+
+    return memo[i][j] = max;
+  }
+
+  let max = 0;
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      max = Math.max(max, _longestIncreasingPath(matrix, i, j));
+    }
+  }
+
+  return max;
+};
