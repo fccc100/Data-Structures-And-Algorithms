@@ -12,7 +12,6 @@
 //     public Node parent;
 // }
  
-
 // 示例 1：
 
 // 输入：tree = [2,1,3], node = 1
@@ -34,23 +33,19 @@
  * @return {Node}
  */
 var inorderSuccessor = function(node) {
-  // let root = node;
-  // while(root.parent) {
-  //   root = root.parent;
-  // }
-
-  // let val = node.val;
-  // let res = null;
-  // function inorder(node) {
-  //   if (node == null) return;
-
-  //   inorder(node.left);
-  //   if (res == null || (node.val > val && node.val < res)) {
-  //     res = node.val;
-  //   }
-  //   inorder(node.right);
-  // }
-
-  // inorder(root);
-  // return res;
+  let res = null;
+  if (node.right != null) {
+    let cur = node.right;
+    while(cur.left != null) {
+      cur = cur.left;
+    }
+    res = cur;
+  } else {
+    let cur = node;
+    while(cur.parent != null && cur.parent.val < cur.val) {
+      cur = cur.parent;
+    }
+    res = cur.parent;
+  }
+  return res;
 };
