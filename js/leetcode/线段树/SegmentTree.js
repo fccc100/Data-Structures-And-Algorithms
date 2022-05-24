@@ -131,7 +131,7 @@ class SegmentTree {
 /**
  * 二
  */
-class SegmentTree {
+class SegmentTree1 {
   constructor(arr, merger = this.defaultMerger) {
     if (merger && typeof merger != 'function') {
       throw new Error('merger must be a function')

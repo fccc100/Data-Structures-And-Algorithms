@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="98a69d8e-b36c-4c64-ae57-3460dc4e6551" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../js/leetcode/动态规划/107_983.最低票价.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../js/leetcode/动态规划/107_983.最低票价.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -97,8 +98,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="88" />
-    <option name="y" value="102" />
+    <option name="x" value="12" />
+    <option name="y" value="75" />
     <option name="width" value="1447" />
     <option name="height" value="969" />
   </component>
@@ -132,7 +133,7 @@
     <property name="SearchEverywhereHistoryKey" value="0&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1652861233872" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1653036063078" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -176,7 +177,7 @@
     <option name="totallyTimeSpent" value="2884000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="88" y="102" width="1447" height="969" extended-state="1" />
+    <frame x="12" y="75" width="1447" height="969" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Image Layers" />

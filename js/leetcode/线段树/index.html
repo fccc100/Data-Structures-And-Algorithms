@@ -7,8 +7,11 @@
   <title>Document</title>
 </head>
 <body>
-  <script src="./SegmentTree.js"></script>
+  <!-- <script src="./SegmentTree.js"></script> -->
+  <script src="./SegmentTree_0524.js"></script>
   <script>
+    // [1, 3, 5, 7, 9, 11]
+    // [36, 9, 27, 4, 5, 16, 11, 1, 3, null, null, 7, 9, null, null, null, null, null, null, null, null, null, null, null]
     let segmentTree = new SegmentTree([1, 3, 5, 7, 9, 11], function(a, b) {
       return a + b;
     })
