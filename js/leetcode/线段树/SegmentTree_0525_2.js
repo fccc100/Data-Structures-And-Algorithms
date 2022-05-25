@@ -7,6 +7,7 @@ class SegmentTree {
     this.buildSegmentTree(0, 0, arr.length - 1);
   }
 
+  // 从treeIndex创建[l, r]区间的线段树
   buildSegmentTree(treeIndex, l, r) {
     if (l == r) {
       this.tree[treeIndex] = this.data[l];
