@@ -17,7 +17,7 @@ function partition(s) {
 
     for (let i = index; i < s.length; i++) {
       if (!isPalindrome(s, index, i)) continue;
-      path.push(s.substr(index, index + i - 1));
+      path.push(s.substr(index, i - index + 1));
       _partition(s, i + 1, path);
       path.pop(); 
     }
