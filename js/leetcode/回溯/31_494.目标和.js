@@ -29,7 +29,7 @@ function findTargetSumWays(nums, target) {
     _findTargetSumWays(nums, index + 1, cur - nums[index], target);
 
     // 选择+
-    _findTargetSumWays(nums, index + 1, cur + nums[i], target);
+    _findTargetSumWays(nums, index + 1, cur + nums[index], target);
   }
 
   _findTargetSumWays(nums, 0, 0, target);
