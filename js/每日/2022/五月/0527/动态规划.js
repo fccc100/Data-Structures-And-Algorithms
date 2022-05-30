@@ -59,8 +59,8 @@ var maxA = function (n) {
 
   for (let i = 1; i <= n; i++) {
     dp[i] = dp[i - 1] + 1;
-    // 遍历前面可能的Ctrl A后Ctrl V
-    // 要在i位置按下Ctrl V，那最晚也是在i - 2的地方按下Ctrl A
+    // 遍历前面可能的Ctrl A和Ctrl V
+    // 要在i位置按下Ctrl V，那最晚也是在i - 2的地方按下Ctrl A，所以j < i - 1
     // 如果在j位置按下了Ctrl A，那在i位置可以产生A的个数是 j位置A的个数 * i - j - 1次粘贴 
     for (let j = 0; j < i - 1; j++) {
       dp[i] = Math.max(dp[i], dp[j] * (i - j - 1));
