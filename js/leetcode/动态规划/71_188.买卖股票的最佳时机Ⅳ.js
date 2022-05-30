@@ -7,8 +7,14 @@
 
 // 动态规划
 function maxProfit(k, prices) {
-  let buy = Array(k);
-  let sell = Array(k);
+  let buy = Array(k + 1).fill(-Infinity);
+  let sell = Array(k + 1).fill(0);
 
-  
+  for (let i = 0; i < prices.length; i++) {
+    for (let j = 1; j <= k; j++) {
+      buy[j] = Math.max(buy[j], sell[j - 1] - prices[i]);
+      sell[j] = Math.max(sell[j], buy[j] + prices[i]);
+    }
+  }
+  return sell[k];
 }
