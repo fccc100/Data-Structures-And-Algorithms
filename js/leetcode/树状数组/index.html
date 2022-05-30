@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./BinaryIndexedTree.js"></script>
+</head>
+<body>
+  <script>
+    let binaryIndexedTree = new BinaryIndexedTree(10);
+    binaryIndexedTree.update(1, 1)
+    binaryIndexedTree.update(2, 3)
+    binaryIndexedTree.update(3, 5)
+    
+    console.log(binaryIndexedTree)
+    console.log(binaryIndexedTree.query(0))
+    console.log(binaryIndexedTree.query(3))
+
+    binaryIndexedTree.update(1, 2)
+
+    console.log(binaryIndexedTree.query(0))
+    console.log(binaryIndexedTree.query(3))
+    
+  </script>
+</body>
+</html>
