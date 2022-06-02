@@ -58,3 +58,56 @@ function binarySearch(nums, target) {
   }
   return _binarySearch(nums, 0, nums.length - 1, target);
 }
+
+// 20220601
+// 704.二分查找
+// 二分查找给定值
+// 第一种
+var search = function(nums, target) {
+  let l = 0;
+  let r = nums.length - 1;
+  while(l <= r) {
+    let mid = l + (r - l >> 1);
+    if (nums[mid] == target) {
+      return mid;
+    } else if (nums[mid] > target) {
+      r = mid - 1;
+    } else {
+      l = mid + 1;
+    }
+  }
+  return -1;
+}
+
+// 第二种
+var search = function(nums, target) {
+  let l = 0;
+  let r = nums.length;
+  while(l < r) {
+    let mid = l + (r - l >> 1);
+    if (target == nums[mid]) {
+      return mid;
+    } else if (target > nums[mid]) {
+      l = mid + 1
+    } else {
+      r = mid;
+    }
+  }
+  return -1;
+}
+
+// 递归
+var search = function(nums, target) {
+
+  function binarySearch(nums, l, r, target) {
+    if (l > r) return -1;
+    let mid = l + (r - l >> 1);
+    if (nums[mid] == target) {
+      return mid;
+    } else if (nums[mid] > target) {
+      return binarySearch(nums, l, mid - 1, target);
+    }
+    return binarySearch(nums, mid + 1, r, target);
+  }
+  return binarySearch(nums, 0, nums.length - 1, target);
+}
