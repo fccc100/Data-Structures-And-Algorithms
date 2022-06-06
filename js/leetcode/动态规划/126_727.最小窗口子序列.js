@@ -17,6 +17,44 @@
  * @param {string} s2
  * @return {string}
  */
+// 滑动窗口：76.最小覆盖子串的思路
+// 以下这种方法很慢，仅超5%
 var minWindow = function (s1, s2) {
-  
+  // 定义l, r窗口
+  // 如果r位置的字符
+  let l = 0;
+  let r = -1;
+
+  let minLen = Infinity;
+  let resL = -1;
+  while (r < s1.length) {
+    r++;
+
+    // s2是当前窗口的子序列
+    while (isSubSequence(s1.substring(l, r + 1), s2) && l <= r) {
+      if (r - l + 1 < minLen) {
+        minLen = r - l + 1;
+        resL = l;
+      }
+      l++;
+    }
+  }
+  return resL == -1 ? '' : s1.substr(resL, minLen);
+}
+
+function isSubSequence(s1, s2) {
+  let p1 = 0;
+  let p2 = 0;
+  while (p1 < s1.length) {
+    if (s1[p1] == s2[p2]) {
+      p1++;
+      p2++;
+      if (p2 == s2.length) {
+        return true;
+      }
+    } else {
+      p1++;
+    }
+  }
+  return false;
 }
