@@ -53,9 +53,8 @@ MyCalendarThree.prototype.book = function (start, end) {
   //   this.map.set(end, -1);
   // }
 
-  // for (let entry of this.map) {
-  //   let freq = entry[1];
-  //   max += freq;
+  // for (let val of this.map.values()) {
+  //   max += val;
   //   res = Math.max(max, res);
   // }
   // return res;
@@ -65,4 +64,33 @@ MyCalendarThree.prototype.book = function (start, end) {
  * Your MyCalendarThree object will be instantiated and called as such:
  * var obj = new MyCalendarThree()
  * var param_1 = obj.book(start,end)
+ */
+
+// java TreeMap实现，js只有一个map，底层是hashMap，无法用map实现
+class MyCalendarThree {
+  TreeMap < Integer, Integer > map;
+
+  public MyCalendarThree() {
+    map = new TreeMap < Integer, Integer > ();
+  }
+
+  public int book(int start, int end) {
+    map.put(start, map.getOrDefault(start, 0) + 1);
+    map.put(end, map.getOrDefault(end, 0) - 1);
+
+    int freq = 0;
+    int res = 0;
+    for (int val: map.values()) {
+      System.out.print(val + ",");
+      freq += val;
+      res = Math.max(res, freq);
+    }
+    return res;
+  }
+}
+
+/**
+ * Your MyCalendarThree object will be instantiated and called as such:
+ * MyCalendarThree obj = new MyCalendarThree();
+ * int param_1 = obj.book(start,end);
  */
