@@ -10,15 +10,51 @@
  * @param {number[][]} intervals
  * @return {number}
  */
-var minMeetingRooms = function(intervals) {
-  // if (intervals.length == 1) return 1;
-  // intervals.sort((a, b) => a[0] - b[0]);
+var minMeetingRooms = function (intervals) {
+  let maxEnd = 0;
+  for (let i = 0; i < intervals.length; i++) {
+    maxEnd = Math.max(maxEnd, intervals[i][1]);
+  }
 
-  // let res = 1;
-  // for (let i = 0; i < intervals.length - 2; i++) {
-  //   if (intervals[i][1] > intervals[i + 1][0]) {
-  //     res++;
-  //   }
-  // }
-  // return res;
+  let diff = Array(maxEnd + 1).fill(0);
+  for (let i = 0; i < intervals.length; i++) {
+    diff[intervals[i][0]]++;
+    diff[intervals[i][1]]--;
+  }
+
+  let max = 0;
+  for (let i = 1; i < maxEnd; i++) {
+    diff[i] += diff[i - 1];
+    max = Math.max(max, diff[i]);
+  }
+  return max;
+};
+
+
+// 2.使用js的对象 代替 map， js的map是基于哈希表无序的
+// Object可以代替java的TreeMap
+var minMeetingRooms = function (intervals) {
+  let map = new Object();
+
+  for (let i = 0; i < intervals.length; i++) {
+    if (map[intervals[i][0]] !== undefined) {
+      map[intervals[i][0]]++;
+    } else {
+      map[intervals[i][0]] = 1;
+    }
+
+    if (map[intervals[i][1]] !== undefined) {
+      map[intervals[i][1]]--;
+    } else {
+      map[intervals[i][1]] = -1;
+    }
+  }
+
+  let cur = 0;
+  let max = 0;
+  for (let key in map) {
+    cur += map[key];
+    max = Math.max(max, cur);
+  }
+  return max;
 };
