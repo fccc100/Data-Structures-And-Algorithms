@@ -70,3 +70,16 @@ var lengthOfLongestSubstring = function(s) {
   }
   return max;
 }
+
+// 20220623
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+  let r = -1;
+
+  for (let i = 0; i < s.length; i++) {
+    
+  }
+};
