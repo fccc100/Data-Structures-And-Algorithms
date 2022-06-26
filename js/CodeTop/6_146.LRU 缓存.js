@@ -3,7 +3,8 @@
 // 实现 LRUCache 类：
 // LRUCache(int capacity) 以 正整数 作为容量 capacity 初始化 LRU 缓存
 // int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。
-// void put(int key, int value) 如果关键字 key 已经存在，则变更其数据值 value ；如果不存在，则向缓存中插入该组 key-value 。如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。
+// void put(int key, int value) 如果关键字 key 已经存在，则变更其数据值 value ；
+// 如果不存在，则向缓存中插入该组 key-value 。如果插入操作导致关键字数量超过 capacity ，则应该 逐出 最久未使用的关键字。
 // 函数 get 和 put 必须以 O(1) 的平均时间复杂度运行。
 
 // 示例：
@@ -26,9 +27,7 @@
 // lRUCache.get(3);    // 返回 3
 // lRUCache.get(4);    // 返回 4
 
-// 这道题使用双向链表，使得get put操作均为O(1)时间复杂度
-
-// 链表节点，含有next 和 prev的双向链表
+// 先写一个双向链表
 class ListNode {
   constructor(key, value, prev = null, next = null) {
     this.key = key;
@@ -38,10 +37,9 @@ class ListNode {
   }
 }
 
-// 链表
 class LinkedList {
-  // 初始时头尾指针均为null
   constructor() {
+    // 初始时头尾节点均为null
     this.head = null;
     this.tail = null;
     this.size = 0;
@@ -51,12 +49,13 @@ class LinkedList {
     return this.size;
   }
 
-  // 在链表的尾巴加一个节点
   addLast(node) {
+    // 添加一个节点，如果头节点就是空，让头尾节点都指向新节点
     if (this.head == null) {
       this.head = node;
       this.tail = node;
     } else {
+      // 头节点不为空，把新节点加到尾节点的后面
       this.tail.next = node;
       node.prev = this.tail;
       this.tail = node;
@@ -64,31 +63,43 @@ class LinkedList {
     this.size ++;
   }
 
-  // 删除链表的头节点，在缓存满了时，需要将最久未使用的头节点删除
+  // 删除头节点并返回该节点
   removeHead() {
-    let res;
+    let removeNode = null;
     if (this.head == null || this.head.next == null) {
-      res = this.head;
+      removeNode = this.head;
       this.head = null;
       this.tail = null;
     } else {
-      res = this.head;
       let head = this.head;
+      removeNode = head;
       this.head = head.next;
       this.head.prev = null;
       head.next = null;
     }
-    this.size --;
-    return res;
+    this.size--;
+    return removeNode;
   }
 
-  // 把一个节点移动到链表的尾巴，在操作了缓存中的某条数据时，需要将这个节点移动到链表的尾巴
   moveToTail(node) {
-    if (this.head == null || this.head.next == null) return;
-    if (this.tail == node) return;
+    if (this.head == null || this.head.next == null) {
+      return;
+    }
+
+    // 头尾 节点一样，只有一个节点，不需要移动
+    if (this.head == this.tail) {
+      return;
+    }
+
+    // 已经是尾节点，不需移动
+    if (this.tail == node) {
+      return;
+    }
+
+    // 要移动的节点是头节点跟不是头节点分开处理
     if (this.head == node) {
-      this.head = node.next;
-      node.next.prev = null;
+      this.head = this.head.next;
+      this.head.prev = null;
       node.next = null;
       this.tail.next = node;
       node.prev = this.tail;
@@ -106,7 +117,7 @@ class LinkedList {
 /**
  * @param {number} capacity
  */
-var LRUCache = function(capacity) {
+var LRUCache = function (capacity) {
   this.capacity = capacity;
   this.map = new Map();
   this.list = new LinkedList();
@@ -116,11 +127,11 @@ var LRUCache = function(capacity) {
  * @param {number} key
  * @return {number}
  */
-LRUCache.prototype.get = function(key) {
+LRUCache.prototype.get = function (key) {
+  // map中存在key，本次访问需要将其移动到链表的尾节点
   if (this.map.has(key)) {
     let node = this.map.get(key);
     let ret = node.value;
-
     this.list.moveToTail(node);
     return ret;
   } else {
@@ -133,21 +144,19 @@ LRUCache.prototype.get = function(key) {
  * @param {number} value
  * @return {void}
  */
-LRUCache.prototype.put = function(key, value) {
-  // 如果map里有这条记录了，那么更新这个节点的值，并且把他移动到链表的尾巴
+LRUCache.prototype.put = function (key, value) {
   if (this.map.has(key)) {
+    // map中已经存在这个key了，更新节点的值，并且将其移动到链表的尾节点
     let node = this.map.get(key);
     node.key = key;
     node.value = value;
     this.list.moveToTail(node);
   } else {
-
-    // map中没有这个key，新增一个节点假如链表中，如果容量超出，就把链表的头节点删了
     let node = new ListNode(key, value);
     this.list.addLast(node);
     this.map.set(key, node);
     if (this.map.size > this.capacity) {
-      let head = this.list.removeHead()
+      let head = this.list.removeHead();
       this.map.delete(head.key);
     }
   }

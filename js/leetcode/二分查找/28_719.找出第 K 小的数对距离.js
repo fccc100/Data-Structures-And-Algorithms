@@ -42,41 +42,5 @@ var smallestDistancePair = function(nums, k) {
 
 // 
 var smallestDistancePair = function(nums, k) {
-  nums.sort((a, b) => a - b);
-};
-
-var lengthOfLongestSubstring = function(s) {
-  let n = s.length;
-  if (n <= 1) return n;
-
-  let map = Array(256).fill(-1);
-
-  // dp[i]表示已i结尾的无重复字符的最长子串
-  let dp = Array(n);
-  dp[0] = 1;
-  map[s[0].charCodeAt()] = 0;
-  let res = dp[0];
-  for (let i = 1; i < n; i++) {
-    dp[i] = Math.min(dp[i - 1] + 1, i - map[s[i].charCodeAt()]);
-    map[s[i].charCodeAt()] = i;
-
-    res = Math.max(res, dp[i]);
-  }
-  return res;
-};
-
-var maxSubArray = function(nums) {
-  let n = nums.length;
-  if (n == 0) return 0;
-
-  // dp[i]表示以i结尾的最大子数组和
-  let dp = Array(n);
-  dp[0] = nums[0];
-
-  let res = dp[0];
-  for (let i = 1; i < n; i++) {
-    dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
-    res = Math.max(res, dp[i]);
-  }
-  return res;
+  // nums.sort((a, b) => a - b);
 };
