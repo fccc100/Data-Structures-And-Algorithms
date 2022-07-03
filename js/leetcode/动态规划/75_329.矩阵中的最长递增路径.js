@@ -87,3 +87,43 @@ function longestIncreasingPath(matrix) {
   return max;
 }
 
+/**
+ * @param {number[][]} matrix
+ * @return {number}
+ */
+var longestIncreasingPath = function(matrix) {
+  let m = matrix.length;
+  if (!m) return 0;
+  let n = matrix[0].length;
+
+  let dir = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+
+  let memo = Array(m);
+  for (let i = 0; i < m; i++) {
+    memo[i] = Array(n);
+  }
+
+  function dfs(matrix, i, j) {
+    if (memo[i][j] !== undefined) {
+      return memo[i][j];
+    }
+
+    let max = 1;
+    for (let k = 0; k < dir.length; k++) {
+      let newI = i + dir[k][0];
+      let newJ = j + dir[k][1];
+      if (newI >= 0 && newI < m && newJ >= 0 && newJ < n && matrix[newI][newJ] > matrix[i][j]) {
+        max = Math.max(max, dfs(matrix, newI, newJ) + 1);
+      }
+    }
+    return memo[i][j] = max;
+  }
+
+  let max = 0;
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      max = Math.max(max, dfs(matrix, i, j));
+    }
+  }
+  return max;
+};
