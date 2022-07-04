@@ -25,7 +25,7 @@
  * @param {number} destination
  * @return {boolean}
  */
-// 使用并查集，查看两个点是否在同一个联通分量中
+// 1.使用并查集，查看两个点是否在同一个联通分量中
 var validPath = function (n, edges, source, destination) {
   let uf = new UnionFind(n);
 
@@ -60,7 +60,7 @@ class UnionFind {
   }
 }
 
-// 邻接矩阵建图, 空间超了
+// 2.邻接矩阵建图, 空间超了
 var validPath = function (n, edges, source, destination) {
   let graph = Array(n);
   for (let i = 0; i < n; i++) {
@@ -87,7 +87,7 @@ var validPath = function (n, edges, source, destination) {
   return source == destination || visited[destination];
 };
 
-// 邻接表, 勉强通过
+// 3.邻接表, 勉强通过
 var validPath = function (n, edges, source, destination) {
   let graph = Array(n);
   for (let i = 0; i < n; i++) {
