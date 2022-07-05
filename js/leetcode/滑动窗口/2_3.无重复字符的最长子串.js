@@ -30,6 +30,26 @@ var lengthOfLongestSubstring = function(s) {
   return res;
 };
 
+// 滑动窗口2
+var lengthOfLongestSubstring = function(s) {
+  let l = 0;
+  let r = -1;
+  let freq = Array(256).fill(0);
+
+  let res = 0;
+  while(l < s.length) {
+    if (r + 1 < s.length && freq[s[r + 1].charCodeAt()] == 0) {
+      r++;
+      freq[s[r].charCodeAt()]++;
+    } else {
+      freq[s[l].charCodeAt()]--;
+      l++;
+    }
+    res = Math.max(res, r - l + 1);
+  }
+  return res;
+}
+
 // 动态规划
 // aab
 var lengthOfLongestSubstring = function(s) {
