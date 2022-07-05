@@ -11,7 +11,7 @@
 // AA -> 27
 // AB -> 28 
 // ...
- 
+
 // 示例 1：
 
 // 输入：columnNumber = 1
@@ -33,13 +33,13 @@
  * @param {number} columnNumber
  * @return {string}
  */
-var convertToTitle = function(columnNumber) {
+var convertToTitle = function (columnNumber) {
   let res = '';
-  while(columnNumber > 0) {
+  while (columnNumber > 0) {
     columnNumber--;
     let char = String.fromCharCode((columnNumber % 26) + 'A'.charCodeAt());
     res = char + res;
-    columnNumber = Math.floor(columnNumber/26);
+    columnNumber = Math.floor(columnNumber / 26);
   }
   return res;
 };
