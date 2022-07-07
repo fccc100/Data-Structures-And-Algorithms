@@ -43,3 +43,5 @@ function topKFrequent(words, k) {
   }
   return res;
 }
+
+// 堆优化
