@@ -50,7 +50,6 @@ var isBipartite = function(graph) {
     if (!visited[i]) {
       if (!dfs(i, 0)) {
         return false;
-        break;
       }
     }
   }
