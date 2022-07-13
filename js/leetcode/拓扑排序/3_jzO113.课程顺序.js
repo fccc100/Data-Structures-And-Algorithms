@@ -29,6 +29,7 @@
  * @param {number[][]} prerequisites
  * @return {number[]}
  */
+// 与207.课程表基本一样
 var findOrder = function(numCourses, prerequisites) {
   // 邻接表建图
   let graph = Array(numCourses);

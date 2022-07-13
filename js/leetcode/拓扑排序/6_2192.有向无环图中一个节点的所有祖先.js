@@ -37,7 +37,7 @@
  * @return {number[][]}
  */
 // 用set记录,超时
-var getAncestors = function(n, edges) {
+var getAncestors = function (n, edges) {
 
   // 邻接表建图
   let res = Array(n);
@@ -50,9 +50,9 @@ var getAncestors = function(n, edges) {
     graph[edges[i][0]].push(edges[i][1]);
   }
 
-  
+
   function dfs(v, parent) {
-    
+
     for (let i = 0; i < parent.length; i++) {
       if (v != parent[i]) {
         res[v].add(parent[i]);
@@ -76,16 +76,59 @@ var getAncestors = function(n, edges) {
   return res;
 };
 
-// 2.
-var getAncestors = function(n, edges) {
+// 2.拓扑排序
+var getAncestors = function (n, edges) {
   let res = Array(n);
 
   // 邻接表建图
-  //  let graph = Array(n);
-  //  for (let i = 0; i < n; i++) {
-  //    graph[i] = [];
-  //  }
-  //  for (let i = 0; i < edges.length; i++) {
-  //    graph[edges[i][0]].push(edges[i][1]);
-  //  }
+  let graph = Array(n);
+  for (let i = 0; i < n; i++) {
+    graph[i] = [];
+    res[i] = new Set();
+  }
+
+  // 记录每个点的入度
+  let degree = Array(n).fill(0);
+  for (let i = 0; i < edges.length; i++) {
+    graph[edges[i][0]].push(edges[i][1]);
+    degree[edges[i][1]]++;
+  }
+
+  let queue = [];
+  for (let i = 0; i < degree.length; i++) {
+    if (degree[i] == 0) {
+      queue.push(i);
+    }
+  }
+
+  // BFS
+  while(queue.length) {
+    let cur = queue.shift();
+
+    for (let i = 0; i < graph[cur].length; i++) {
+      degree[graph[cur][i]]--;
+
+      // 遍历到每个节点时，当前节点父节点的所有父节点都是自己的父节点，拷过来
+      for (let key of res[cur]) {
+        if (!res[graph[cur][i]].has(key)) {
+          res[graph[cur][i]].add(key);
+        }
+      }
+      // 再把父节点加进来
+      if (!res[graph[cur][i]].has(cur)) {
+        res[graph[cur][i]].add(cur);
+      }
+
+      if (degree[graph[cur][i]] == 0) {
+        queue.push(graph[cur][i]);
+      }
+    }
+  }
+  
+  // set转数组
+  for (let i = 0; i < res.length; i++) {
+    res[i] = [...res[i]];
+    res[i].sort((a, b) => a - b);
+  }
+  return res;
 }
