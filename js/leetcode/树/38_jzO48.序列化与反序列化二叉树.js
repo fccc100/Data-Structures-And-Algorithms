@@ -34,8 +34,8 @@
  * @param {TreeNode} root
  * @return {string}
  */
-var serialize = function(root) {
-    return __serialize(root, '');
+var serialize = function (root) {
+  return __serialize(root, '');
 };
 
 function __serialize(node, str) {
@@ -56,7 +56,7 @@ function __serialize(node, str) {
  * @param {string} data
  * @return {TreeNode}
  */
-var deserialize = function(data) {
+var deserialize = function (data) {
   data = data.split(',');
 
   return __deserialize(data);
