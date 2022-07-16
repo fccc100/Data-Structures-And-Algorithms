@@ -42,7 +42,7 @@ var openLock = function(deadends, target) {
   if (target == '0000') return 0;
 
   let visited = new Map();
-  Map.set('0000', 0);
+  visited.set('0000', 0);
   let queue = [];
   queue.push('0000');
 
