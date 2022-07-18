@@ -86,5 +86,5 @@ var maxCoins = function(nums) {
 
 // 动态规划
 var maxCoins = function(nums) {
-  let n = nums.length;
+ 
 }

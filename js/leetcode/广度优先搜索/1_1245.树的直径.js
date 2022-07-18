@@ -23,7 +23,7 @@
  * @return {number}
  */
 
- var treeDiameter = function(edges) {
+var treeDiameter = function (edges) {
   // let n = edges.length + 1;
 
   // // 邻接表建图
@@ -66,4 +66,56 @@
   //   res = Math.max(res, bfs(i));
   // }
   // return res;
+};
+
+/**
+ * @param {number[][]} edges
+ * @return {number}
+ */
+// 逐个节点BFS求最长路径，超时
+var treeDiameter = function (edges) {
+  let n = edges.length + 1;
+
+  // 邻接表建图
+  let graph = Array(n);
+  for (let i = 0; i < n; i++) {
+    graph[i] = [];
+  }
+
+  for (let i = 0; i < edges.length; i++) {
+    graph[edges[i][0]].push(edges[i][1]);
+    graph[edges[i][1]].push(edges[i][0]);
+  }
+
+  let visited = Array(n).fill(false);
+
+  function bfs(v) {
+    let queue = [];
+    queue.push(v);
+    visited[v] = true;
+
+    let res = 0;
+    while (queue.length) {
+      let len = queue.length;
+      res++;
+      for (let i = 0; i < len; i++) {
+        let cur = queue.shift();
+        for (let j = 0; j < graph[cur].length; j++) {
+          if (!visited[graph[cur][j]]) {
+            queue.push(graph[cur][j]);
+            visited[graph[cur][j]] = true;
+          }
+        }
+      }
+    }
+    return res;
+  }
+
+  let res = 0;
+  for (let i = 0; i < n; i++) {
+    visited.fill(false);
+
+    res = Math.max(res, bfs(i));
+  }
+  return res - 1;
 };
