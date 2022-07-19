@@ -43,23 +43,28 @@
  * @return {string}
  */
 var countAndSay = function(n) {
-  let cur = 1;
-  let ans = '';
+  let cur = '1';
+  
   for (let i = 2; i <= n; i++) {
-    let temp = String(cur);
-    let p = 0;
+
+    // 逐个连续片段拼接
     let res = '';
-    while(p < temp.length) {
-      let curVal = temp[p];
-      let count = 0;
-      while(temp[p] != curVal) {
-        p++;
-        count ++;
+    let curIndex = 0;
+    let curChar = cur[curIndex];
+    for (let j = 0; j < cur.length; j++) {
+      if (cur[j] != curChar) {
+        res = res + (j - curIndex) + curChar;
+        curIndex = j;
+        curChar = cur[curIndex];
       }
-      res = res + '' + count + curVal;
     }
-    temp = res;
-    ans = temp;
+
+    // 最后一段
+    if (curIndex < cur.length) {
+      res = res + (cur.length - curIndex) + cur[cur.length - 1];
+    }
+    
+    cur = res;
   }
-  return ans;
+  return cur;
 };
