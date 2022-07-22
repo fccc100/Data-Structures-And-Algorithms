@@ -32,8 +32,9 @@
  * @return {number}
  */
 var findMinArrowShots = function(points) {
-  // 结束位置从大到小排序
-  points.sort((a, b) => b[1] - a[1]);
+  // 结束位置从小到大排序
+  // [[1,6],[2,8],[7,12],[10,16]]
+  points.sort((a, b) => a[1] - b[1]);
 
   let res = 1;
   let currentEnd = points[0][1];

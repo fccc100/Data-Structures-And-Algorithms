@@ -30,7 +30,7 @@
  * @param {number[][]} points
  * @return {number}
  */
-// 思路：先按结束位置从大到小排序
+// 思路：先按结束位置从小到大排序
 // 每次记录当前的结束位置，如果遍历下一个时开始位置大于当前结束位置了，必须用一支新箭
 // 否则可以在上一轮就将它射爆
 var findMinArrowShots = function (points) {
