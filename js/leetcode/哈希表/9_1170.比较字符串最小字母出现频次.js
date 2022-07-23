@@ -33,7 +33,7 @@ var numSmallerByFrequency = function (queries, words) {
     let count = 0;
     for (let j = 0; j < words.length; j++) {
       if (queryWord < f(words[j])) {
-        count++;
+      count++;
       }
     }
     res[i] = count;
