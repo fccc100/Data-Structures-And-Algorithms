@@ -25,7 +25,7 @@
 // mapSum.insert("app", 2);    
 // mapSum.sum("ap");           // 返回 5 (apple + app = 3 + 2 = 5)
 
-// 字典树
+// 1.字典树
 class TrieNode {
   constructor(val = 0) {
     this.isWord = false;
@@ -78,6 +78,83 @@ class Trie {
       }
       this.__sum(entry[1]);
     }
+  }
+}
+
+var MapSum = function () {
+  this.trie = new Trie();
+};
+
+/** 
+ * @param {string} key 
+ * @param {number} val
+ * @return {void}
+ */
+MapSum.prototype.insert = function (key, val) {
+  this.trie.add(key, val);
+};
+
+/** 
+ * @param {string} prefix
+ * @return {number}
+ */
+MapSum.prototype.sum = function (prefix) {
+
+  return this.trie.sum(prefix);
+};
+
+/**
+ * Your MapSum object will be instantiated and called as such:
+ * var obj = new MapSum()
+ * obj.insert(key,val)
+ * var param_2 = obj.sum(prefix)
+ */
+
+// 2.字典树。修改sum写法
+class TrieNode {
+  constructor(val = 0) {
+    this.isWord = false;
+    this.val = val;
+    this.next = new Map();
+  }
+}
+
+class Trie {
+  constructor() {
+    this.root = new TrieNode();
+  }
+
+  add(word, val) {
+    let cur = this.root;
+    for (let i = 0; i < word.length; i++) {
+      if (!cur.next.has(word[i])) {
+        cur.next.set(word[i], new TrieNode());
+      }
+      cur = cur.next.get(word[i]);
+    }
+
+    cur.isWord = true;
+    cur.val = val;
+  }
+
+  sum(prefix) {
+    let cur = this.root;
+    for (let i = 0; i < prefix.length; i++) {
+      if (!cur.next.has(prefix[i])) {
+        return 0;
+      }
+      cur = cur.next.get(prefix[i]);
+    }
+
+    return this.__sum(cur);
+  }
+
+  __sum(node) {
+    let res = node.val;
+    for (let entry of node.next) {
+      res += this.__sum(entry[1]);
+    }
+    return res;
   }
 }
 
