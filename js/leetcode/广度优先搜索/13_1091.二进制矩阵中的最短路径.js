@@ -24,7 +24,7 @@
  * @param {number[][]} grid
  * @return {number}
  */
-var shortestPathBinaryMatrix = function(grid) {
+var shortestPathBinaryMatrix = function (grid) {
   let m = grid.length;
   if (m == 0) return 0;
   let n = grid[0].length;
@@ -48,10 +48,19 @@ var shortestPathBinaryMatrix = function(grid) {
   }
   visited[0][0] = true;
 
-  const dirs = [[-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1]];
+  const dirs = [
+    [-1, 0],
+    [-1, 1],
+    [0, 1],
+    [1, 1],
+    [1, 0],
+    [1, -1],
+    [0, -1],
+    [-1, -1]
+  ];
 
   // BFS
-  while(queue.length) {
+  while (queue.length) {
     let curPath = queue.shift();
     let x = curPath[0];
     let y = curPath[1];
