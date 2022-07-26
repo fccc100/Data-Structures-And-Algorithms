@@ -25,6 +25,8 @@
 // 输入：m = 3, n = 1, k = 0
 // 输出：1
 
+// 广度优先遍历中解决
+
 /**
  * @param {number} m
  * @param {number} n

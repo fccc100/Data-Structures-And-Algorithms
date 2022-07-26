@@ -181,11 +181,6 @@ var wallsAndGates = function (rooms) {
 
   const dirs = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 
-  let visited = Array(m);
-  for (let i = 0; i < m; i++) {
-    visited[i] = Array(n).fill(false);
-  }
-
   let queue = [];
   for (let i = 0; i < m; i++) {
     for (let j = 0; j < n; j++) {
@@ -214,6 +209,51 @@ var wallsAndGates = function (rooms) {
         }
       }
     }
+  }
+  return rooms;
+}
+
+// 不使用shift操作
+// 直接优化成100%^^
+var wallsAndGates = function (rooms) {
+  let m = rooms.length;
+  if (m == 0) {
+    return [];
+  }
+  let n = rooms[0].length;
+
+  const dirs = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+
+  let queue = [];
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      if (rooms[i][j] == 0) {
+        queue.push([i, j, 0]);
+      }
+    }
+  }
+
+  while (queue.length) {
+    let len = queue.length;
+    let newQueue = [];
+    
+    for (let i = 0; i < len; i++) {
+      let curPath = queue[i];
+      let curI = curPath[0];
+      let curJ = curPath[1];
+      let curDis = curPath[2];
+
+      for (j = 0; j < dirs.length; j++) {
+        let nextI = curI + dirs[j][0];
+        let nextJ = curJ + dirs[j][1];
+
+        if (nextI >= 0 && nextI < m && nextJ >= 0 && nextJ < n && rooms[nextI][nextJ] == 2147483647) {
+          rooms[nextI][nextJ] = curDis + 1;
+          newQueue.push([nextI, nextJ, curDis + 1]);
+        }
+      }
+    }
+    queue = newQueue;
   }
   return rooms;
 }
