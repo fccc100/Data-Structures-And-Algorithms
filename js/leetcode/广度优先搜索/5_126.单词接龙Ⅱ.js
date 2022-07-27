@@ -86,3 +86,68 @@ var findLadders = function (beginWord, endWord, wordList) {
   }
   return res;
 };
+
+
+var findLadders = function (beginWord, endWord, wordList) {
+  let wordSet = new Set();
+  for (let i = 0; i < wordList.length; i++) {
+    wordSet.add(wordList[i]);
+  }
+
+  if (wordSet.size == 0 || !wordSet.has(endWord)) {
+    return [];
+  }
+
+  wordSet.delete(beginWord)
+
+  let queue = [];
+  queue.push([beginWord]);
+
+  let visited = new Set();
+  visited.add(beginWord);
+
+  let res = [];
+  while (queue.length) {
+    let len = queue.length;
+    let newQueue = [];
+
+    for (let i = 0; i < len; i++) {
+
+      let curPath = queue[i];
+      let curWord = curPath[curPath.length - 1];
+
+      let charArray = curWord.split('');
+      for (let j = 0; j < curWord.length; j++) {
+        let originChar = charArray[j];
+
+        for (let k = 'a'.charCodeAt(); k <= 'z'.charCodeAt(); k++) {
+          if (String.fromCharCode(k) == originChar) {
+            continue;
+          }
+
+          charArray[j] = String.fromCharCode(k);
+          let nextWord = charArray.join('');
+
+          if (wordSet.has(nextWord)) {
+            let newPath = [...curPath];
+            newPath.push(nextWord);
+            visited.add(nextWord);
+            if (nextWord == endWord) {
+              res.push(newPath);
+            } else {
+              newQueue.push(newPath);
+            }
+          }
+        }
+        charArray[j] = originChar;
+      }
+    }
+
+    queue = newQueue;
+
+    for (let key of visited) {
+      wordSet.delete(key);
+    }
+  }
+  return res;
+};
