@@ -59,3 +59,44 @@ var hasPath = function(maze, start, destination) {
   // }
   // return false;
 };
+
+var hasPath = function(maze, start, destination) {
+  // let m = maze.length;
+  // if (m == 0) return false;
+  // let n = maze[0].length;
+
+  // // 先从开始位置遍历看是否能到达终点
+  // let dir = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+
+  // let visited = Array(m);
+  // for (let i = 0; i < m; i++) {
+  //   visited[i] = Array(n).fill(false);
+  // }
+
+  // let queue = [];
+  // queue.push([start[0], start[1]]);
+  // visited[start[0]][start[1]] = true;
+
+  // let canArrive = false;
+  // while (queue.length) {
+  //   let len = queue.length;
+
+  //   for (let i = 0; i < len; i++) {
+  //     let curPos = queue.shift();
+  //     let curI = curPos[0];
+  //     let curJ = curPos[1];
+
+  //     for (let j = 0; j < dir.length; j++) {
+  //       let nextI = curI + dir[j][0];
+  //       let nextJ = curJ + dir[j][1];
+  //       if (nextI >= 0 && nextI < m && nextJ >= 0 && nextJ < n && maze[nextI][nextJ] == 0 && !visited[nextI][nextJ]) {
+  //         if (destination[0] == nextI && destination[1] == nextJ) {
+  //           canArrive = true;
+  //         }
+
+  //         queue.push([nextI, nextJ]);
+  //       }
+  //     }
+  //   }
+  // }
+}
