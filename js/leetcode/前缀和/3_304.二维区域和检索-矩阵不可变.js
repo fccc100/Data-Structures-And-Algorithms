@@ -57,7 +57,17 @@ NumMatrix.prototype.sumRegion = function (row1, col1, row2, col2) {
  * @param {number[][]} matrix
  */
 var NumMatrix = function (matrix) {
-  this.matrix = matrix;
+  let m = matrix.length;
+  if (m > 0) {
+    let n = matrix[0].length;
+    this.sum = Array(m);
+    for (let i = 0; i < m; i++) {
+      this.sum[i] = Array(n + 1).fill(0);
+      for (let j = 0; j < n; j++) {
+        this.sum[i][j + 1] = this.sum[i][j] + matrix[i][j];
+      }
+    }
+  }
 };
 
 /** 
@@ -68,7 +78,11 @@ var NumMatrix = function (matrix) {
  * @return {number}
  */
 NumMatrix.prototype.sumRegion = function (row1, col1, row2, col2) {
-  
+  let sum = 0;
+  for (let i = row1; i <= row2; i++) {
+    sum += this.sum[i][col2 + 1] - this.sum[i][col1];
+  }
+  return sum;
 };
 
 /**

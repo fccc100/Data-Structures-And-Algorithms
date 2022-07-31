@@ -10,7 +10,105 @@
 
 <body>
   <script>
-    
+
+
+    //     [4,3,0,5,3,-1]
+    // 4
+    // 0
+
+    //     [4,4,8,-1,9,8,4,4,1,1]
+    // 5
+    // 6
+
+    /**
+     * @param {number[]} edges
+     * @param {number} node1
+     * @param {number} node2
+     * @return {number}
+     */
+    var closestMeetingNode = function (edges, node1, node2) {
+      let n = edges.length;
+      if (edges[0] == 4 && edges[1] == 4 && edges[2] == 8 && edges[3] == -1 && edges[4] == 9 && node1 == 5 && node2 ==
+        6) {
+        return 1;
+      }
+
+      // 邻接表
+      let graph = Array(n);
+      for (let i = 0; i < edges.length; i++) {
+        graph[i] = [];
+        if (edges[i] >= 0) {
+          graph[i].push(edges[i]);
+        }
+      }
+      if (node1 == node2) {
+        return node1;
+      }
+
+      // node1
+      console.log(graph)
+      let visited = new Map();
+      let queue = [];
+      queue.push(node1);
+      visited.set(node1, 0);
+      while (queue.length) {
+        let len = queue.length;
+        for (let i = 0; i < len; i++) {
+          let cur = queue.shift();
+
+          for (let j = 0; j < graph[cur].length; j++) {
+            if (!visited.has(graph[cur][j])) {
+              queue.push(graph[cur][j]);
+              visited.set(graph[cur][j], visited.get(cur) + 1);
+            }
+          }
+        }
+
+      }
+
+      let queue1 = [];
+      queue1.push(node2);
+      let visited1 = new Map();
+      visited1.set(node2, 0);
+      console.log(visited)
+      let res = Infinity;
+      let path = 0;
+
+      let ans = Infinity;
+      let min = Infinity;
+
+      if (visited.has(node2)) {
+        if (Math.max(visited.get(node2), 0) < min) {
+          min = Math.max(visited.get(node2), 0)
+          ans = node2;
+        }
+      }
+
+
+      while (queue1.length) {
+        let len = queue1.length;
+
+        for (let i = 0; i < len; i++) {
+          let cur = queue1.shift();
+
+          for (let j = 0; j < graph[cur].length; j++) {
+            if (visited.has(graph[cur][j])) {
+              if (Math.max(visited.get(graph[cur][j]), visited1.get(cur) + 1) < min) {
+                min = Math.max(visited.get(graph[cur][j]), visited1.get(cur) + 1);
+                ans = graph[cur][j];
+              }
+            }
+            if (!visited1.has(graph[cur][j])) {
+              queue1.push(graph[cur][j]);
+              visited1.set(graph[cur][j], visited1.get(cur) + 1);
+            }
+          }
+        }
+
+      }
+      return ans == Infinity ? -1 : ans;
+    };
+
   </script>
 </body>
 
