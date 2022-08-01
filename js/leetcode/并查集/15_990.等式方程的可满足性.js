@@ -86,3 +86,61 @@ var equationsPossible = function(equations) {
   }
   return true;
 };
+
+
+class UnionFind {
+  constructor(size) {
+    this.parent = Array(size);
+    for (let i = 0; i < size; i++) {
+      this.parent[i] = i;
+    }
+  }
+
+  findRoot(p) {
+    while (p != this.parent[p]) {
+      p = this.parent[p];
+    }
+    return p;
+  }
+
+  isConnected(p, q) {
+    return this.findRoot(p) == this.findRoot(q);
+  }
+
+  union(p, q) {
+    let pRoot = this.findRoot(p);
+    let qRoot = this.findRoot(q);
+    if (pRoot == qRoot) {
+      return;
+    }
+
+    this.parent[pRoot] = qRoot;
+  }
+}
+/**
+ * @param {string[]} equations
+ * @return {boolean}
+ */
+var equationsPossible = function(equations) {
+  let uf = new UnionFind(26);
+  for (let i = 0; i < equations.length; i++) {
+    let c1 = equations[i][0].charCodeAt() - 'a'.charCodeAt();
+    let c2 = equations[i][3].charCodeAt() - 'a'.charCodeAt();
+    if (uf.isConnected(c1, c2)) {
+      continue;
+    }
+    if (equations[i][1] == '=') {
+      uf.union(c1, c2);
+    }
+  }
+  for (let i = 0; i < equations.length; i++) {
+    let c1 = equations[i][0].charCodeAt() - 'a'.charCodeAt();
+    let c2 = equations[i][3].charCodeAt() - 'a'.charCodeAt();
+    if (equations[i][1] == '!') {
+      if (uf.isConnected(c1, c2)) {
+        return false;
+      }
+    }
+  }
+  return true;
+};

@@ -81,3 +81,63 @@ class UnionFind {
     }
   }
 }
+
+// 20220801
+class UnionFind {
+  constructor(size) {
+    this.parent = Array(size);
+    for (let i = 0; i < size; i++) {
+      this.parent[i] = i;
+    }
+  }
+
+  findRoot(p) {
+    while (p != this.parent[p]) {
+      p = this.parent[p];
+    }
+    return p;
+  }
+
+  isConnected(p, q) {
+    return this.findRoot(p) == this.findRoot(q);
+  }
+
+  union(p, q) {
+    let pRoot = this.findRoot(p);
+    let qRoot = this.findRoot(q);
+    if (pRoot == qRoot) {
+      return;
+    }
+
+    this.parent[pRoot] = qRoot;
+  }
+
+  getConnectedComponent() {
+    let res = 0;
+    for (let i = 0; i < this.parent.length; i++) {
+      if (this.parent[i] == i) {
+        res++;
+      }
+    }
+    return res;
+  }
+}
+/**
+ * @param {number[][]} isConnected
+ * @return {number}
+ */
+var findCircleNum = function(isConnected) {
+  let n = isConnected.length;
+  let uf = new UnionFind(n);
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if (isConnected[i][j] == 1) {
+        if (uf.isConnected(i, j)) {
+          continue;
+        }
+        uf.union(i, j);
+      }
+    }
+  }
+  return uf.getConnectedComponent();
+};

@@ -70,3 +70,57 @@ class UnionFind {
   }
 }
 
+// 20220801
+class UnionFind {
+  constructor(size) {
+    this.parent = Array(size);
+    for (let i = 0; i < size; i++) {
+      this.parent[i] = i;
+    }
+  }
+
+  findRoot(p) {
+    while (p != this.parent[p]) {
+      p = this.parent[p];
+    }
+    return p;
+  }
+
+  isConnected(p, q) {
+    return this.findRoot(p) == this.findRoot(q);
+  }
+
+  union(p, q) {
+    let pRoot = this.findRoot(p);
+    let qRoot = this.findRoot(q);
+    if (pRoot == qRoot) {
+      return;
+    }
+    this.parent[pRoot] = qRoot;
+  }
+
+  getConnectedComponent() {
+    let res = 0;
+    for (let i = 0; i < this.parent.length; i++) {
+      if (this.parent[i] == i) {
+        res++;
+      }
+    }
+    return res;
+  }
+}
+/**
+ * @param {number[]} row
+ * @return {number}
+ */
+var minSwapsCouples = function(row) {
+  let uf = new UnionFind(row.length / 2);
+  for (let i = 0; i < row.length; i += 2) {
+    if (uf.isConnected(row[i] >> 1, row[i + 1] >> 1)) {
+      continue;
+    }
+    uf.union(row[i] >> 1, row[i + 1] >> 1);
+  }
+
+  return (row.length >> 1) - uf.getConnectedComponent();
+};
