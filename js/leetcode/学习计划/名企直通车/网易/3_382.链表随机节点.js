@@ -7,6 +7,7 @@
 // int getRandom() 从链表中随机选择一个节点并返回该节点的值。链表中所有节点被选中的概率相等。
 
 // 示例：
+
 // 输入
 // ["Solution", "getRandom", "getRandom", "getRandom", "getRandom", "getRandom"]
 // [[[1, 2, 3]], [], [], [], [], []]
