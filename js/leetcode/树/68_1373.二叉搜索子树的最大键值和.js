@@ -89,3 +89,52 @@ function keyValSum(root) {
 
   return keyValSum(root.left) + keyValSum(root.right) + root.val;
 }
+
+// 2.超时
+var maxSumBST = function(root) {
+
+  let res = -Infinity;
+  function __maxSumBST(root) {
+    if (root == null) {
+      res = Math.max(res, 0);
+      return;
+    }
+    
+    if (isBstTree(root)) {
+      res = Math.max(res, root.keyValSum);
+    }
+  
+    __maxSumBST(root.left),
+    __maxSumBST(root.right);
+  }
+
+  keyValSum(root);
+  __maxSumBST(root);
+  return res;
+};
+
+function isBstTree(root) {
+  function __isBstTree(node, min, max) {
+    if (node == null) {
+      return true;
+    }
+
+    if (node.val <= min || node.val >= max) {
+      return false;
+    }
+    
+    return __isBstTree(node.left, min, node.val) && __isBstTree(node.right, node.val, max);
+  }
+
+  return __isBstTree(root, -Infinity, Infinity);
+}
+
+function keyValSum(root) {
+  
+  if (root == null) {
+    return 0;
+  }
+
+  root.keyValSum = keyValSum(root.left) + keyValSum(root.right) + root.val;
+  return root.keyValSum;
+}
