@@ -10,8 +10,6 @@
 
 <body>
   <script>
-
-
     //     [4,3,0,5,3,-1]
     // 4
     // 0
@@ -108,7 +106,407 @@
       }
       return ans == Infinity ? -1 : ans;
     };
+  </script>
 
+  <script>
+    /**
+     * @param {number[][]} items1
+     * @param {number[][]} items2
+     * @return {number[][]}
+     */
+    var mergeSimilarItems = function (items1, items2) {
+      let map = new Map();
+      for (let i = 0; i < items1.length; i++) {
+        if (!map.has(items1[i][0])) {
+          map.set(items1[i][0], items1[i][1]);
+        } else {
+          map.set(items1[i][0], map.get(items1[i][0]) + items1[i][1]);
+        }
+      }
+      for (let i = 0; i < items2.length; i++) {
+        if (!map.has(items2[i][0])) {
+          map.set(items2[i][0], items2[i][1]);
+        } else {
+          map.set(items2[i][0], map.get(items2[i][0]) + items2[i][1]);
+        }
+      }
+
+      let res = [];
+      for (let entry of map) {
+        res.push(entry);
+        return res;
+      }
+    };
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var countBadPairs = function (nums) {
+
+      let res = 0;
+      for (let i = 0; i < nums.length; i++) {
+        for (let j = i + 1; j < nums.length; j++) {
+          if (j - i != nums[j] - nums[i]) {
+            res++;
+          }
+        }
+      }
+      return res;
+    };
+
+    var countBadPairs = function (nums) {
+
+      let m = nums.length;
+      let total = m * (m - 1) / 2;
+      let map = new Map();
+      for (let i = 0; i < nums.length; i++) {
+        let cur = nums[i] - i;
+        if (map.has(0 - cur)) {
+          total -= map.get(0 - cur);
+        }
+        map.set(i - nums[i], map.has(i - nums[i]) ? map.get(i - nums[i]) + 1 : 1);
+      }
+      return total;
+    };
+
+
+    /**
+     * @param {number[]} tasks
+     * @param {number} space
+     * @return {number}
+     */
+    var taskSchedulerII = function (tasks, space) {
+      let map = new Map();
+      let res = 0;
+      for (let i = 0; i < tasks.length;) {
+        if (map.has(tasks[i])) {
+          if (map.get(tasks[i]) > i - space) {
+            res += (space - (i - map.get(tasks[i]) - 1));
+          }
+        }
+
+        res++;
+        map.set(tasks[i], i);
+      }
+      return res;
+    };
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var minimumReplacement = function (nums) {
+      let res = 0;
+      for (let i = 0; i < nums.length - 1; i++) {
+        if (nums[i] < nums[i + 1]) {
+          let m = nums[i + 1];
+          let n = nums[i];
+          while (m > n) {
+            m -= n;
+            res++;
+          }
+          nums[i] = m + n;
+        }
+      }
+      return res;
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * @param {number[]} nums
+     * @param {number} diff
+     * @return {number}
+     */
+    var arithmeticTriplets = function (nums, diff) {
+      let res = 0;
+      for (let i = 0; i < nums.length; i++) {
+        for (let j = i + 1; j < nums.length; j++) {
+          for (let k = j + 1; k < nums.length; k++) {
+            if (nums[k] - nums[j] == diff && nums[j] - nums[i] == diff) {
+              res++;
+            }
+          }
+        }
+      }
+      return res;
+    };
+
+
+    /**
+     * @param {number} n
+     * @param {number[][]} edges
+     * @param {number[]} restricted
+     * @return {number}
+     */
+    var reachableNodes = function (n, edges, restricted) {
+      let graph = Array(n);
+      for (let i = 0; i < n; i++) {
+        graph[i] = [];
+      }
+
+      for (let i = 0; i < edges.length; i++) {
+        graph[edges[i][0]].push(edges[i][1]);
+        graph[edges[i][1]].push(edges[i][0]);
+      }
+
+      let visited = Array(n).fill(false);
+
+      function bfs(v) {
+        visited[v] = true;
+
+        let queue = [];
+        queue.push(v);
+
+        let res = 0;
+        while (queue.length) {
+          let len = queue.length;
+          let newQueue = [];
+
+          for (let i = 0; i < len; i++) {
+            let cur = queue[i];
+
+            if (!restricted.includes(cur)) {
+              res++;
+            }
+
+            for (let j = 0; j < graph[cur].length; j++) {
+              if (!visited[graph[cur][j]] && !restricted.includes(graph[cur][j])) {
+                visited[graph[cur][j]] = true;
+                newQueue.push(graph[cur][j]);
+              }
+            }
+          }
+          queue = newQueue;
+        }
+        return res;
+      }
+
+      return bfs(0);
+    };
+
+
+    /**
+     * @param {number[]} nums
+     * @return {boolean}
+     */
+    var validPartition = function (nums) {
+
+    };
+
+    function check(nums) {
+      let n = nums.length;
+      if (n == 0) return true;
+      if (n == 1) return false;
+      if (n == 2) {
+        if (nums[1] == nums[0]) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      for (let i = 0; i < n; i++) {
+
+      }
+    }
+
+
+    /**
+     * @param {string} s
+     * @param {number} k
+     * @return {number}
+     */
+    var longestIdealString = function (s, k) {
+      let n = s.length;
+
+      // dp[i]: 以i位置结尾的最长理想字符串的长度
+      let dp = Array(n).fill(0);
+
+      dp[0] = 1;
+
+      let max = dp[0]
+      for (let i = 1; i < n; i++) {
+        if (Math.abs(s[i].charCodeAt() - s[i - 1].charCodeAt()) <= k) {
+          dp[i] = Math.max(dp[i], dp[j] + 1);
+        } else {
+          dp[i] = Math.max(dp[i - 1], 1);
+        }
+        max = Math.max(max, dp[i])
+        // for (let j = i - 1; j >= 0; j--) {
+        //   if (Math.abs(s[j].charCodeAt() - s[i].charCodeAt()) <= k) {
+        //   }
+        // }
+      }
+      return max;
+
+    };
+
+    var longestIdealString = function (s, k) {
+      let n = s.length;
+
+      // dp[i]: 以i位置结尾的最长理想字符串的长度
+      let dp = Array(n);
+      for (let i = 0; i < n; i++) {
+        dp[i] = Array(2);
+      }
+
+      dp[0][0] = 1;
+      dp[0][1] = s[0];
+
+      let max = dp[0][0]
+      for (let i = 1; i < n; i++) {
+        if (Math.abs(s[i].charCodeAt() - dp[i - 1][1].charCodeAt()) <= k) {
+          dp[i][0] = dp[i - 1][0] + 1;
+          dp[i][1] = s[i];
+        } else {
+          dp[i][0] = dp[i - 1][0];
+          dp[i][1] = dp[i - 1][1];
+        }
+        max = Math.max(max, dp[i][0])
+        // for (let j = i - 1; j >= 0; j--) {
+        //   if (Math.abs(s[j].charCodeAt() - s[i].charCodeAt()) <= k) {
+        //   }
+        // }
+      }
+      return max;
+
+    };
+
+    "jxhwaysa"
+    14
+    输出：
+    3
+    预期：
+    5
+
+
+    var longestIdealString = function (s, k) {
+      debugger
+
+      let memo = Array(s.length);
+
+      function f(s, k, index) {
+        if (index == 0) {
+          return 1;
+        }
+
+        if (memo[index] !== undefined) {
+          return memo[index];
+        }
+
+        let max = 1;
+        for (let i = index - 1; i >= 0; i--) {
+          if (Math.abs(s[index].charCodeAt() - s[i].charCodeAt()) <= k) {
+            max = Math.max(max, f(s, k, i) + 1);
+          }
+        }
+        return memo[index] = max;
+      }
+
+      let max = 1;
+      for (let i = 0; i < s.length; i++) {
+        max = Math.max(max, f(s, k, s.length - 1));
+      }
+      return max;
+    };
+
+    console.log(longestIdealString('lkpkxcigcs', 6))
+
+    //     输入：
+    // a b c d e f g h i j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z
+    // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26
+
+    // "lkpkxcigcs"
+    // 6
+    // 输出：
+    // 4
+    // 预期：
+    // 7
+
+
+
+    var longestIdealString = function (s, k) {
+      let n = s.length;
+
+      // dp[i]: 以i位置结尾的最长理想字符串的长度
+      let dp = Array(n).fill(0);
+
+      dp[0] = 1;
+
+      let map = new Map();
+      map.set(s[0], 1);
+      let max = dp[0]
+      for (let i = 1; i < n; i++) {
+        for (let j = 0; j <= 26; j++) {
+          let char = String.fromCharCode(j + 'a'.charCodeAt());
+          if (map.has(char)) {
+            if (Math.abs(s[i].charCodeAt() - char.charCodeAt()) <= k) {
+              dp[i] = Math.max(dp[i], map.get(char) + 1);
+            }
+          }
+        }
+        map.set(s[i], Math.max(dp[i], 1));
+        max = Math.max(max, dp[i]);
+      }
+      return max;
+
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * @param {number[]} nums
+     * @return {boolean}
+     */
+    var validPartition = function (nums) {
+      let n = nums.length;
+
+      // dp[i]: 以i结尾子数组是否可以划分
+      let dp = Array(n);
+
+      dp[0] = true;
+      dp[1] = nums[0] == nums[1] ? true : false;
+      for (let i = 2; i < n; i++) {
+        if (nums[i] != nums[i - 1] && nums[i] - nums[i - 1] != 1) {
+          dp[i] = false;
+        }
+
+        
+      }
+    };
   </script>
 </body>
 
