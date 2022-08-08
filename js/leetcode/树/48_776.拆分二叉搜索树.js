@@ -15,6 +15,11 @@
 // 输入: root = [1], target = 1
 // 输出: [[1],[]]
 
+        //          4
+        //     2        6
+        //  1     3  5      7
+
+
 /**
  * Definition for a binary tree node.
  * function TreeNode(val, left, right) {
@@ -29,5 +34,26 @@
  * @return {TreeNode[]}
  */
 var splitBST = function(root, target) {
+  // res[0]存放小于等于的子树，res[1]存放大于的子树
+  let res = Array(2);
   
+  // 分割以root为根的树，返回小子树和大子树
+  function split(root, target) {
+    if (root == null) return [null, null];
+
+    // 当前值小于等于target，左子树肯定更小，但右子树可能还有比target小的
+    if (root.val <= target) {
+      res = split(root.right, target);
+      root.right = res[0];
+      res[0] = root;
+      return res;
+    } else {
+      res = split(root.left, target);
+      root.left = res[1];
+      res[1] = root;
+      return res;
+    }
+  }
+
+  return split(root, target);
 };
