@@ -35,7 +35,7 @@ var findMinHeightTrees = function(n, edges) {
   for (let i = 0; i < edges.length; i++) {
     graph[edges[i][0]].push(edges[i][1]);
     graph[edges[i][1]].push(edges[i][0]);
-  }
+}
 
   let visited = Array(n).fill(false);
 

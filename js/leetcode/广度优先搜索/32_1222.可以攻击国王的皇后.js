@@ -29,22 +29,53 @@
  * @return {number[][]}
  */
 var queensAttacktheKing = function(queens, king) {
-  // let n = 8;
+  let n = 8;
 
-  // let res = [];
-  // for (let i = 0; i < queens.length; i++) {
-  //   if (queens[i][0] == king[0]) {
-  //     res.push(queens[i]);
-  //   }
-  //   if (queens[i][1] == king[1]) {
-  //     res.push(queens[i]);
-  //   }
-  //   if (queens[i][0] + queens[i][1] == king[0] + king[1]) {
-  //     res.push(queens[i]);
-  //   }
-  //   if (queens[i][0] - queens[i][1] == king[0] - king[1]) {
-  //     res.push(queens[i]);
-  //   }
-  // }
-  // return res;
+  let grid = Array(n);
+  for (let i = 0; i < n; i++) {
+    grid[i] = Array(n).fill(0);
+  }
+
+  for (let i = 0; i < queens.length; i++) {
+    grid[queens[i][0]][queens[i][1]] = 1;
+  }
+
+  function bfs(grid, x, y, dir) {
+    let queue = [];
+    queue.push([x, y]);
+
+    while (queue.length) {
+      let cur = queue.shift();
+
+      let nextX = cur[0] + dir[0];
+      let nextY = cur[1] + dir[1];
+      if (nextX >= 0 && nextX < n && nextY >= 0 && nextY < n) {
+        if (grid[nextX][nextY] == 1) {
+          return [nextX, nextY];
+        }
+        queue.push([nextX, nextY]);
+      }
+    }
+    return null;
+  }
+
+  const dirs = [
+    [-1, 0],
+    [-1, 1],
+    [0, 1],
+    [1, 1],
+    [1, 0],
+    [1, -1],
+    [0, -1],
+    [-1, -1]
+  ];
+
+  let res = [];
+  for (let i = 0; i < dirs.length; i++) {
+    let queen = bfs(grid, king[0], king[1], dirs[i]);
+    if (queen) {
+      res.push(queen);
+    }
+  }
+  return res;
 };
