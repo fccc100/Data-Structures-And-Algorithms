@@ -20,7 +20,7 @@
  * @param {number[][]} connections
  * @return {number[][]}
  */
-// 删除每条边看是否只有一个联通分量，使用rank合并的并查集任超时
+// 删除每条边看是否只有一个联通分量，使用rank合并的并查集超时
 var criticalConnections = function (n, connections) {
   let graph = Array(n);
   for (let i = 0; i < n; i++) {

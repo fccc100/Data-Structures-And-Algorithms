@@ -504,9 +504,152 @@
           dp[i] = false;
         }
 
-        
+
       }
     };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * @param {number[][]} grid
+     * @return {number[][]}
+     */
+    var largestLocal = function (grid) {
+      let m = grid.length;
+
+      let res = Array(m - 2);
+      for (let i = 0; i < m - 2; i++) {
+        res[i] = Array(m - 2);
+      }
+      for (let i = 0; i < m - 2; i++) {
+        for (let j = 0; j < m - 2; j++) {
+          let max = grid[i][j];
+          for (let k = i; k < k + 3; k++) {
+            for (let l = j; l < j + 3; l++) {
+              max = Math.max(max, grid[k][l]);
+            }
+          }
+          res[i][j] = max;
+        }
+      }
+      return res;
+    };
+
+    /**
+     * @param {number[]} edges
+     * @return {number}
+     */
+    var edgeScore = function (edges) {
+      let scores = Array(edges.length).fill(0);
+
+      let max = -1;
+      for (let i = 0; i < edges.length; i++) {
+        scores[edges[i]] += i;
+        max = Math.max(scores[edges[i]], max);
+      }
+
+      for (let i = 0; i < scores.length; i++) {
+        if (scores[i] == max) {
+          return i;
+        }
+      }
+      return -1;
+    };
+
+
+    /**
+     * @param {string} pattern
+     * @return {string}
+     */
+    var smallestNumber = function (pattern) {
+      let n = pattern.length;
+      let min = 1;
+      let max = n + 1;
+
+      let iCnt = 0;
+      let dCnt = 0;
+      for (let i = 0; i < pattern.length; i++) {
+        if (pattern[i] == 'I') {
+          iCnt++;
+        } else {
+          dCnt++;
+        }
+      }
+
+      let minMax = iCnt + 1;
+      console.log(iCnt, dCnt)
+      let res = '';
+      for (let i = 0; i < pattern.length;) {
+        if (i < pattern.length - 1) {
+          if (pattern[i] == 'I') {
+            res = res + min;
+            min++;
+            i++;
+          } else {
+            let curDCnt = 0;
+            let j = i;
+            while (pattern[j] == 'D') {
+              curDCnt++;
+              j++;
+            }
+            console.log(j, 'jjjjjjjjjjjjjjjjjjjj')
+            if (j >= n) {
+              console.log('sdfsdfsf')
+              curDCnt++;
+            }
+            console.log(curDCnt, 'curdcnt', minMax)
+            let curMax = minMax + curDCnt - 1;
+            while (curMax >= minMax) {
+              res = res + curMax;
+              curMax--;
+            }
+            minMax = minMax + curDCnt;
+            i = i + curDCnt;
+          }
+        } else {
+          if (pattern[i] == 'I') {
+            res = res + min;
+            min++;
+            i++;
+          }
+        }
+        console.log(res)
+      }
+      return res;
+    };
+
+
+
+    /**
+     * @param {number} n
+     * @return {number}
+     */
+    var countSpecialNumbers = function (n) {
+      if (n <= 10) {
+        return n;
+      }
+
+      let res = 10;
+      let cur = 9;
+      for (let i = 11; i < n; i += 10) {
+        res += 8;
+      }
+      return res;
+    };
+
+    // "DDDIII"
   </script>
 </body>
 
