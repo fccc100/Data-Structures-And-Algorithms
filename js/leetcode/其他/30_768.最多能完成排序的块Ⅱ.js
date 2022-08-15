@@ -39,7 +39,6 @@ var maxChunksToSorted = function (arr) {
   preMax[0] = arr[0];
   for (let i = 1; i < n; i++) {
     preMax[i] = Math.max(arr[i], preMax[i - 1]);
-
   }
 
   // 第i位前面的最大值小于等于第i位后面的最小值，可以做一次拆分
