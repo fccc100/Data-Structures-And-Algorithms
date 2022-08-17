@@ -41,32 +41,32 @@ function equals(text, l1, l2, r1, r2) {
 
 // 字符串哈希
 function longestDecomposition(text) {
-  let mod = 1e9 + 7;
-  function _longestDecomposition(text, l, r) {
-    if (l > r) return 0;
-    let lHash = 0;
-    let rHash = 0;
-    for (let i = l, j = r; i < r; i++, j--) {
-      lHash = (lHash * 26 + (text[i].charCodeAt() - 'a'.charCodeAt())) % mod;
-      rHash = ((text[j].charCodeAt() - 'a'.charCodeAt()) * Math.pow(26, r - j) + rHash) % mod;
-      if (lHash == rHash && equals(text, l, i, j, r)) {
-        return 2 + _longestDecomposition(text, i + 1, j - 1);
-      }
-    }
+  // let mod = 1e9 + 7;
+  // function _longestDecomposition(text, l, r) {
+  //   if (l > r) return 0;
+  //   let lHash = 0;
+  //   let rHash = 0;
+  //   for (let i = l, j = r; i < r; i++, j--) {
+  //     lHash = (lHash * 26 + (text[i].charCodeAt() - 'a'.charCodeAt())) % mod;
+  //     rHash = ((text[j].charCodeAt() - 'a'.charCodeAt()) * Math.pow(26, r - j) + rHash) % mod;
+  //     if (lHash == rHash && equals(text, l, i, j, r)) {
+  //       return 2 + _longestDecomposition(text, i + 1, j - 1);
+  //     }
+  //   }
 
-    return 1;
-  }
+  //   return 1;
+  // }
 
-  function equals(text, l1, l2, r1, r2) {
-    if (l2 - l1 !== r2 - r1) {
-      return false;
-    }
-    for (let i = l1, j = r1; i <= l2; i++, j++) {
-      if (text[i] != text[j]) {
-        return false;
-      }
-    }
-    return true;
-  }
-  return _longestDecomposition(text, 0, text.length - 1);
+  // function equals(text, l1, l2, r1, r2) {
+  //   if (l2 - l1 !== r2 - r1) {
+  //     return false;
+  //   }
+  //   for (let i = l1, j = r1; i <= l2; i++, j++) {
+  //     if (text[i] != text[j]) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
+  // return _longestDecomposition(text, 0, text.length - 1);
 }
