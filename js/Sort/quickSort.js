@@ -1,3 +1,0 @@
-function quickSort(nums) {
-
-}
