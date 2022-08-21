@@ -632,24 +632,482 @@
 
 
 
+
+    if (n === 0) {
+      return 1;
+    }
+    if (n === 1) {
+      return 10;
+    }
+    let res = 10,
+      cur = 9;
+    for (let i = 0; i < n - 1; i++) {
+      cur *= 9 - i;
+      res += cur;
+    }
+    return res;
+
     /**
      * @param {number} n
      * @return {number}
      */
     var countSpecialNumbers = function (n) {
+
       if (n <= 10) {
         return n;
       }
-
-      let res = 10;
-      let cur = 9;
-      for (let i = 11; i < n; i += 10) {
-        res += 8;
+      let res = 10,
+        cur = 9;
+      for (let i = 0; i < n - 1; i++) {
+        cur *= 9 - i;
+        res += cur;
       }
       return res;
     };
 
     // "DDDIII"
+
+
+
+
+
+
+
+
+
+    /**
+     * @param {string} blocks
+     * @param {number} k
+     * @return {number}
+     */
+    // WBBWWBBWBW
+    // 1 2 2 2 1 1 1
+    var minimumRecolors = function (blocks, k) {
+      let wCnt = 0;
+      let bCnt = 0;
+      if (blocks.length == 1) {
+        if (blocks[0] == 'W') {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+
+      let l = 0;
+      let r = l + k - 1;
+      for (let i = 0; i <= r; i++) {
+        if (blocks[i] == 'W') {
+          wCnt++;
+        } else {
+          bCnt++;
+        }
+      }
+
+      let min = wCnt;
+      console.log(min)
+      while (r < blocks.length) {
+        r++;
+        if (r >= blocks.length) break;
+        if (blocks[r] == 'W') {
+          wCnt++;
+        } else {
+          bCnt++;
+        }
+
+        if (blocks[l] == 'W') {
+          wCnt--;
+        } else {
+          bCnt--;
+        }
+        l++;
+
+
+        min = Math.min(min, wCnt);
+      }
+      return min < 0 ? 0 : min;
+    };
+
+    //     "WWBBBWBBBBBWWBWWWB"
+    //     16
+
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var secondsToRemoveOccurrences = function (s) {
+      let arr = s.split('');
+
+      let res = 0;
+      while (true) {
+        let has = false;
+        for (let i = 0; i < arr.length - 1;) {
+          if (arr[i] == 0 && arr[i + 1] == 1) {
+            has = true;
+            swap(arr, i, i + 1);
+            i += 2;
+          } else {
+            i++;
+          }
+        }
+        if (!has) break;
+        res++;
+      }
+      return res;
+    };
+
+    function swap(nums, i, j) {
+      let temp = nums[i];
+      nums[i] = nums[j];
+      nums[j] = temp;
+    }
+
+
+
+    /**
+     * @param {string} s
+     * @param {number[][]} shifts
+     * @return {string}
+     */
+    var shiftingLetters = function (s, shifts) {
+      let nums = s.split('');
+      for (let i = 0; i < nums.length; i++) {
+        nums[i] = nums[i].charCodeAt() - 'a'.charCodeAt();
+      }
+
+      let diff = Array(nums.length + 1).fill(0);
+
+      for (let i = 0; i < shifts.length; i++) {
+        if (shifts[i][2] == 0) {
+          diff[shifts[i][0]]--;
+          diff[shifts[i][1] + 1]++;
+        } else {
+          diff[shifts[i][0]]++;
+          diff[shifts[i][1] + 1]--;
+        }
+      }
+      console.log(diff, 'diff')
+      let preSum = Array(nums.length + 1).fill(0);
+      preSum[0] = 0;
+      for (let i = 1; i < preSum.length; i++) {
+        preSum[i] = preSum[i - 1] + diff[i - 1];
+      }
+      console.log(preSum)
+      for (let i = 0; i < nums.length; i++) {
+        nums[i] = nums[i] + preSum[i + 1];
+        console.log(nums[i], 'nums[i]')
+        if (nums[i] == 26) {
+          nums[i] = 0;
+        }
+        if (nums[i] >= 26) {
+          if (nums[i] % 26 + 'a'.charCodeAt() == 123) {
+            nums[i] = 'a';
+          } else {
+            nums[i] = String.fromCharCode(nums[i] % 26 + 'a'.charCodeAt());
+          }
+
+        } else if (nums[i] < 0) {
+          if ((nums[i] % 26) + 26 + 'a'.charCodeAt() == 123) {
+            nums[i] = 'a'
+          } else {
+            nums[i] = String.fromCharCode((nums[i] % 26) + 26 + 'a'.charCodeAt());
+          }
+
+        } else {
+          nums[i] = String.fromCharCode(nums[i] + 'a'.charCodeAt());
+        }
+      }
+
+      return nums.join('');
+    };
+
+
+    /**
+     * @param {number[]} nums
+     * @param {number[]} removeQueries
+     * @return {number[]}
+     */
+    var maximumSegmentSum = function (nums, removeQueries) {
+      let n = nums.length;
+      let temp = Array(n).fill(0);
+
+      let res = Array(n).fill(0);
+      res[n - 1] = 0;
+      temp[removeQueries[n - 1]] = nums[removeQueries[n - 1]];
+      for (let i = n - 2; i >= 0; i--) {
+        console.log(temp)
+        res[i] = max(temp);
+
+        temp[removeQueries[i]] = nums[removeQueries[i]];
+      }
+      return res;
+    };
+
+    function max(nums) {
+      let max = 0;
+      let sum = 0;
+      for (let i = 0; i < nums.length; i++) {
+        if (nums[i] == 0) {
+          sum = 0;
+        } else {
+          sum += nums[i];
+        }
+        max = Math.max(max, sum);
+      }
+      return max;
+    }
+
+
+
+
+
+
+
+
+
+
+    /**
+     * @param {number} initialEnergy
+     * @param {number} initialExperience
+     * @param {number[]} energy
+     * @param {number[]} experience
+     * @return {number}
+     */
+    var minNumberOfHours = function (initialEnergy, initialExperience, energy, experience) {
+      let res = 0;
+      for (let i = 0; i < energy.length; i++) {
+        if (initialEnergy > energy[i] && initialExperience > experience[i]) {
+          initialEnergy -= energy[i];
+          initialExperience += experience[i];
+          continue;
+        } else {
+
+          if (energy[i] >= initialEnergy) {
+            res += energy[i] - initialEnergy + 1;
+            initialEnergy += energy[i] - initialEnergy + 1;
+          }
+          if (experience[i] >= initialExperience) {
+            res += experience[i] - initialExperience + 1;
+            initialExperience += experience[i] - initialExperience + 1
+          }
+
+          initialEnergy -= energy[i];
+          initialExperience += experience[i];
+        }
+      }
+      return res;
+    };
+
+    // initialEnergy = 5, initialExperience = 3, energy = [1,4,3,2], experience = [2,6,3,1]
+    // 4 5
+    // 
+
+
+    /**
+     * @param {string} num
+     * @return {string}
+     */
+    var largestPalindromic = function (num) {
+      let map = Array(10).fill(0);
+      for (let i = 0; i < num.length; i++) {
+        map[Number(num[i])]++;
+      }
+
+      for (let i = 0; i < map.length; i++) {
+        map[i] = [map[i], i];
+      }
+
+      map.sort((a, b) => b[1] - a[1]);
+
+      let head = '';
+      let tail = '';
+      for (let i = 0; i < map.length; i++) {
+        if (map[i][0] >= 2) {
+          let cnt = Math.floor(map[i][0] / 2);
+          for (let j = 0; j < cnt; j++) {
+            head += map[i][1];
+            tail = map[i][1] + tail;
+          }
+          map[i][0] -= cnt * 2;
+        }
+      }
+
+      let last;
+      for (let i = 0; i < map.length; i++) {
+        if (map[i][0] > 0) {
+          last = map[i][1] + '';
+          break;
+        }
+      }
+
+      if (last) {
+        head = head + last;
+      }
+
+      let res = head + tail;
+
+      let i = 0;
+      while (res[i] == 0 && i < num.length) {
+        i++;
+      }
+
+      if (i >= num.length) {
+        return '0'
+      }
+
+      if (i > 0) {
+        res = res.substring(i, num.length - i);
+      }
+
+      //if (!res) return '0';
+      return res;
+    };
+
+
+
+    /**
+     * @param {TreeNode} root
+     * @param {number} start
+     * @return {number}
+     */
+    var amountOfTime = function (root, start) {
+      if (root == null) return 0;
+
+      function depth(root) {
+        if (root == null) {
+          return 0;
+        }
+
+        return Math.max(depth(root.left), depth(root.right)) + 1;
+      }
+
+      // 寻找指定节点的高度
+      function findTarget(root, target) {
+        if (root == null) return Infinity;
+        if (root.val == target) {
+          return 0;
+        }
+
+        return Math.min(findTarget(root.left, target), findTarget(root.right, target)) + 1;
+      }
+
+      let leftDepth = depth(root.left);
+      let rightDepth = depth(root.right);
+
+
+      if (root.val == start) {
+        return Math.max(leftDepth, rightDepth);
+      }
+
+
+
+      let leftTargetDepth = findTarget(root.left, start);
+      let rightTargetDepth = findTarget(root.right, start);
+
+      if (leftTargetDepth < rightTargetDepth) {
+        return Math.max(leftTargetDepth + rightDepth, leftDepth - leftTargetDepth);
+      } else {
+        return Math.max(rightTargetDepth + leftDepth, rightDepth - rightTargetDepth);
+      }
+    };
+
+
+
+
+
+    /**
+     * @param {TreeNode} root
+     * @param {number} start
+     * @return {number}
+     */
+    var amountOfTime = function (root, start) {
+      function findNode(root, val) {
+        if (root == null) {
+          return null;
+        }
+        if (root.val = val) {
+          return root;
+        }
+
+        let leftNode = findNode(root.left, val);
+        let rightNode = findNode(root.right, val);
+
+        return leftNode ? leftNode : rightNode;
+      }
+
+      let targetNode = findNode(root, start);
+
+      function getRootDepth(root) {
+
+      }
+
+      let rootDepth = getRootDepth(root);
+    };
+
+
+
+
+
+
+
+
+    /**
+     * @param {string} num
+     * @return {string}
+     */
+     var largestPalindromic = function (num) {
+      let map = Array(10).fill(0);
+      for (let i = 0; i < num.length; i++) {
+        map[Number(num[i])]++;
+      }
+
+      for (let i = 0; i < map.length; i++) {
+        map[i] = [map[i], i];
+      }
+
+      map.sort((a, b) => b[1] - a[1]);
+      
+      let head = '';
+      let tail = '';
+      for (let i = 0; i < map.length; i++) {
+        if (map[i][0] >= 2) {
+          let cnt = Math.floor(map[i][0] / 2);
+          for (let j = 0; j < cnt; j++) {
+            head += map[i][1];
+            tail = map[i][1] + tail;
+          }
+          map[i][0] -= cnt * 2;
+        }
+      }
+      
+      let last;
+      for (let i = 0; i < map.length; i++) {
+        if (map[i][0] > 0) {
+          last = map[i][1] + '';
+          break;
+        }
+      }
+
+      if (last) {
+        head = head + last;
+      }
+
+      let res = head + tail;
+      let cnt = 0;
+      for (let i = 0; i < res.length; i++) {
+        if (res[i] == 0) {
+          cnt++;
+        } else {
+          break;
+        }
+      }
+
+      if (cnt == res.length) return '0'
+
+      res = res.substring(cnt, res.length - cnt);
+
+      return res;
+    };
   </script>
 </body>
 
