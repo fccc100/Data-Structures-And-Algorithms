@@ -68,10 +68,12 @@ function max(nums) {
 
 // 2.
 class UnionFind {
-  constructor(size) {
+  constructor(size, nums) {
     this.parent = Array(size);
+    this.sum = Array(size);
     for (let i = 0; i < size; i++) {
       this.parent[i] = i;
+      this.sum[i] = nums[i];
     }
   }
 
@@ -82,10 +84,6 @@ class UnionFind {
     return p;
   }
 
-  isConnected(p, q) {
-    return this.findRoot(p) == this.findRoot(q);
-  }
-
   union(p, q) {
     let pRoot = this.findRoot(p);
     let qRoot = this.findRoot(q);
@@ -94,16 +92,12 @@ class UnionFind {
     }
 
     this.parent[pRoot] = qRoot;
+    this.sum[qRoot] += this.sum[pRoot];
   }
 
-  getConnectedComponent() {
-    let res = 0;
-    for (let i = 0; i < this.parent.length; i++) {
-      if (this.parent[i] == i) {
-        res++;
-      }
-    }
-    return res;
+  getMax(x) {
+    let root = this.findRoot(x);
+    return this.sum[root];
   }
 }
 
@@ -112,15 +106,24 @@ var maximumSegmentSum = function (nums, removeQueries) {
   let temp = Array(n).fill(0);
 
   let res = Array(n).fill(0);
-  res[n - 1] = 0;
-  temp[removeQueries[n - 1]] = nums[removeQueries[n - 1]];
 
-  let uf = new UnionFind(n);
-  for (let i = n - 2; i >= 0; i--) {
+  let uf = new UnionFind(n, nums);
+  let max = 0;
+  for (let i = n - 1; i > 0; i--) {
 
-    res[i] = max(temp);
+    let x = removeQueries[i];
+    if (x - 1 >= 0 && temp[x - 1] != 0) {
+      uf.union(x, x - 1);
+    }
 
-    temp[removeQueries[i]] = nums[removeQueries[i]];
+    if (x + 1 < n && temp[x + 1] != 0) {
+      uf.union(x, x + 1);
+    }
+
+    max = Math.max(max, uf.getMax(x));
+    res[i - 1] = max;
+
+    temp[x] = nums[x];
   }
   return res;
 }
