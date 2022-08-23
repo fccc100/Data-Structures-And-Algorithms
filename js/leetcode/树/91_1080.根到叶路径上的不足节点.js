@@ -45,5 +45,6 @@ var sufficientSubset = function(root, limit) {
   root.left = sufficientSubset(root.left, limit - root.val);
   root.right = sufficientSubset(root.right, limit - root.val);
 
+  // 左右节点都被干没了，说明全部路径都小于limit，自身也该删掉
   return root.left == null && root.right == null ? null : root;
 };
