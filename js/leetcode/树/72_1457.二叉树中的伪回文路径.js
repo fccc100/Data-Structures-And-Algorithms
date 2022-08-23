@@ -122,31 +122,44 @@ function isPalindromicPath(path) {
   return (map.size == 0 || map.size == 1);
 }
 
-// 3.
+// 3.使用set记录
+//              2
+//            /   \
+//           3     1
+//         /  \     \
+//        3    1     1
 var pseudoPalindromicPaths  = function(root) {
-  // let res = 0;
+  let res = 0;
 
-  // // 查找所有从根节点到叶子节点的路径
-  // function find(root, path) {
-  //   path.add(root.val);
-  //   if (root.left == null && root.right == null) {
-  //     if (path.size == 0 || path.size == 1) {
-  //       res++;
-  //     }
-  //     return;
-  //   }
+  // 查找所有从根节点到叶子节点的路径
+  function find(root, path) {
+    if (root == null) return;
+    if (root.left == null && root.right == null) {
+      if (path.size == 0 || path.size <= 2 && path.has(root.val)) {
+        res++;
+      }
+      return;
+    }
+    
+    // 来到一个节点，如果set中有这个节点相同的值了就删掉，如果没有就加入
+    if (path.has(root.val)) {
+      path.delete(root.val);
+    } else {
+      path.add(root.val);
+    }
+    
+    find(root.left, path);
+    find(root.right, path);
+    
+    // 搞完左右子树后又回到了这个节点，这个时候如果没有这个节点，说明之前是有的要加回来，如果现在有了说明之前没有要删去
+    if (path.has(root.val)) {
+      path.delete(root.val);
+    } else {
+      path.add(root.val);
+    }
+  }
+  
+  find(root, new Set());
 
-  //   if (root.left) {
-  //     find(root.left, path);
-  //     path.delete(root.val);
-  //   }
-  //   if (root.right) {
-  //     find(root.right, path);
-  //     path.delete(root.val);
-  //   }
-  // }
-
-  // find(root, new Set());
-
-  // return res;
+  return res;
 };
