@@ -6,7 +6,7 @@
 // 任意节点的左子树中的键值都 小于 此节点的键值。
 // 任意节点的右子树中的键值都 大于 此节点的键值。
 // 任意节点的左子树和右子树都是二叉搜索树。
- 
+
 // 示例 1：
 
 // 输入：root = [1,4,3,2,4,2,5,null,null,null,null,null,null,4,6]
@@ -44,7 +44,7 @@
  * @return {number}
  */
 // 超时
-var maxSumBST = function(root) {
+var maxSumBST = function (root) {
 
   let res = -Infinity;
   function __maxSumBST(root) {
@@ -52,13 +52,13 @@ var maxSumBST = function(root) {
       res = Math.max(res, 0);
       return;
     }
-    
+
     if (isBstTree(root)) {
       res = Math.max(res, keyValSum(root));
     }
-  
+
     __maxSumBST(root.left),
-    __maxSumBST(root.right);
+      __maxSumBST(root.right);
   }
 
   __maxSumBST(root);
@@ -82,7 +82,7 @@ function isBstTree(root) {
 }
 
 function keyValSum(root) {
-  
+
   if (root == null) {
     return 0;
   }
@@ -91,7 +91,7 @@ function keyValSum(root) {
 }
 
 // 2.超时
-var maxSumBST = function(root) {
+var maxSumBST = function (root) {
 
   let res = -Infinity;
   function __maxSumBST(root) {
@@ -99,13 +99,13 @@ var maxSumBST = function(root) {
       res = Math.max(res, 0);
       return;
     }
-    
+
     if (isBstTree(root)) {
       res = Math.max(res, root.keyValSum);
     }
-  
+
     __maxSumBST(root.left),
-    __maxSumBST(root.right);
+      __maxSumBST(root.right);
   }
 
   keyValSum(root);
@@ -122,7 +122,7 @@ function isBstTree(root) {
     if (node.val <= min || node.val >= max) {
       return false;
     }
-    
+
     return __isBstTree(node.left, min, node.val) && __isBstTree(node.right, node.val, max);
   }
 
@@ -130,7 +130,7 @@ function isBstTree(root) {
 }
 
 function keyValSum(root) {
-  
+
   if (root == null) {
     return 0;
   }
@@ -138,3 +138,60 @@ function keyValSum(root) {
   root.keyValSum = keyValSum(root.left) + keyValSum(root.right) + root.val;
   return root.keyValSum;
 }
+
+// 3.
+var maxSumBST = function (root) {
+  let res = -Infinity;
+
+  // 返回以root为根的子树的最小值、最大值和总和
+  function dfs(root, min, max) {
+    if (root == null) {
+      res = Math.max(res, 0);
+      return [Infinity, -Infinity, 0];
+    }
+
+    if (root.left == null && root.right == null) {
+      root.isBstTree = true;
+      res = Math.max(res, root.val);
+      return [root.val, root.val, root.val];
+    }
+
+    let left = dfs(root.left, min, root.val);
+    let right = dfs(root.right, root.val, max);
+
+    // 判断当前树是否二叉搜索树
+    // 大于左子树的最大值
+    // 小于右子树的最小值
+    // 左右子树都是二叉搜索树
+    let isValid = root.val > left[1] && root.val < right[0];
+    if (root.left == null) {
+      root.isBstTree = isValid && root.right.isBstTree;
+    } else if (root.right == null) {
+      root.isBstTree = isValid && root.left.isBstTree;
+    } else {
+      root.isBstTree = isValid && root.left.isBstTree && root.right.isBstTree;
+    }
+
+    // 求和，记录最大值
+    let curSum = left[2] + right[2] + root.val;
+    if (root.isBstTree) {
+      res = Math.max(res, curSum);
+    }
+    return [Math.min(left[0], right[0], root.val), Math.max(left[1], right[1], root.val), curSum];
+  }
+
+  let rootSum = dfs(root, -Infinity, Infinity);
+
+  if (root.isBstTree) {
+    res = Math.max(res, rootSum[2]);
+  }
+  return res < 0 ? 0 : res;
+}
+
+
+// [1,null,10,-5,20]
+//         1
+//          \
+//           10
+//          /  \
+//         -5  20
