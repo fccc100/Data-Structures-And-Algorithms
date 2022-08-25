@@ -85,5 +85,15 @@ var sumOddLengthSubarrays = function (arr) {
 // 3.此问题还有更高效的解法：O(n)
 // 求每个数字在奇数数组中出现的次数
 var sumOddLengthSubarrays = function (arr) {
-
+  let res = 0;
+  for (let i = 0; i < arr.length; i++) {
+    let left = i + 1;
+    let right = arr.length - i;
+    let left_even = (left + 1) >> 1;
+    let right_even = (right + 1) >> 1;
+    let left_odd = left >> 1;
+    let right_odd = right >> 1;
+    res += (left_even * right_even + left_odd * right_odd) * arr[i];
+  }
+  return res;
 }
