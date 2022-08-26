@@ -61,3 +61,26 @@ function integerBreak(n) {
 
   return dp[n];
 }
+
+function integerBreak(n) {
+  // n <= 3 时，应该不拆分才是最大，当题目要求至少拆分一次，所以拆一个1出来
+  if (n <= 3) {
+    return n - 1;
+  }
+  // 求出n / 3的整数部分
+  let a = Math.floor(n / 3);
+  // n / 3 的余数部分
+  let b = n % 3;
+
+  // 没有余数，则刚好全部拆成3就是最大值
+  if (b == 0) {
+    return Math.pow(3, a);
+  }
+  // 余数是1， 把一个3加上1组成4，此时是最大的
+  if (b == 1) {
+    return Math.pow(3, a - 1) * 4;
+  }
+
+  // 余数是2，直接把2作为单独一份
+  return Math.pow(3, a) * 2;
+}
