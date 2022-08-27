@@ -99,6 +99,49 @@ var widthOfBinaryTree = function (root) {
   return res + 1;
 };
 
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+// 使用BigInt可通过
+var widthOfBinaryTree = function (root) {
+  if (root == null) return 0;
+  let queue = [];
+  root.index = 0n;
+  queue.push(root);
+
+  let res = 0n;
+  while (queue.length) {
+    let len = queue.length;
+    let curLen = queue[len - 1].index - queue[0].index;
+    res = curLen > res ? curLen : res;
+
+    for (let i = 0; i < len; i++) {
+      let curNode = queue.shift();
+
+      if (curNode.left) {
+        curNode.left.index = 2n * curNode.index + 1n;
+        queue.push(curNode.left);
+      }
+      if (curNode.right) {
+
+        curNode.right.index = 2n * curNode.index + 2n;
+        queue.push(curNode.right);
+      }
+    }
+  }
+
+  return res + 1n;
+};
+
 // 使用java可以通过
 // class Solution {
 //   public int widthOfBinaryTree(TreeNode root) {
