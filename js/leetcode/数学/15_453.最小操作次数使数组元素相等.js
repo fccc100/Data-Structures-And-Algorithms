@@ -38,3 +38,17 @@ var minMoves = function (nums) {
 // 我们再设数组最小的元素为min_val，m = x - min_val​，即 ​x = m + min_val​带入(1)得：
 
 // m = sum - min_val * n​
+
+
+var minMoves = function (nums) {
+  let min = nums[0];
+  for (let i = 0; i < nums.length; i++) {
+    min = Math.min(min, nums[i]);
+  }
+
+  let res = 0;
+  for (let i = 0; i < nums.length; i++) {
+    res += nums[i] - min;
+  }
+  return res;
+}
