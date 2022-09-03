@@ -12,247 +12,179 @@
   <script>
     /**
      * @param {number[]} nums
-     * @param {number[]} queries
-     * @return {number[]}
+     * @return {boolean}
      */
-    var answerQueries = function (nums, queries) {
-      let m = nums.length;
-      let n = queries.length;
-
-      let res = Array(n);
-      for (let i = 0; i < n; i++) {
-        res[i] = getLen(nums, queries[i]);
-      }
-      return res;
-    };
-
-    function getLen(nums, sum) {
-      nums.sort((a, b) => a - b);
-
-      let cur = 0;
-      let res = 0;
-      for (let i = 0; i < nums.length; i++) {
-        cur += nums[i];
-        if (cur <= sum) {
-          res = i + 1;
-        } else {
-          break;
-        }
-      }
-      return res;
-    }
-
-    //     [736411,184882,914641,37925,214915]
-    // [331244,273144,118983,118252,305688,718089,665450]
-    // 输出：
-    // [2,2,1,1,2,2,2]
-    // 预期：
-    // [2,2,1,1,2,3,3]
-
-
-    /**
-     * @param {string} s
-     * @return {string}
-     */
-    var removeStars = function (s) {
-      let stack = [];
-      for (let i = 0; i < s.length; i++) {
-        if (!stack.length) {
-          stack.push(s[i]);
-        } else {
-          if (s[i] == '*') {
-            stack.pop();
-          } else {
-            stack.push(s[i]);
+    var findSubarrays = function (nums) {
+      for (let i = 0; i < nums.length - 1; i++) {
+        let sum = nums[i] + nums[i + 1];
+        for (let j = i + 1; j < nums.length - 1; j++) {
+          if (nums[j] + nums[j + 1] == sum) {
+            return true;
           }
         }
       }
-      if (!stack.length) return '';
-      return stack.join('');
+      return false;
     };
 
+
     /**
-     * @param {string[]} garbage
-     * @param {number[]} travel
+     * @param {number[][]} mat
+     * @param {number} cols
      * @return {number}
      */
-    var garbageCollection = function (garbage, travel) {
-      let n = garbage.length;
+    var maximumRows = function (mat, cols) {
+      let m = mat.length;
+      let n = mat[0].length;
 
-      let p = Array(n).fill(0);
-      let g = Array(n).fill(0);
-      let m = Array(n).fill(0);
+      let map = Array(m);
+      for (let i = 0; i < m; i++) {
+        map[i] = new Set();
+      }
 
-      for (let i = 0; i < n; i++) {
-        for (let j = 0; j < garbage[i].length; j++) {
-          if (garbage[i][j] == 'G') {
-            g[i]++;
-          } else if (garbage[i][j] == 'P') {
-            p[i]++;
-          } else {
-            m[i]++;
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+          if (mat[i][j] == 1) {
+            map[i].add(j);
           }
         }
       }
+      console.log(map)
 
-      let preP = Array(n).fill(0);
-      let preG = Array(n).fill(0);
-      let preM = Array(n).fill(0);
+      function dfs(index) {
 
-      preP[n - 1] = 0;
-      for (let i = n - 2; i >= 0; i--) {
-        preP[i] = p[i + 1] + preP[i + 1];
-      }
-      preG[n - 1] = 0;
-      for (let i = n - 2; i >= 0; i--) {
-        preG[i] = g[i + 1] + preG[i + 1];
-      }
-      preM[n - 1] = 0;
-      for (let i = n - 2; i >= 0; i--) {
-        preM[i] = m[i + 1] + preM[i + 1];
       }
 
-      // 收p
+      let combineRes = combine(n, cols);
+      console.log(combineRes)
+
+
       let res = 0;
-      for (let i = 0; i < n; i++) {
-        if (p[i] == 0 && preP[i] == 0) {
-          break;
+      for (let i = 0; i < combineRes.length; i++) {
+        let cur = 0;
+        for (let k = 0; k < m; k++) {
+          let allExist = true;
+          let oneCount = 0;
+          for (let j = 0; j < combineRes[i].length; j++) {
+
+            if (mat[k][combineRes[i][j]] == 1) {
+              oneCount++;
+            }
+
+          }
+          if (oneCount >= map[k].size) {
+            cur++;
+          }
+
         }
-        if (p[i] != 0) {
-          res += p[i];
-        }
-        if (preP[i] != 0) {
-          res += travel[i];
-        }
-      }
-      for (let i = 0; i < n; i++) {
-        if (m[i] == 0 && preM[i] == 0) {
-          break;
-        }
-        if (m[i] != 0) {
-          res += m[i];
-        }
-        if (preM[i] != 0) {
-          res += travel[i];
-        }
-      }
-      for (let i = 0; i < n; i++) {
-        if (g[i] == 0 && preG[i] == 0) {
-          break;
-        }
-        if (g[i] != 0) {
-          res += g[i];
-        }
-        if (preG[i] != 0) {
-          res += travel[i];
-        }
+        res = Math.max(res, cur);
       }
       return res;
     };
 
-    // p:   [0, 1, 1, 0]
-    // preP:[2, 1, 0, 0]
+    var combine = function (n, k) {
+      let res = [];
 
-    // g: [1, 0, 1, 2]
-    // m: [0, 0, 0, 0]
+      function __combine(n, k, index, path) {
+        if (path.length == k) {
+          res.push([...path]);
+          return;
+        }
+
+        for (let i = index; i <= n; i++) {
+          path.push(i);
+          __combine(n, k, i + 1, path);
+          path.pop();
+        }
+      }
+      __combine(n, k, 0, []);
+      return res;
+    };
 
 
     /**
-     * @param {number} k
-     * @param {number[][]} rowConditions
-     * @param {number[][]} colConditions
-     * @return {number[][]}
+     * @param {number[]} chargeTimes
+     * @param {number[]} runningCosts
+     * @param {number} budget
+     * @return {number}
      */
-    var buildMatrix = function (k, rowConditions, colConditions) {
-      let res = Array(k);
-      for (let i = 0; i < res.length; i++) {
-        res[i] = Array(k).fill(0);
+    var maximumRobots = function (chargeTimes, runningCosts, budget) {
+      let n = chargeTimes.length;
+
+      let preSum = Array(n);
+      preSum[0] = runningCosts[0];
+      for (let i = 1; i < n; i++) {
+        preSum[i] = preSum[i - 1] + runningCosts[i];
       }
+      preSum.unshift(0);
 
-      let rowRes = build(k, rowConditions);
-      let colRes = build(k, colConditions);
-      console.log(rowRes, colRes, 'reseresrsrserserse')
-      if (!rowRes || !colRes) return [];
-      if (rowRes.length < k || colRes.length < k) return [];
+      let l = 0;
+      let r = -1;
 
+      let res = 0;
 
-      let rowIndex = Array(k + 1);
-      let colIndex = Array(k + 1);
+      let maxQueue = new MaxQueue();
 
+      let cur = 0;
+      while (r < n) {
+        if (cur <= budget) {
+          res = Math.max(res, r - l + 1);
 
-      for (let i = 0; i < rowRes.length; i++) {
-        rowIndex[rowRes[i]] = i;
+          r++;
+          if (r >= n) break;
+          maxQueue.push_back(chargeTimes[r]);
+          let max = maxQueue.max_value();
+
+          let len = r - l + 1;
+          let sum = preSum[r + 1] - preSum[l];
+
+          cur = max + len * sum;
+        } else {
+          l++;
+          maxQueue.pop_front();
+        }
       }
-      for (let i = 0; i < colRes.length; i++) {
-        colIndex[colRes[i]] = i;
-      }
-
-
-
-      for (let i = 1; i <= k; i++) {
-        res[rowIndex[i]][colIndex[i]] = i;
-      }
-
-
-      // 拿到row和col
-
-
       return res;
     };
 
-    function build(k, rowConditions) {
-      let rowGraph = Array(k + 1);
-      let rowDegree = Array(k + 1).fill(0);
-      for (let i = 0; i <= k; i++) {
-        rowGraph[i] = new Set();
+    var MaxQueue = function () {
+      this.array = new Array();
+      this.maxArray = new Array();
+    };
+
+    /**
+     * @return {number}
+     */
+    MaxQueue.prototype.max_value = function () {
+      return this.array.length ? this.maxArray[0] : -1;
+    };
+
+    /** 
+     * @param {number} value
+     * @return {void}
+     */
+    MaxQueue.prototype.push_back = function (value) {
+      this.array.push(value);
+      while (this.maxArray.length && this.maxArray[this.maxArray.length - 1] < value) {
+        this.maxArray.pop();
       }
+      this.maxArray.push(value);
+    };
 
-      for (let i = 0; i < rowConditions.length; i++) {
-        if (!rowGraph[rowConditions[i][0]].has(rowConditions[i][1])) {
-          rowDegree[rowConditions[i][1]]++;
-        }
-
-        rowGraph[rowConditions[i][0]].add(rowConditions[i][1]);
+    /**
+     * @return {number}
+     */
+    MaxQueue.prototype.pop_front = function () {
+      if (!this.array.length) return -1;
+      const shiftElement = this.array.shift();
+      if (shiftElement === this.maxArray[0]) {
+        this.maxArray.shift();
       }
-      
-      let queue = [];
-      let rowRes = [];
-      for (let i = 1; i < rowDegree.length; i++) {
-        if (rowDegree[i] == 0) {
-          queue.push(i);
-          rowRes.push(i)
-        }
-      }
-      console.log(queue)
-      if (!queue.length) {
-        return false;
-      }
-
-      // rowRes[i]表示第i行能放的数字
+      return shiftElement;
+    };
 
 
-      while (queue.length) {
-        let len = queue.length;
-
-        for (let i = 0; i < len; i++) {
-          let cur = queue.shift();
-
-          for (let w of rowGraph[cur]) {
-
-            rowDegree[w]--;
-
-            if (rowDegree[w] == 0) {
-              rowRes.push(w);
-              queue.push(w);
-            }
-          }
-        }
-      }
-      return rowRes;
-    }
-
-    // row: 1, 3
-    // col: 3
+    //                          [3, 6, 1, 3, 4]
+    //                          [2, 1, 3, 4, 5]     25
   </script>
 </body>
 
