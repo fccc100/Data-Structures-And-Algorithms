@@ -11,180 +11,255 @@
 <body>
   <script>
     /**
-     * @param {number[]} nums
+     * @param {string} s
+     * @param {number[]} distance
      * @return {boolean}
      */
-    var findSubarrays = function (nums) {
-      for (let i = 0; i < nums.length - 1; i++) {
-        let sum = nums[i] + nums[i + 1];
-        for (let j = i + 1; j < nums.length - 1; j++) {
-          if (nums[j] + nums[j + 1] == sum) {
-            return true;
+    var checkDistances = function (s, distance) {
+      let map = new Map();
+
+      for (let i = 0; i < s.length; i++) {
+        if (!map.has(s[i])) {
+          map.set(s[i], i);
+        } else {
+          let len = i - map.get(s[i]) - 1;
+          if (distance[s[i].charCodeAt() - 'a'.charCodeAt()] != len) {
+            return false;
           }
         }
       }
-      return false;
+      return true;
     };
 
 
+
     /**
-     * @param {number[][]} mat
-     * @param {number} cols
+     * @param {number} startPos
+     * @param {number} endPos
+     * @param {number} k
      * @return {number}
      */
-    var maximumRows = function (mat, cols) {
-      let m = mat.length;
-      let n = mat[0].length;
-
-      let map = Array(m);
-      for (let i = 0; i < m; i++) {
-        map[i] = new Set();
-      }
-
-      for (let i = 0; i < m; i++) {
-        for (let j = 0; j < n; j++) {
-          if (mat[i][j] == 1) {
-            map[i].add(j);
-          }
-        }
-      }
-      console.log(map)
-
-      function dfs(index) {
-
-      }
-
-      let combineRes = combine(n, cols);
-      console.log(combineRes)
-
-
+    var numberOfWays = function (startPos, endPos, k) {
       let res = 0;
-      for (let i = 0; i < combineRes.length; i++) {
-        let cur = 0;
-        for (let k = 0; k < m; k++) {
-          let allExist = true;
-          let oneCount = 0;
-          for (let j = 0; j < combineRes[i].length; j++) {
 
-            if (mat[k][combineRes[i][j]] == 1) {
-              oneCount++;
-            }
-
-          }
-          if (oneCount >= map[k].size) {
-            cur++;
-          }
-
-        }
-        res = Math.max(res, cur);
+      let memo = Array(1000);
+      for (let i = 0; i < memo.length; i++) {
+        memo[i] = Array(1000);
       }
-      return res;
+
+      function dfs(s, e, k) {
+        if (s == e && k == 0) {
+          return 1;
+        }
+        if (k == 0) {
+          return 0;
+        }
+        console.log(memo[s], s, e, k)
+        if (memo[s][k] !== undefined) {
+          return memo[s][k];
+        }
+
+        return memo[s][k] = dfs(s + 1, e, k - 1) + dfs(s - 1, e, k - 1);
+      }
+      return dfs(startPos, endPos, k);
     };
 
-    var combine = function (n, k) {
-      let res = [];
 
-      function __combine(n, k, index, path) {
-        if (path.length == k) {
-          res.push([...path]);
-          return;
-        }
+    1
+    1000
+    999
 
-        for (let i = index; i <= n; i++) {
-          path.push(i);
-          __combine(n, k, i + 1, path);
-          path.pop();
-        }
-      }
-      __combine(n, k, 0, []);
-      return res;
-    };
 
 
     /**
-     * @param {number[]} chargeTimes
-     * @param {number[]} runningCosts
-     * @param {number} budget
+     * @param {number[]} nums
      * @return {number}
      */
-    var maximumRobots = function (chargeTimes, runningCosts, budget) {
-      let n = chargeTimes.length;
+    var longestNiceSubarray = function (nums) {
+      let n = nums.length;
 
-      let preSum = Array(n);
-      preSum[0] = runningCosts[0];
-      for (let i = 1; i < n; i++) {
-        preSum[i] = preSum[i - 1] + runningCosts[i];
+      let l = 0;
+      let r = 0;
+
+      let res = 1;
+      let cur = nums[0];
+      while (r < n) {
+        if (l == r) {
+          r++;
+          cur = cur & nums[r];
+        } else {
+          if (cur == 0) {
+            res = Math.max(r - l + 1);
+
+            r++;
+            cur &= nums[r];
+          } else {
+            l = r + 1;
+            r++;
+          }
+        }
       }
-      preSum.unshift(0);
+      return res;
+    };
+
+
+
+
+
+
+
+
+
+    /**
+     * @param {number} startPos
+     * @param {number} endPos
+     * @param {number} k
+     * @return {number}
+     */
+    var numberOfWays = function (startPos, endPos, k) {
+
+      // dp[i][j]表示从i开始经历j步到达end的方法
+      let dp = Array(1000);
+      for (let i = 0; i < de.length; i++) {
+        dp[i] = Array(1000).fill(0);
+      }
+
+      dp[1][1] = 1;
+    };
+
+
+
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var longestNiceSubarray = function (nums) {
+      let n = nums.length;
+
+      for (let i = 0; i < nums.length; i++) {
+        nums[i] = Number(nums[i]).toString(2);
+      }
 
       let l = 0;
       let r = -1;
 
-      let res = 0;
+      let res = 1;
+      console.log(nums)
+      let cur = nums[0];
 
-      let maxQueue = new MaxQueue();
+      let used = Array(32).fill(false);
+      while (l < n && r < n) {
 
-      let cur = 0;
-      while (r < n) {
-        if (cur <= budget) {
-          res = Math.max(res, r - l + 1);
-
+        if (r + 1 < n && canFill(used, nums[r + 1])) {
           r++;
           if (r >= n) break;
-          maxQueue.push_back(chargeTimes[r]);
-          let max = maxQueue.max_value();
-
-          let len = r - l + 1;
-          let sum = preSum[r + 1] - preSum[l];
-
-          cur = max + len * sum;
+          fill(used, nums[r]);
+          res = Math.max(res, r - l + 1);
         } else {
+          unFill(used, nums[l]);
           l++;
-          maxQueue.pop_front();
         }
       }
       return res;
     };
 
-    var MaxQueue = function () {
-      this.array = new Array();
-      this.maxArray = new Array();
-    };
+    function unFill(used, num) {
+      console.log(num, 'num')
+      for (let i = num.length - 1; i >= 0; i--) {
+        if (num[i] == 1) {
+          used[num.length - 1 - i] = false;
+        }
+      }
+    }
+
+    function fill(used, num) {
+      for (let i = num.length - 1; i >= 0; i--) {
+        if (num[i] == 1) {
+          used[num.length - 1 - i] = true;
+        }
+      }
+    }
+
+    function canFill(used, num) {
+      for (let i = num.length - 1; i >= 0; i--) {
+        if (num[i] == 1 && used[num.length - 1 - i]) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     /**
+     * @param {number} startPos
+     * @param {number} endPos
+     * @param {number} k
      * @return {number}
      */
-    MaxQueue.prototype.max_value = function () {
-      return this.array.length ? this.maxArray[0] : -1;
+    var numberOfWays = function (startPos, endPos, k) {
+
     };
 
-    /** 
-     * @param {number} value
-     * @return {void}
-     */
-    MaxQueue.prototype.push_back = function (value) {
-      this.array.push(value);
-      while (this.maxArray.length && this.maxArray[this.maxArray.length - 1] < value) {
-        this.maxArray.pop();
-      }
-      this.maxArray.push(value);
-    };
+
+
+
 
     /**
+     * @param {number} startPos
+     * @param {number} endPos
+     * @param {number} k
      * @return {number}
      */
-    MaxQueue.prototype.pop_front = function () {
-      if (!this.array.length) return -1;
-      const shiftElement = this.array.shift();
-      if (shiftElement === this.maxArray[0]) {
-        this.maxArray.shift();
+    var numberOfWays = function (startPos, endPos, k) {
+      let res = 0;
+      const MOD = 1000000007;
+
+      let map = new Map();
+
+      function dfs(s, e, k) {
+        if (s == e && k == 0) {
+          return 1;
+        }
+        if (Math.abs(e - s) > k) {
+          return 0;
+        }
+        if (k == 0) {
+          return 0;
+        }
+
+        if (map.has(s + ',' + k)) {
+          return map.get(s + ',' + k);
+        }
+
+        let res = (dfs(s + 1, e, k - 1) + dfs(s - 1, e, k - 1)) % MOD;
+        map.set(s + ',' + k, res);
+        return res;
       }
-      return shiftElement;
+      return dfs(startPos, endPos, k);
     };
 
 
-    //                          [3, 6, 1, 3, 4]
-    //                          [2, 1, 3, 4, 5]     25
+
+    /**
+     * @param {number} n
+     * @param {number[][]} meetings
+     * @return {number}
+     */
+    var mostBooked = function (n, meetings) {
+
+    };
   </script>
 </body>
 
