@@ -34,6 +34,7 @@
  * @param {number} limit
  * @return {number}
  */
+// 超时
 var longestSubarray = function (nums, limit) {
   let n = nums.length;
 
@@ -68,4 +69,205 @@ var longestSubarray = function (nums, limit) {
     r++;
   }
   return res;
+};
+
+// 2.自己实现队列，仍超时
+var longestSubarray = function (nums, limit) {
+  let n = nums.length;
+
+  let queueMin = new MyCircularDeque(n);
+  let queueMax = new MyCircularDeque(n);
+
+  let l = 0;
+  let r = 0;
+  let res = 0;
+
+  while (r < n) {
+    while (!queueMax.isEmpty() && queueMax.getRear() < nums[r]) {
+      queueMax.deleteLast();
+    }
+    while (!queueMin.isEmpty() && queueMin.getRear() > nums[r]) {
+      queueMin.deleteLast();
+    }
+
+    queueMax.insertLast(nums[r]);
+    queueMin.insertLast(nums[r]);
+
+    while (!queueMin.isEmpty() && !queueMax.isEmpty() && queueMax.getFront() - queueMin.getFront() > limit) {
+      if (nums[l] == queueMin.getFront()) {
+        queueMin.deleteFront();
+      }
+      if (nums[l] == queueMax.getFront()) {
+        queueMax.deleteFront();
+      }
+      l++;
+    }
+    res = Math.max(res, r - l + 1);
+    r++;
+  }
+  return res;
+};
+
+
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.size = 0;
+  }
+
+  getSize() {
+    return this.size;
+  }
+
+  addLast(val) {
+    if (this.head == null) {
+      this.head = new Node(val);
+      this.tail = this.head;
+    } else {
+      let newNode = new Node(val);
+      this.tail.next = newNode;
+      this.tail = newNode;
+    }
+    this.size++;
+  }
+
+  addFirst(val) {
+    if (this.head == null) {
+      this.head = new Node(val);
+      this.tail = this.head;
+    } else {
+      this.head = new Node(val, this.head);
+    }
+    this.size++;
+  }
+
+  getFirst() {
+    return this.head.val;
+  }
+
+  getLast() {
+    return this.tail.val;
+  }
+
+  removeFirst() {
+    if (this.head == null || this.head.next == null) {
+      this.head = null;
+      this.tail = null;
+    } else {
+      this.head = this.head.next;
+    }
+    this.size--;
+  }
+
+  removeLast() {
+    if (this.head == null || this.head.next == null) {
+      this.head = null;
+      this.tail = null;
+    } else {
+      let cur = this.head;
+      while (cur.next.next != null) {
+        cur = cur.next;
+      }
+
+      cur.next = null;
+      this.tail = cur;
+    }
+    this.size--;
+  }
+}
+
+class Node {
+  constructor(val, next = null) {
+    this.val = val;
+    this.next = next;
+  }
+}
+
+/**
+ * @param {number} k
+ */
+var MyCircularDeque = function (k) {
+  this.size = k;
+  this.linkedList = new LinkedList();
+};
+
+/** 
+ * @param {number} value
+ * @return {boolean}
+ */
+MyCircularDeque.prototype.insertFront = function (value) {
+  if (this.isFull()) {
+    return false;
+  }
+  this.linkedList.addFirst(value);
+  return true;
+};
+
+/** 
+ * @param {number} value
+ * @return {boolean}
+ */
+MyCircularDeque.prototype.insertLast = function (value) {
+  if (this.isFull()) {
+    return false;
+  }
+  this.linkedList.addLast(value);
+  return true;
+};
+
+/**
+ * @return {boolean}
+ */
+MyCircularDeque.prototype.deleteFront = function () {
+  if (this.isEmpty()) {
+    return false;
+  }
+  this.linkedList.removeFirst();
+  return true;
+};
+
+/**
+ * @return {boolean}
+ */
+MyCircularDeque.prototype.deleteLast = function () {
+  if (this.isEmpty()) {
+    return false;
+  }
+  this.linkedList.removeLast();
+  return true;
+};
+
+/**
+ * @return {number}
+ */
+MyCircularDeque.prototype.getFront = function () {
+  if (this.isEmpty()) {
+    return -1;
+  }
+  return this.linkedList.getFirst();
+};
+
+/**
+ * @return {number}
+ */
+MyCircularDeque.prototype.getRear = function () {
+  if (this.isEmpty()) {
+    return -1;
+  }
+  return this.linkedList.getLast();
+};
+
+/**
+ * @return {boolean}
+ */
+MyCircularDeque.prototype.isEmpty = function () {
+  return this.linkedList.getSize() == 0;
+};
+
+/**
+ * @return {boolean}
+ */
+MyCircularDeque.prototype.isFull = function () {
+  return this.linkedList.getSize() == this.size;
 };
