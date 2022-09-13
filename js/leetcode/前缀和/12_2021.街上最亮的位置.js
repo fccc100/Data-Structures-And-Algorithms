@@ -1,5 +1,6 @@
 // 2021. 街上最亮的位置
-// 一条街上有很多的路灯，路灯的坐标由数组 lights 的形式给出。 每个 lights[i] = [positioni, rangei] 代表坐标为 positioni 的路灯照亮的范围为 [positioni - rangei, positioni + rangei] （包括顶点）。
+// 一条街上有很多的路灯，路灯的坐标由数组 lights 的形式给出。 
+// 每个 lights[i] = [positioni, rangei] 代表坐标为 positioni 的路灯照亮的范围为 [positioni - rangei, positioni + rangei] （包括顶点）。
 
 // 位置 p 的亮度由能够照到 p的路灯的数量来决定的。
 
