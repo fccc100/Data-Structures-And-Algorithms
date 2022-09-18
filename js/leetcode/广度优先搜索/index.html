@@ -135,6 +135,336 @@
 
     //     [[5,0], [4,2], [2,1]]
     //      5  0    4
+    //     -5     -2    -1      3
+
+    //      [[2,1],[5,0],[4,2]]
+    //         -1    -5    -2
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * @param {number} n
+     * @return {number}
+     */
+    var smallestEvenMultiple = function (n) {
+      if (n % 2 == 0) return n;
+
+      return n * 2;
+    };
+
+
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var longestContinuousSubstring = function (s) {
+      let n = s.length;
+      if (n == 0) return 0;
+      if (n == 1) return 1;
+
+      let cur = s[0].charCodeAt() - 'a'.charCodeAt();
+      let curLen = 1;
+
+      let res = cur;
+      for (let i = 1; i < s.length; i++) {
+        let c = s[i];
+        if (c.charCodeAt() - 'a'.charCodeAt == cur + 1) {
+          cur = c.charCodeAt() - 'a'.charCodeAt
+          curLen++;
+        } else {
+          cur = c.charCodeAt() - 'a'.charCodeAt;
+          curLen = 1;
+        }
+        res = Math.max(res, curLen);
+      }
+      return res;
+    };
+
+    //     输入：
+    // "dfrimswg"
+    // 输出：
+    // 3
+    // 预期：
+    // 1
+
+
+    /**
+     * Definition for a binary tree node.
+     * function TreeNode(val, left, right) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.left = (left===undefined ? null : left)
+     *     this.right = (right===undefined ? null : right)
+     * }
+     */
+    /**
+     * @param {TreeNode} root
+     * @return {TreeNode}
+     */
+    var reverseOddLevels = function (root) {
+      if (root == null) return null;
+      if (root.left == null && root.right == null) return root;
+
+      let queue = [];
+
+      let curLevel = 0;
+      queue.push(root);
+
+      while (queue.length) {
+        let len = queue.length;
+
+        let nodeList = [];
+        let nodeValue = [];
+        for (let i = 0; i < len; i++) {
+          let curNode = queue.shift();
+          if (curNode.left) {
+            queue.push(curNode.left);
+          }
+          if (curNode.right) {
+            queue.push(curNode.right);
+          }
+
+          nodeList.push(curNode);
+          nodeValue.unshift(curNode.val);
+        }
+
+        if (curLevel % 2 == 1) {
+          let n = nodeList.length
+          for (let i = 0; i < n; i++) {
+            nodeList[i].val = nodeValue[n - i - 1];
+          }
+        }
+        curLevel++;
+      }
+      return root;
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * @param {string[]} words
+     * @return {number[]}
+     */
+    var sumPrefixScores = function (words) {
+      let trie = new Trie();
+      for (let i = 0; i < words.length; i++) {
+        trie.insert(words[i]);
+      }
+
+      let res = [];
+      for (let i = 0; i < words.length; i++) {
+        let curS = '';
+        // let curLen = 0;
+        // for (let j = 0; j < words[i].length; j++) {
+
+        let curLen = trie.countWordsStartingWith(words[i]);
+        // }
+        res[i] = curLen;
+      }
+      return res;
+    };
+
+
+    class Node {
+      constructor(isWord) {
+        this.next = new Map();
+        this.isWord = isWord || false;
+        this.count = 0;
+        this.prefixCount = 0;
+      }
+    }
+
+    var Trie = function () {
+      this.root = new Node();
+      this.size = 0;
+    };
+
+    /** 
+     * @param {string} word
+     * @return {void}
+     */
+    Trie.prototype.insert = function (word) {
+      let cur = this.root;
+      for (let i = 0; i < word.length; i++) {
+        if (!cur.next.has(word[i])) {
+          cur.next.set(word[i], new Node());
+        }
+        cur = cur.next.get(word[i]);
+        cur.prefixCount++;
+      }
+      if (!cur.isWord) {
+        cur.isWord = true;
+        this.size++;
+      }
+      cur.count++;
+    };
+
+    /** 
+     * @param {string} word
+     * @return {number}
+     */
+    Trie.prototype.countWordsEqualTo = function (word) {
+      let cur = this.root;
+      for (let i = 0; i < word.length; i++) {
+        if (!cur.next.has(word[i])) {
+          return 0;
+        } else {
+          cur = cur.next.get(word[i]);
+        }
+      }
+      return cur.count;
+    };
+
+    /** 
+     * @param {string} prefix
+     * @return {number}
+     */
+    Trie.prototype.countWordsStartingWith = function (prefix) {
+      let cur = this.root;
+      let res = 0;
+      for (let i = 0; i < prefix.length; i++) {
+        if (!cur.next.has(prefix[i])) {
+          return res;
+        } else {
+          res += cur.prefixCount;
+          cur = cur.next.get(prefix[i]);
+        }
+      }
+
+      return res;
+    };
+
+    /** 
+     * @param {string} word
+     * @return {void}
+     */
+    Trie.prototype.erase = function (word) {
+      let cur = this.root;
+      for (let i = 0; i < word.length; i++) {
+        cur = cur.next.get(word[i]);
+        cur.prefixCount--;
+      }
+      cur.count--;
+      if (cur.count == 0) {
+        cur.isWord = false;
+      }
+    };
+
+    /**
+     * Your Trie object will be instantiated and called as such:
+     * var obj = new Trie()
+     * obj.insert(word)
+     * var param_2 = obj.countWordsEqualTo(word)
+     * var param_3 = obj.countWordsStartingWith(prefix)
+     * obj.erase(word)
+     */
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * @param {string[]} words
+     * @return {number[]}
+     */
+    var sumPrefixScores = function (words) {
+      let trie = new Trie();
+      for (let i = 0; i < words.length; i++) {
+        trie.insert(words[i]);
+      }
+
+      let res = [];
+      for (let i = 0; i < words.length; i++) {
+        let curS = '';
+        // let curLen = 0;
+        // for (let j = 0; j < words[i].length; j++) {
+
+        let curLen = trie.countWordsStartingWith(words[i]);
+        // }
+        res[i] = curLen;
+      }
+      return res;
+    };
+
+
+    class Node {
+      constructor(isWord) {
+        this.next = new Map();
+        this.isWord = isWord || false;
+        this.count = 0;
+        this.prefixCount = 0;
+      }
+    }
+
+    var Trie = function () {
+      this.root = new Node();
+      this.size = 0;
+    };
+
+    /** 
+     * @param {string} word
+     * @return {void}
+     */
+    Trie.prototype.insert = function (word) {
+      let cur = this.root;
+      for (let i = 0; i < word.length; i++) {
+        if (!cur.next.has(word[i])) {
+          cur.next.set(word[i], new Node());
+        }
+        cur = cur.next.get(word[i]);
+        cur.prefixCount++;
+      }
+      if (!cur.isWord) {
+        cur.isWord = true;
+        this.size++;
+      }
+      cur.count++;
+    };
+
+
+    /** 
+     * @param {string} prefix
+     * @return {number}
+     */
+    Trie.prototype.countWordsStartingWith = function (prefix) {
+      let cur = this.root;
+      let res = 0;
+      for (let i = 0; i < prefix.length; i++) {
+        if (!cur.next.has(prefix[i])) {
+          return res;
+        } else {
+          res += cur.prefixCount;
+          cur = cur.next.get(prefix[i]);
+        }
+      }
+
+      return res;
+    };
   </script>
 </body>
 
