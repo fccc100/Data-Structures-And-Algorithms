@@ -38,3 +38,18 @@ function getBinary(n) {
   }
   return res;
 }
+
+// 2.
+// 异或运算相同为0，不同为1，可以先求两个数的异或，再求位1的个数
+var hammingDistance = function(x, y) {
+  return hammingWeight(x ^ y);
+}
+
+function hammingWeight(n) {
+  let res = 0;
+  while (n != 0) {
+    n &= n - 1;
+    res++;
+  }
+  return res;
+}

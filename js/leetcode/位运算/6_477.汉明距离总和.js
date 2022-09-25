@@ -40,3 +40,45 @@ function getBinary(n) {
   }
   return res;
 }
+
+// 2.求两两直接 异或值 的位1的个数， 超时
+var totalHammingDistance = function(nums) {
+  let n = nums.length;
+
+  let res = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      res += hammingWeight(nums[i] ^ nums[j]);
+    }
+  }
+  return res;
+}
+
+function hammingWeight(n) {
+  let res = 0;
+  while (n != 0) {
+    n &= n - 1;
+    res++;
+  }
+  return res;
+}
+
+
+// 3.10^9总共不超过32位，可以逐位统计
+// 比如某一位上有 c 个1，那么有 n - c 个0，这一位对结果的贡献就是 c * (n - c);
+var totalHammingDistance = function(nums) {
+  let n = nums.length;
+
+  let res = 0;
+  for (let i = 31; i >= 0; i--) {
+    // 当前位1的个数
+    let c = 0;
+
+    for (let j = 0; j < nums.length; j++) {
+      c += (1 & (nums[j] >> i));
+    }
+
+    res += c * (n - c);
+  }
+  return res;
+}
