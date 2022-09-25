@@ -11,57 +11,55 @@
 <body>
   <script>
     /**
-     * @param {string} arriveAlice
-     * @param {string} leaveAlice
-     * @param {string} arriveBob
-     * @param {string} leaveBob
-     * @return {number}
+     * @param {string[]} names
+     * @param {number[]} heights
+     * @return {string[]}
      */
-    var countDaysTogether = function (arriveAlice, leaveAlice, arriveBob, leaveBob) {
-      let days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    var sortPeople = function (names, heights) {
+      let n = names.length;
 
-      if (arriveAlice > leaveBob || arriveBob > leaveAlice) return 0;
-
-      if (arriveAlice == leaveBob || arriveBob == leaveAlice) return 1;
-
-      let maxArrive = arriveAlice > arriveBob ? arriveAlice : arriveBob;
-      let minLeave = leaveAlice < leaveBob ? leaveAlice : leaveBob;
-
-      let m1 = maxArrive.split('-')[0] * 1;
-      let d1 = maxArrive.split('-')[1] * 1;
-
-      let m2 = minLeave.split('-')[0] * 1;
-      let d2 = minLeave.split('-')[1] * 1;
-
-      let res = 0;
-      res += days[m1] - d1 + 1;
-      for (let i = m1 + 1; i < m2; i++) {
-        res += days[i];
+      for (let i = 0; i < names.length; i++) {
+        names[i] = [names[i], heights[i]];
       }
-      res += d2;
-      return res;
+
+      names.sort((a, b) => b[1] - a[1]);
+
+      for (let i = 0; i < n; i++) {
+        names[i] = names[i][0];
+      }
+      return names;
     };
 
+
+
     /**
-     * @param {number[]} players
-     * @param {number[]} trainers
-     * @return {number}
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number[]}
      */
-    var matchPlayersAndTrainers = function (players, trainers) {
-      players.sort((a, b) => a - b);
-      trainers.sort((a, b) => a - b);
+    var goodIndices = function (nums, k) {
+      let n = nums.length;
 
-      let res = 0;
-      let i = 0;
-      let j = 0;
-
-      while (i < players.length && j < trainers.length) {
-        if (players[i] <= trainers[j]) {
-          res++;
-          i++;
-          j++;
+      let downDp = Array(n).fill(0);
+      for (let i = 1; i < n; i++) {
+        if (nums[i] <= nums[i - 1]) {
+          downDp[i] = downDp[i - 1] + 1;
         } else {
-          j++;
+          downDp[i] = 0;
+        }
+      }
+
+      let upDp = Array(n).fill(0);
+      for (let i = n - 2; i >= 0; i--) {
+        if (nums[i] <= nums[i + 1]) {
+          upDp[i] = upDp[i + 1] + 1;
+        }
+      }
+
+      let res = [];
+      for (let i = 0; i < n; i++) {
+        if (downDp[i] >= k && upDp[i] >= k) {
+          res.push(i);
         }
       }
       return res;
@@ -71,400 +69,177 @@
 
     /**
      * @param {number[]} nums
-     * @return {number[]}
-     */
-    var smallestSubarrays = function (nums) {
-      let n = nums.length;
-      let res = Array(n).fill(0);
-
-      res[n - 1] = 1;
-
-      if (n == 1) return res;
-
-      let rightMax = Array(n);
-      rightMax[n - 1] = nums[n - 1];
-      for (let i = n - 2; i >= 0; i--) {
-        rightMax[i] = Math.max(i | rightMax[i + 1], nums[i]);
-      }
-
-      let cur = nums[n - 1];
-
-      for (let i = n - 2; i >= 0; i--) {
-
-        if (nums[i] == rightMax[i]) {
-          res[i] = 1;
-        } else if (nums[i] | cur == rightMax[i]) {
-          res[i] = res[i + 1] + 1;
-        }
-        // if (nums[i] | cur > cur) {
-        //   res[i] = res[i + 1] + 1;
-        // } else {
-        //   res[i] = res[i + 1];
-        // }
-        cur = nums[i] | cur;
-      }
-      return res;
-    };
-
-
-
-
-
-    /**
-     * @param {number[][]} transactions
      * @return {number}
      */
-    var minimumMoney = function (transactions) {
-      let n = transactions.length;
+    var longestSubarray = function (nums) {
+      let max = nums[0]
+      let map = new Map();
+      for (let i = 0; i < nums.length; i++) {
+        max = Math.max(max, nums[i]);
 
-      transactions.sort((a, b) => (a[1] - a[0]) - (b[1] - b[0]));
+        if (!map.has(nums[i])) {
+          map.set(nums[i], 1);
+        } else {
+          map.set(nums[i], map.get(nums[i]) + 1);
+        }
+      }
+      if (map.get(max) == 1) {
+        return 1;
+      }
 
       let res = 0;
 
       let cur = 0;
-      for (let i = 0; i < n; i++) {
-        if (cur < transactions[i][0]) {
-          res += transactions[i][0] - cur;
-          cur = transactions[i][0];
-        }
+      for (let i = 0; i < nums.length; i++) {
+        if (nums[i] == max) {
 
-        cur = cur + transactions[i][1] - transactions[i][0];
-      }
-      return res;
-    };
+          cur++;
 
-    //     [[5,0], [4,2], [2,1]]
-    //      5  0    4
-    //     -5     -2    -1      3
-
-    //      [[2,1],[5,0],[4,2]]
-    //         -1    -5    -2
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * @param {number} n
-     * @return {number}
-     */
-    var smallestEvenMultiple = function (n) {
-      if (n % 2 == 0) return n;
-
-      return n * 2;
-    };
-
-
-
-    /**
-     * @param {string} s
-     * @return {number}
-     */
-    var longestContinuousSubstring = function (s) {
-      let n = s.length;
-      if (n == 0) return 0;
-      if (n == 1) return 1;
-
-      let cur = s[0].charCodeAt() - 'a'.charCodeAt();
-      let curLen = 1;
-
-      let res = cur;
-      for (let i = 1; i < s.length; i++) {
-        let c = s[i];
-        if (c.charCodeAt() - 'a'.charCodeAt == cur + 1) {
-          cur = c.charCodeAt() - 'a'.charCodeAt
-          curLen++;
         } else {
-          cur = c.charCodeAt() - 'a'.charCodeAt;
-          curLen = 1;
+          res = Math.max(cur, res);
+          cur = 0;
         }
-        res = Math.max(res, curLen);
       }
       return res;
     };
 
-    //     输入：
-    // "dfrimswg"
+
+    // [378034,378034,378034]
+
+    // [586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,516529,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,55816,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,586730,232392,232392,294503]
+
+    // 输入：
+    //   [878724, 201541, 179099, 98437, 35765, 327555, 475851, 598885, 849470, 943442]
+
+    //down 0        1       2       3      4   
+    // 4
     // 输出：
-    // 3
+    //   [4]
     // 预期：
-    // 1
+    //   [4, 5]
 
 
     /**
-     * Definition for a binary tree node.
-     * function TreeNode(val, left, right) {
-     *     this.val = (val===undefined ? 0 : val)
-     *     this.left = (left===undefined ? null : left)
-     *     this.right = (right===undefined ? null : right)
-     * }
+     * @param {number[]} vals
+     * @param {number[][]} edges
+     * @return {number}
      */
-    /**
-     * @param {TreeNode} root
-     * @return {TreeNode}
-     */
-    var reverseOddLevels = function (root) {
-      if (root == null) return null;
-      if (root.left == null && root.right == null) return root;
-
-      let queue = [];
-
-      let curLevel = 0;
-      queue.push(root);
-
-      while (queue.length) {
-        let len = queue.length;
-
-        let nodeList = [];
-        let nodeValue = [];
-        for (let i = 0; i < len; i++) {
-          let curNode = queue.shift();
-          if (curNode.left) {
-            queue.push(curNode.left);
-          }
-          if (curNode.right) {
-            queue.push(curNode.right);
-          }
-
-          nodeList.push(curNode);
-          nodeValue.unshift(curNode.val);
-        }
-
-        if (curLevel % 2 == 1) {
-          let n = nodeList.length
-          for (let i = 0; i < n; i++) {
-            nodeList[i].val = nodeValue[n - i - 1];
-          }
-        }
-        curLevel++;
-      }
-      return root;
-    };
+    var numberOfGoodPaths = function (vals, edges) {
+      let n = vals.length;
+      let graph = Array(n);
 
 
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * @param {string[]} words
-     * @return {number[]}
-     */
-    var sumPrefixScores = function (words) {
-      let trie = new Trie();
-      for (let i = 0; i < words.length; i++) {
-        trie.insert(words[i]);
+      for (let i = 0; i < n; i++) {
+        graph[i] = [];
       }
 
-      let res = [];
-      for (let i = 0; i < words.length; i++) {
-        let curS = '';
-        // let curLen = 0;
-        // for (let j = 0; j < words[i].length; j++) {
+      for (let i = 0; i < edges.length; i++) {
+        graph[edges[i][0]].push(edges[i][1]);
+        graph[edges[i][1]].push(edges[i][0]);
+      }
 
-        let curLen = trie.countWordsStartingWith(words[i]);
-        // }
-        res[i] = curLen;
+      let set = new Set();
+
+      function bfs(v) {
+        let visited = Array(n).fill(false);
+
+        let queue = [];
+        queue.push([v, vals[v], v + '']);
+        visited[v] = true;
+
+        let res = 0;
+        while (queue.length) {
+          let len = queue.length;
+          let newQueue = [];
+
+          for (let i = 0; i < len; i++) {
+            let curPath = queue[i];
+            let curV = curPath[0];
+            let curVal = curPath[1];
+            let curP = curPath[2];
+
+            for (let j = 0; j < graph[curV].length; j++) {
+              if (!visited[graph[curV][j]]) {
+                if (vals[graph[curV][j]] < curVal) {
+                  newQueue.push([graph[curV][j], curVal, curP + graph[curV][j]]);
+                  visited[graph[curV][j]] = true;
+                }
+                if (vals[graph[curV][j]] == curVal) {
+                  let path = curP + graph[curV][j];
+                  if (!set.has(path) && !set.has(reverse(path))) {
+                    console.log('res+_', '---', path)
+                    res++;
+                    set.add(path);
+                  }
+                  visited[graph[curV][j]] = true;
+                  newQueue.push([graph[curV][j], curVal, curP + graph[curV][j]]);
+                }
+              }
+            }
+          }
+
+          queue = newQueue;
+        }
+        return res;
+      }
+
+      let map = new Map();
+      for (let i = 0; i < vals.length; i++) {
+        if (!map.has(vals[i])) {
+          map.set(vals[i], 1);
+        } else {
+          map.set(vals[i], map.get(vals[i]) + 1);
+        }
+      }
+
+      let res = n;
+      for (let i = 0; i < n; i++) {
+        if (map.get(vals[i]) > 1) {
+          res += bfs(i);
+        }
       }
       return res;
     };
 
-
-    class Node {
-      constructor(isWord) {
-        this.next = new Map();
-        this.isWord = isWord || false;
-        this.count = 0;
-        this.prefixCount = 0;
-      }
+    function reverse(s) {
+      let arr = s.split('');
+      return arr.reverse().join('');
     }
 
-    var Trie = function () {
-      this.root = new Node();
-      this.size = 0;
-    };
-
-    /** 
-     * @param {string} word
-     * @return {void}
-     */
-    Trie.prototype.insert = function (word) {
-      let cur = this.root;
-      for (let i = 0; i < word.length; i++) {
-        if (!cur.next.has(word[i])) {
-          cur.next.set(word[i], new Node());
-        }
-        cur = cur.next.get(word[i]);
-        cur.prefixCount++;
-      }
-      if (!cur.isWord) {
-        cur.isWord = true;
-        this.size++;
-      }
-      cur.count++;
-    };
-
-    /** 
-     * @param {string} word
-     * @return {number}
-     */
-    Trie.prototype.countWordsEqualTo = function (word) {
-      let cur = this.root;
-      for (let i = 0; i < word.length; i++) {
-        if (!cur.next.has(word[i])) {
-          return 0;
-        } else {
-          cur = cur.next.get(word[i]);
-        }
-      }
-      return cur.count;
-    };
-
-    /** 
-     * @param {string} prefix
-     * @return {number}
-     */
-    Trie.prototype.countWordsStartingWith = function (prefix) {
-      let cur = this.root;
-      let res = 0;
-      for (let i = 0; i < prefix.length; i++) {
-        if (!cur.next.has(prefix[i])) {
-          return res;
-        } else {
-          res += cur.prefixCount;
-          cur = cur.next.get(prefix[i]);
-        }
-      }
-
-      return res;
-    };
-
-    /** 
-     * @param {string} word
-     * @return {void}
-     */
-    Trie.prototype.erase = function (word) {
-      let cur = this.root;
-      for (let i = 0; i < word.length; i++) {
-        cur = cur.next.get(word[i]);
-        cur.prefixCount--;
-      }
-      cur.count--;
-      if (cur.count == 0) {
-        cur.isWord = false;
-      }
-    };
-
-    /**
-     * Your Trie object will be instantiated and called as such:
-     * var obj = new Trie()
-     * obj.insert(word)
-     * var param_2 = obj.countWordsEqualTo(word)
-     * var param_3 = obj.countWordsStartingWith(prefix)
-     * obj.erase(word)
-     */
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * @param {string[]} words
-     * @return {number[]}
-     */
-    var sumPrefixScores = function (words) {
-      let trie = new Trie();
-      for (let i = 0; i < words.length; i++) {
-        trie.insert(words[i]);
-      }
-
-      let res = [];
-      for (let i = 0; i < words.length; i++) {
-        let curS = '';
-        // let curLen = 0;
-        // for (let j = 0; j < words[i].length; j++) {
-
-        let curLen = trie.countWordsStartingWith(words[i]);
-        // }
-        res[i] = curLen;
-      }
-      return res;
-    };
-
-
-    class Node {
-      constructor(isWord) {
-        this.next = new Map();
-        this.isWord = isWord || false;
-        this.count = 0;
-        this.prefixCount = 0;
-      }
-    }
-
-    var Trie = function () {
-      this.root = new Node();
-      this.size = 0;
-    };
-
-    /** 
-     * @param {string} word
-     * @return {void}
-     */
-    Trie.prototype.insert = function (word) {
-      let cur = this.root;
-      for (let i = 0; i < word.length; i++) {
-        if (!cur.next.has(word[i])) {
-          cur.next.set(word[i], new Node());
-        }
-        cur = cur.next.get(word[i]);
-        cur.prefixCount++;
-      }
-      if (!cur.isWord) {
-        cur.isWord = true;
-        this.size++;
-      }
-      cur.count++;
-    };
-
-
-    /** 
-     * @param {string} prefix
-     * @return {number}
-     */
-    Trie.prototype.countWordsStartingWith = function (prefix) {
-      let cur = this.root;
-      let res = 0;
-      for (let i = 0; i < prefix.length; i++) {
-        if (!cur.next.has(prefix[i])) {
-          return res;
-        } else {
-          res += cur.prefixCount;
-          cur = cur.next.get(prefix[i]);
-        }
-      }
-
-      return res;
-    };
+    输入：
+      [1, 4, 11, 19, 14, 11, 12, 18, 9, 15, 18, 9, 11, 1, 18, 8, 10, 13, 3, 17, 1, 10, 11, 15, 11, 19, 2]
+      [
+        [0, 1],
+        [0, 2],
+        [3, 0],
+        [4, 3],
+        [0, 5],
+        [2, 6],
+        [7, 4],
+        [4, 8],
+        [9, 2],
+        [10, 0],
+        [3, 11],
+        [1, 12],
+        [5, 13],
+        [6, 14],
+        [6, 15],
+        [16, 0],
+        [14, 17],
+        [12, 18],
+        [19, 6],
+        [20, 17],
+        [14, 21],
+        [12, 22],
+        [23, 20],
+        [24, 11],
+        [25, 15],
+        [26, 7]
+      ]
+    输出：
+    42
+    预期：
+    35
   </script>
 </body>
 

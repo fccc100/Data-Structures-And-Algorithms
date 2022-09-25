@@ -63,3 +63,118 @@ var canFinish = function(numCourses, prerequisites) {
 
   return res.length == numCourses;
 };
+
+输入：
+[[2,5],[4,3],[2,3]]
+输出：
+3
+预期：
+-1
+
+输入：
+[[0,3],[1,3],[4,0],[2,0],[2,4]]
+输出：
+3
+预期：
+-1
+
+输入：
+[[3,4],[2,4],[0,4],[1,4]]
+输出：
+-1
+预期：
+4
+
+class Solution {
+  public int transportationHub(int[][] path) {
+
+      int n = 0;
+      for (int i = 0; i < path.length; i++) {
+          n = Math.max(n, Math.max(path[i][0], path[i][1]));
+      }
+      n = n + 1;
+
+      ArrayList<HashSet<Integer>> graph = new ArrayList<>();
+      for (int i = 0; i < n; i++) {
+          graph.add(new HashSet());
+      }
+
+      int [] inDegree = new int[n];
+      
+      int [] outDegree = new int[n];
+      
+
+      for (int i = 0; i < path.length; i++) {
+
+          graph.get(path[i][0]).add(path[i][1]);
+          inDegree[path[i][1]]++;
+          outDegree[path[i][0]]++;
+      }
+      
+      
+      
+      int [] inDegree1 = new int[n];
+      for (int i = 0; i < n; i++) {
+          if (outDegree[i] == 0 && inDegree[i] == n - 1) {
+              return i;
+          }
+          
+      }
+      return -1;
+
+      int visitedCnt = 0;
+      Queue<Integer> queue = new LinkedList<>();
+      for (int i = 0; i < inDegree.length; i++) {
+          if (inDegree[i] == 0) {
+              queue.offer(i);
+              visitedCnt++;
+          }
+      }
+      if (queue.isEmpty()) return -1;
+
+
+
+      int res = -1;
+      boolean flag = false;
+      while (!queue.isEmpty()) {
+          int len = queue.size();
+
+          for (int i = 0; i < len; i++) {
+              int curV = queue.poll();
+
+              HashSet<Integer> curSet = graph.get(curV);
+              for (Integer key : curSet) {
+                  inDegree[key]--;
+                  if (inDegree[key] == 0) {
+                      queue.offer(key);
+                      visitedCnt++;
+                      if (visitedCnt == n) {
+                          flag = true;
+                          res = key;
+                      }
+                      
+                  }
+              }
+          }
+      }
+
+      boolean hasRes = true;
+      for (int i = 0; i < inDegree.length; i++) {
+          if (inDegree[i] > 0) {
+              hasRes = false;
+          }
+      }
+      System.out.print(hasRes);
+      System.out.print(flag);
+      if (hasRes && flag) {
+          if (inDegree1[res] < n - 1) {
+              System.out.print(1);
+              return -1;
+          }
+          return res;
+      } else {
+          System.out.print(1);
+          return -1;
+      }
+  }
+}
