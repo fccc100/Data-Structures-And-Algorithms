@@ -1,6 +1,7 @@
 // 490. 迷宫
 // 由空地（用 0 表示）和墙（用 1 表示）组成的迷宫 maze 中有一个球。球可以途经空地向 上、下、左、右 四个方向滚动，且在遇到墙壁前不会停止滚动。当球停下时，可以选择向下一个方向滚动。
-// 给你一个大小为 m x n 的迷宫 maze ，以及球的初始位置 start 和目的地 destination ，其中 start = [startrow, startcol] 且 destination = [destinationrow, destinationcol] 。请你判断球能否在目的地停下：如果可以，返回 true ；否则，返回 false 。
+// 给你一个大小为 m x n 的迷宫 maze ，以及球的初始位置 start 和目的地 destination ，其中 start = [startrow, startcol] 且 destination = [destinationrow, destinationcol] 。
+// 请你判断球能否在目的地停下：如果可以，返回 true ；否则，返回 false 。
 
 // 你可以 假定迷宫的边缘都是墙壁（参考示例）。
 
@@ -26,77 +27,42 @@
  * @return {boolean}
  */
 var hasPath = function(maze, start, destination) {
-  // let m = maze.length;
-  // let n = maze[0].length;
+  let m = maze.length;
+  if (m == 0) return false;
+  let n = maze[0].length;
 
-  // let dir = [[-1, 0], [0, 1], [1, 0], [0, -1]];
-  // let queue = [];
+  const dirs = [[-1, 0], [0, 1], [1, 0], [0, -1]];
 
-  // queue.push(start);
-  // while(queue.length) {
-  //   let curPos = queue.shift();
+  let visited = Array(m);
+  for (let i = 0; i < m; i++) {
+    visited[i] = Array(n).fill(false);
+  }
 
-  //   if (curPos[0] == destination[0] && curPos[1] == curPos[1]) {
-  //     let top = destination[0] - 1 >= 0 ? maze[destination[0] - 1][destination[1]] : 1;
-  //     let right = destination[1] + 1 < n ? maze[destination[0]][destination[1] + 1] : 1;
-  //     let bottom = destination[0] + 1 < m ? maze[destination[0] + 1][destination[1]] : 1;
-  //     let left = destination[1] - 1 >= 0 ? maze[destination[0]][destination[1] - 1] : 1;
+  let queue = [];
+  visited[start[0]][start[1]] = true;
+  queue.push(start);
 
-  //     if (!((top == 0 && bottom == 0 && left == 0 && right == 0) || (top == 0 && bottom == 0 && left == 1 && right == 1) || (top == 1 && bottom == 1 && left == 0 && right == 0))) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }
+  while (queue.length) {
+    let curV = queue.shift();
 
-  //   for (let i = 0; i < 4; i++) {
-  //     let nextRow = curPos[0] + dir[i][0];
-  //     let nextCol = curPos[1] + dir[i][1];
-  //     if (nextRow >= 0 && nextRow < m && nextCol >= 0 && nextCol < n && maze[nextRow][nextCol] == 0) {
-  //       queue.push([nextRow, nextCol]);
-  //     }
-  //   }
-  // }
-  // return false;
+    if (curV[0] == destination[0] && curV[1] == destination[1]) {
+      return true;
+    }
+
+    for (let i = 0; i < dirs.length; i++) {
+      let nextX = curV[0] + dirs[i][0];
+      let nextY = curV[1] + dirs[i][1];
+
+      while (nextX >= 0 && nextY >= 0 && nextX < m && nextY < n && maze[nextX][nextY] == 0) {
+        nextX += dirs[i][0];
+        nextY += dirs[i][1];
+      }
+
+      if (!visited[nextX - dirs[i][0]][nextY - dirs[i][1]]) {
+        queue.push([nextX - dirs[i][0], nextY - dirs[i][1]]);
+        visited[nextX - dirs[i][0]][nextY - dirs[i][1]] = true;
+      }
+    }
+  }
+  return false;
 };
-
-var hasPath = function(maze, start, destination) {
-  // let m = maze.length;
-  // if (m == 0) return false;
-  // let n = maze[0].length;
-
-  // // 先从开始位置遍历看是否能到达终点
-  // let dir = [[-1, 0], [0, 1], [1, 0], [0, -1]];
-
-  // let visited = Array(m);
-  // for (let i = 0; i < m; i++) {
-  //   visited[i] = Array(n).fill(false);
-  // }
-
-  // let queue = [];
-  // queue.push([start[0], start[1]]);
-  // visited[start[0]][start[1]] = true;
-
-  // let canArrive = false;
-  // while (queue.length) {
-  //   let len = queue.length;
-
-  //   for (let i = 0; i < len; i++) {
-  //     let curPos = queue.shift();
-  //     let curI = curPos[0];
-  //     let curJ = curPos[1];
-
-  //     for (let j = 0; j < dir.length; j++) {
-  //       let nextI = curI + dir[j][0];
-  //       let nextJ = curJ + dir[j][1];
-  //       if (nextI >= 0 && nextI < m && nextJ >= 0 && nextJ < n && maze[nextI][nextJ] == 0 && !visited[nextI][nextJ]) {
-  //         if (destination[0] == nextI && destination[1] == nextJ) {
-  //           canArrive = true;
-  //         }
-
-  //         queue.push([nextI, nextJ]);
-  //       }
-  //     }
-  //   }
-  // }
-}
