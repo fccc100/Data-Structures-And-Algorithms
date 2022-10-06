@@ -240,6 +240,469 @@
     42
     预期：
     35
+
+
+
+
+
+
+
+
+
+
+    /**
+     * @param {string} word
+     * @return {boolean}
+     */
+    var equalFrequency = function (word) {
+
+
+      for (let i = 0; i < word.length; i++) {
+
+        let map = new Map();
+        for (let j = 0; j < word.length; j++) {
+          if (i == j) {
+            continue;
+          }
+          if (!map.has(word[j])) {
+            map.set(word[j], 1);
+          } else {
+            map.set(word[j], map.get(word[j]) + 1);
+          }
+        }
+
+        let set = new Set();
+        for (let [k, v] of map) {
+          set.add(v);
+        }
+        if (size.size == 1) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    //     ["LUPrefix","longest"]
+    // [[1],[]]
+    // 2.并查集
+    class UnionFind {
+      constructor(size) {
+        this.parent = Array(size);
+        this.size = Array(size);
+        for (let i = 0; i < size; i++) {
+          this.parent[i] = i;
+          this.size[i] = 1;
+        }
+      }
+
+      findRoot(p) {
+        while (p != this.parent[p]) {
+          p = this.parent[p];
+        }
+        return p;
+      }
+
+      isConnected(p, q) {
+        return this.findRoot(p) == this.findRoot(q);
+      }
+
+      union(p, q) {
+        let pRoot = this.findRoot(p);
+        let qRoot = this.findRoot(q);
+
+        if (pRoot == qRoot) {
+          return;
+        }
+
+        // 基于size合并
+        if (this.size[pRoot] < this.size[qRoot]) {
+          this.parent[qRoot] = pRoot;
+          this.size[pRoot] += this.size[qRoot];
+        } else {
+          this.parent[pRoot] = qRoot;
+          this.size[qRoot] += this.size[pRoot];
+        }
+
+      }
+
+      get() {
+        return this.size;
+      }
+    }
+
+    /**
+     * @param {number} n
+     */
+    var LUPrefix = function (n) {
+      this.n = n;
+      this.uf = new UnionFind(n + 1);
+      this.nums = Array(n + 1).fill(0);
+    };
+
+    /** 
+     * @param {number} video
+     * @return {void}
+     */
+    LUPrefix.prototype.upload = function (video) {
+      console.log(video)
+      if (video == 1 && this.n > 1) {
+        if (this.nums[video + 1] > 0) {
+          this.uf.union(video, video + 1)
+        }
+
+        this.nums[video]++;
+        return;
+      }
+      if (video == this.n && this.n > 1) {
+        if (this.nums[video - 1] > 0) {
+          this.uf.union(video, video - 1);
+        }
+
+        this.nums[video]++;
+        return;
+      }
+
+      this.nums[video]++;
+
+      if (this.nums[video + 1] > 0) {
+
+        this.uf.union(video, video + 1);
+      }
+
+      if (this.nums[video - 1] > 0) {
+        this.uf.union(video, video - 1);
+      }
+
+    };
+
+    /**
+     * @return {number}
+     */
+    LUPrefix.prototype.longest = function () {
+      console.log(this.nums, 'sdffsdfsfs')
+      if (this.nums[1] == 0) return 0;
+      let res = this.uf.get();
+
+      console.log(res)
+      return res[1];
+    };
+
+    /**
+     * Your LUPrefix object will be instantiated and called as such:
+     * var obj = new LUPrefix(n)
+     * obj.upload(video)
+     * var param_2 = obj.longest()
+     */
+
+
+
+
+    /**
+     * @param {number[]} nums1
+     * @param {number[]} nums2
+     * @return {number}
+     */
+    var xorAllNums = function (nums1, nums2) {
+      let m = nums1.length;
+      let n = nums2.length;
+
+      if (m % 2 == 0 && n % 2 == 0) {
+        return 0;
+      }
+
+      if (m % 2 == 0 && n % 2 != 0) {
+        let res = 0;
+        for (let i = 0; i < m; i++) {
+          res ^= nums1[i];
+        }
+        return res;
+      }
+
+      if (m % 2 != 0 && n % 2 == 0) {
+        let res = 0;
+        for (let i = 0; i < n; i++) {
+          res ^= nums2[i];
+        }
+        return res;
+      }
+
+      if (m % 2 != 0 && n % 2 != 0) {
+        let res = 0;
+        for (let i = 0; i < m; i++) {
+          res ^= nums1[i];
+        }
+        for (let i = 0; i < n; i++) {
+          res ^= nums2[i];
+        }
+        return res;
+      }
+    };
+
+
+
+
+    /**
+     * @param {number[]} nums1
+     * @param {number[]} nums2
+     * @param {number} diff
+     * @return {number}
+     */
+    var numberOfPairs = function (nums1, nums2, diff) {
+      // 0 <= i < j <= n - 1 且
+      // nums1[i] - nums1[j] <= nums2[i] - nums2[j] + diff.
+      // nums1[i] - nums2[i] - (nums1[j] - nums2[j]) <= diff
+      // (nums1[j] - nums2[j]) - (nums1[i] + nums2[i]) >= diff
+      let res = 0;
+      let map = new Map();
+      for (let i = 0; i < nums1.length; i++) {
+        let cur = nums1[i] - nums2[i];
+
+        for (let [k, v] of map) {
+          if (cur - k >= diff) {
+            res += v;
+          }
+        }
+
+        let sum = nums1[i] + nums2[i];
+        if (!map.has(sum)) {
+          map.set(sum, 1)
+        } else {
+          map.set(sum, map.get(sum) + 1);
+        }
+      }
+      return res;
+    };
+
+
+    /**
+     * @param {number[]} nums1
+     * @param {number[]} nums2
+     * @param {number} diff
+     * @return {number}
+     */
+    var numberOfPairs = function (nums1, nums2, diff) {
+      let n = nums2.length;
+
+      let nums = Array(n);
+      let res = 0;
+      let map = new Map();
+      for (let i = 0; i < n; i++) {
+        nums[i] = nums1[i] - nums2[i];
+      }
+
+
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * @param {number} a
+     * @param {number} b
+     * @return {number}
+     */
+    var commonFactors = function (a, b) {
+      let res = 0;
+      for (let i = 1; i <= Math.min(a, b); i++) {
+        if (a % i == 0 && b % i == 0) {
+          res++;
+        }
+      }
+      return res;
+    };
+
+
+
+
+
+
+
+    /**
+     * @param {number[][]} grid
+     * @return {number}
+     */
+    var maxSum = function (grid) {
+      let m = grid.length;
+      let n = grid[0].length;
+
+      let res = -Infinity;
+      for (let i = 0; i < m; i++) {
+        if (i + 2 >= m) {
+          break;
+        }
+        for (let j = 0; j < n; j++) {
+          if (j + 2 >= n) {
+            break;
+          }
+
+          let curSum = 0;
+          curSum += grid[i][j];
+          curSum += grid[i][j + 1];
+          curSum += grid[i][j + 2];
+          curSum += grid[i + 1][j + 2];
+          curSum += grid[i + 2][j];
+          curSum += grid[i + 2][j + 1];
+          curSum += grid[i + 2][j + 2];
+
+          res = Math.max(res, curSum);
+        }
+      }
+      return res;
+    };
+
+
+    /**
+     * @param {number} num1
+     * @param {number} num2
+     * @return {number}
+     */
+    var minimizeXor = function (num1, num2) {
+      // 3  0011
+      // 5  0101
+
+      // nums2位1的个数
+      let oneCnt = getOneCnt(num2);
+
+      let str = Number(num1).toString(2).padStart(31, 0);
+
+      let res = '0000000000000000000000000000000'
+      let resArr = res.split('');
+      for (let i = 0; i < resArr.length; i++) {
+        if (str[i] == 1 && oneCnt > 0) {
+          resArr[i] = 1;
+          oneCnt--;
+        }
+        if (oneCnt <= 0) break;
+      }
+
+      if (oneCnt > 0) {
+        for (let i = resArr.length - 1; i >= 0; i--) {
+          if (resArr[i] == 0 && oneCnt > 0) {
+            resArr[i] = 1;
+            oneCnt--;
+          }
+          if (oneCnt <= 0) break;
+        }
+      }
+
+      return parseInt(resArr.join(''), 2)
+    };
+
+    var getOneCnt = function (n) {
+      let res = 0;
+      for (let i = 0; i < 32; i++) {
+        if ((n & (1 << i)) != 0) {
+          res++;
+        }
+      }
+      return res;
+    };
+
+
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var deleteString = function (s) {
+      let n = s.length;
+
+      let cur = '';
+      let index = 0;
+      let res = 0;
+      while (s.length > 0) {
+        console.log(s)
+        cur += s[index];
+        console.log(cur)
+        let next = s.substring(index + 1);
+        console.log(next)
+        if (next.indexOf(cur) == 0) {
+          s = s.substring(index + 1);
+          res++;
+          cur = '';
+          index = 0;
+        } else if (next.indexOf(cur) < 0) {
+          s = '';
+          res++;
+        } else {
+          index++
+        }
+
+
+        console.log(res)
+      }
+      return res;
+    };
+
+
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var deleteString = function (s) {
+
+      let charMap = new Map();
+      for (let i = 0; i < s.length; i++) {
+        if (!charMap.has(s[i])) {
+          charMap.set(s[i], 1);
+        } else {
+          charMap.set(s[i], charMap.get(s[i]) + 1);
+        }
+      }
+
+      if (charMap.size == 1) {
+        return s.length;
+      }
+
+      let map = new Map();
+
+      // 删除字符串s的最大操作次数
+      function delStr(s) {
+        let n = s.length;
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+
+        if (map.has(s)) {
+          return map.get(s);
+        }
+
+        let res = 0;
+        let cur = '';
+        let hasPrefix = false;
+        for (let i = 0; i < n; i++) {
+          if (i > Math.floor(n / 2)) break;
+          cur += s[i];
+
+          let next = s.substring(i + 1);
+          if (next.indexOf(cur) == 0) {
+            hasPrefix = true;
+            res = Math.max(res, 1 + delStr(next));
+          }
+        }
+
+        if (!hasPrefix) {
+          map.set(s, 1);
+          return 1
+        }
+
+        map.set(s, res);
+        return res;
+      }
+
+      return delStr(s);
+    };
+
+    // a b c a b c d a b c
+    // 1 
   </script>
 </body>
 

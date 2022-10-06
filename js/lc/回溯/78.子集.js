@@ -6,23 +6,23 @@
 // 输入：nums = [1,2,3]
 // 输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
 function subsets(nums) {
-  let res = [];
-  function backtracking(nums, index) {
-    if (index == nums.length) {
-      res.push([...path]);
-      return;
-    }
+  // let res = [];
+  // function backtracking(nums, index) {
+  //   if (index == nums.length) {
+  //     res.push([...path]);
+  //     return;
+  //   }
 
-    for (let i = startIndex; i < nums.length; i++) {
-      path.push(i);
-      backtracking(nums, i + 1, path);
-      path.pop();
-    }
-    return;
-  }
+  //   for (let i = startIndex; i < nums.length; i++) {
+  //     path.push(i);
+  //     backtracking(nums, i + 1, path);
+  //     path.pop();
+  //   }
+  //   return;
+  // }
 
-  let path = [];
-  backtracking(nums, 0);
-  return res;
+  // let path = [];
+  // backtracking(nums, 0);
+  // return res;
 }
 
