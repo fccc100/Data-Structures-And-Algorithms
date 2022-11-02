@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var averageValue = function (nums) {
+      let n = nums.length
+
+      let cnt = 0;
+      let sum = 0;
+      for (let i = 0; i < n; i++) {
+        if (nums[i] % 3 == 0 && nums[i] % 2 == 0) {
+          sum += nums[i]
+          cnt++
+        }
+      }
+
+      return Math.floor(sum / cnt)
+    };
+
+    /**
+     * @param {string[]} creators
+     * @param {string[]} ids
+     * @param {number[]} views
+     * @return {string[][]}
+     */
+    var mostPopularCreator = function (creators, ids, views) {
+      let n = creators.length
+
+      let map = new Map()
+      let max = -1
+
+      let maxMap = new Map()
+      for (let i = 0; i < n; i++) {
+        if (!map.has(creators[i])) {
+          map.set(creators[i], views[i])
+          maxMap.set(creators[i], i)
+        } else {
+          map.set(creators[i], map.get(creators[i]) + views[i])
+
+          if (views[i] > views[maxMap.get(creators[i])]) {
+            maxMap.set(creators[i], i)
+          }
+          if (views[i] == views[maxMap.get(creators[i])]) {
+            if (ids[i] < ids[maxMap.get(creators[i])]) {
+              maxMap.set(creators[i], i)
+            }
+          }
+        }
+        max = Math.max(max, map.get(creators[i]))
+      }
+
+      console.log(max)
+      let maxC = []
+      for (let [key, val] of map) {
+        if (val == max) {
+          maxC.push(key)
+        }
+      }
+
+      let res = []
+      for (let i = 0; i < maxC.length; i++) {
+        res.push([maxC[i], ids[maxMap.get(maxC[i])]])
+      }
+      return res
+    };
+
+    /**
+     * @param {number} n
+     * @param {number} target
+     * @return {number}
+     */
+    var makeIntegerBeautiful = function (n, target) {
+
+      if (sum(n) <= target) {
+        return 0
+      } else {
+        let t = 1
+        let temp = n
+        while (sum(temp) > target) {
+          let m = (t * 10) - (n % (t * 10))
+          temp = (Math.floor(n / (t * 10)) + 1) * 10
+
+          if (sum(temp) <= target) {
+            return m
+          } else {
+            temp = n
+            t *= 10
+          }
+
+        }
+      }
+    };
+
+    function sum(n) {
+      let s = String(n)
+      let res = 0
+      for (let i = 0; i < s.length; i++) {
+        res += Number(s[i])
+      }
+      return res
+    }
+    // 19 1
+    // 19 + 1 = 20
+
+
+    /**
+     * Definition for a binary tree node.
+     * function TreeNode(val, left, right) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.left = (left===undefined ? null : left)
+     *     this.right = (right===undefined ? null : right)
+     * }
+     */
+    /**
+     * @param {TreeNode} root
+     * @param {number[]} queries
+     * @return {number[]}
+     */
+    var treeQueries = function (root, queries) {
+      let map = new Map()
+
+      function getDepth(root, d) {
+        if (root == null) return
+        map.set(root, d)
+
+        getDepth(root.left, d + 1)
+        getDepth(root.right, d + 1)
+
+      }
+
+      getDepth(root, 0)
+    };
+
+
+    /**
+     * Definition for a binary tree node.
+     * function TreeNode(val, left, right) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.left = (left===undefined ? null : left)
+     *     this.right = (right===undefined ? null : right)
+     * }
+     */
+    /**
+     * @param {TreeNode} root
+     * @param {number[]} queries
+     * @return {number[]}
+     */
+     var treeQueries = function (root, queries) {
+      let n = queries.length
+
+      let maxDepMap = new Map()
+
+      let cnt = 0
+      function getC(root) {
+        if (root == null) return
+        cnt++
+        getC(root.left)
+        getC(root.right)
+      }
+
+      let valSet = new Set()
+      for (let i = 1; i <= cnt; i++) {
+        set.add(i)
+      }
+
+      function dfs(root, set) {
+        if (root == null) return [0, '']
+        let lV = root.val
+        let rV = root.val
+        set.remove(lV)
+        dfs(root.left, set)
+
+        set.add(lV)
+        set.remove(rV)
+        dfs(root.right, set)
+        
+        
+        root.valSet = cSet
+        root.d = cd
+
+        maxDepMap.set(root.val, cd)
+        return [cd, cSet]
+      }
+
+      dfs(root, set)
+
+      function getDepth(root, delVal) {
+        if (root == null || root.val == delVal) {
+          return 0
+        }
+        if (!root.valSet.has(delVal)) {
+          return root.d
+        }
+
+        let res = Math.max(getDepth(root.left, delVal), getDepth(root.right, delVal)) + 1
+
+        return res
+      }
+
+      let res = Array(n)
+      for (let i = 0; i < n; i++) {
+        res[i] = Math.max(getDepth(root.left, queries[i]), getDepth(root.right, queries[i])) - 1
+      }
+      return res
+    };
+  </script>
+</body>
+
+</html>
