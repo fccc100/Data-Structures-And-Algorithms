@@ -98,7 +98,6 @@
             temp = n
             t *= 10
           }
-
         }
       }
     };
@@ -157,12 +156,13 @@
      * @param {number[]} queries
      * @return {number[]}
      */
-     var treeQueries = function (root, queries) {
+    var treeQueries = function (root, queries) {
       let n = queries.length
 
       let maxDepMap = new Map()
 
       let cnt = 0
+
       function getC(root) {
         if (root == null) return
         cnt++
@@ -185,8 +185,8 @@
         set.add(lV)
         set.remove(rV)
         dfs(root.right, set)
-        
-        
+
+
         root.valSet = cSet
         root.d = cd
 
