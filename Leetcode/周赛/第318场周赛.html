@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[]} nums
+     * @return {number[]}
+     */
+    var applyOperations = function (nums) {
+      let n = nums.length;
+
+      for (let i = 0; i < n - 1; i++) {
+        if (nums[i] != nums[i + 1]) {
+          continue;
+        }
+        nums[i] = 2 * nums[i];
+        nums[i + 1] = 0;
+      }
+
+      let res = []
+      for (let i = 0; i < n; i++) {
+        if (nums[i] == 0) {
+          res.push(0)
+        }
+      }
+      for (let i = 0; i < n; i++) {
+        if (nums[i] != 0) {
+          res.push(nums[i])
+        }
+      }
+      return res;
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number}
+     */
+    var maximumSubarraySum = function (nums, k) {
+      let n = nums.length
+
+      let l = 0;
+      let r = 0;
+      let curSum = 0
+      let res = -Infinity
+      let map = new Map()
+      for (; r < k; r++) {
+        if (!map.has(nums[r])) {
+          map.set(nums[r], 1)
+        } else {
+          map.set(nums[r], map.get(nums[r]) + 1)
+        }
+        curSum += nums[r]
+      }
+      r--
+      if (map.size == k) {
+        res = curSum
+      }
+
+      while (r + 1 < n) {
+        r++
+        curSum += nums[r]
+        if (!map.has(nums[r])) {
+          map.set(nums[r], 1)
+        } else {
+          map.set(nums[r], map.get(nums[r]) + 1)
+        }
+
+        map.set(nums[l], map.get(nums[l]) - 1)
+        if (!map.has(nums[l])) {
+          map.delete(nums[l])
+        }
+        curSum -= nums[l]
+        l++
+        if (map.size == k) {
+          res = Math.max(res, curSum)
+        }
+      }
+      return res
+    };
+
+
+    /**
+     * @param {number[]} costs
+     * @param {number} k
+     * @param {number} candidates
+     * @return {number}
+     */
+    var totalCost = function (costs, k, candidates) {
+      let n = costs.length
+
+      let leftHeap = new MinHeap()
+      let l = 0
+      while (l < candidates) {
+        leftHeap.offer(costs[l])
+        l++
+      }
+      l--
+
+      let rightHeap = new MinHeap()
+      let r = n - 1
+      while (n - r < candidates + 1) {
+        rightHeap.offer(costs[r])
+        r--
+      }
+      r++
+
+      let res = 0
+      while (k > 0) {
+
+        let lMin = leftHeap.peek()
+        let rMin = rightHeap.peek()
+        let cur = 0
+        if (l >= r) {
+          if (lMin > rMin) {
+            cur = rightHeap.poll()
+          } else {
+            cur = leftHeap.poll()
+          }
+        } else {
+          if (lMin > rMin) {
+            cur = rightHeap.poll()
+            r--
+            rightHeap.offer(costs[r])
+          } else {
+            cur = leftHeap.poll()
+            l++
+            leftHeap.offer(costs[l])
+          }
+        }
+
+        res += cur
+        k--
+      }
+      return res
+    };
+
+    // [35, 72, 52, 74, 92, 65, 77, 73, 43, 68, 100, 84, 80, 88, 42, 53, 98, 69, 64, 40, 60, 99, 83, 76]
+    // 5
+    // 13
+    // 21
+    // 1
+    // 21
+    // 21
+    // 23
+    // 25
+    // 28
+    // 32
+    // 8
+    // 34
+    // 14
+    // 35
+
+    class MinHeap {
+      constructor() {
+        this.data = [];
+      }
+
+      size() {
+        return this.data.length;
+      }
+
+      leftChild(index) {
+        return 2 * index + 1;
+      }
+
+      rightChild(index) {
+        return 2 * index + 2;
+      }
+
+      parent(index) {
+        return (index - 1) >> 1;
+      }
+
+      __swap(i, j) {
+        let temp = this.data[i];
+        this.data[i] = this.data[j];
+        this.data[j] = temp;
+      }
+
+      // 堆中添加元素
+      offer(num) {
+        this.data.push(num);
+        this.__siftUp(this.size() - 1);
+      }
+
+      // 元素上浮
+      __siftUp(index) {
+        while (index > 0 && this.data[this.parent(index)] > this.data[index]) {
+          this.__swap(index, this.parent(index));
+          index = this.parent(index);
+        }
+      }
+
+      // 取出堆顶元素
+      poll() {
+        let ret = this.data[0];
+
+        this.__swap(0, this.size() - 1);
+        this.data.pop();
+        this.__siftDown(0);
+
+        return ret;
+      }
+
+      __siftDown(index) {
+        while (this.leftChild(index) < this.size()) {
+          let minIndex = this.leftChild(index);
+          let rightIndex = this.rightChild(index);
+          if (rightIndex < this.size() && this.data[rightIndex] < this.data[minIndex]) {
+            minIndex = rightIndex;
+          }
+          if (this.data[index] < this.data[minIndex]) {
+            break;
+          }
+
+          this.__swap(index, minIndex);
+          index = minIndex;
+        }
+      }
+
+      // 查看堆顶元素
+      peek() {
+        return this.data[0];
+      }
+    }
+
+    /**
+     * @param {number[]} costs
+     * @param {number} k
+     * @param {number} candidates
+     * @return {number}
+     */
+    var totalCost = function (costs, k, candidates) {
+      let n = costs.length
+
+      let leftHeap = new MinHeap()
+      let l = 0
+      while (l < candidates) {
+        leftHeap.offer(costs[l])
+        l++
+      }
+      l--
+
+      let rightHeap = new MinHeap()
+      let r = n - 1
+      while (n - r < candidates + 1) {
+        rightHeap.offer(costs[r])
+        r--
+      }
+      r++
+
+      let res = 0
+      while (k > 0) {
+
+
+        let cur = 0
+
+        let lMin = leftHeap.peek()
+        let rMin = rightHeap.peek()
+
+        if (l >= r) {
+          if (lMin > rMin) {
+            cur = rightHeap.poll()
+          } else {
+            cur = leftHeap.poll()
+          }
+        } else {
+          if (lMin > rMin) {
+            cur = rightHeap.poll()
+            r--
+            if (r > l) {
+              rightHeap.offer(costs[r])
+            }
+          } else {
+            cur = leftHeap.poll()
+            l++
+            if (l < r) {
+              leftHeap.offer(costs[l])
+            }
+          }
+        }
+
+        res += cur
+        k--
+      }
+      return res
+    };
+
+    // [18,64,12,21,21,78,36,58,88,58,99,26,   92,91,53,10,24,25,20,92,73,63,51,
+    
+    // 65,87,6,17,32,14,42,46,65,43,9,75]
+    // 13
+    // 23
+
+    class MinHeap {
+      constructor() {
+        this.data = [];
+      }
+
+      size() {
+        return this.data.length;
+      }
+
+      leftChild(index) {
+        return 2 * index + 1;
+      }
+
+      rightChild(index) {
+        return 2 * index + 2;
+      }
+
+      parent(index) {
+        return (index - 1) >> 1;
+      }
+
+      __swap(i, j) {
+        let temp = this.data[i];
+        this.data[i] = this.data[j];
+        this.data[j] = temp;
+      }
+
+      // 堆中添加元素
+      offer(num) {
+        this.data.push(num);
+        this.__siftUp(this.size() - 1);
+      }
+
+      // 元素上浮
+      __siftUp(index) {
+        while (index > 0 && this.data[this.parent(index)] > this.data[index]) {
+          this.__swap(index, this.parent(index));
+          index = this.parent(index);
+        }
+      }
+
+      // 取出堆顶元素
+      poll() {
+        let ret = this.data[0];
+
+        this.__swap(0, this.size() - 1);
+        this.data.pop();
+        this.__siftDown(0);
+
+        return ret;
+      }
+
+      __siftDown(index) {
+        while (this.leftChild(index) < this.size()) {
+          let minIndex = this.leftChild(index);
+          let rightIndex = this.rightChild(index);
+          if (rightIndex < this.size() && this.data[rightIndex] < this.data[minIndex]) {
+            minIndex = rightIndex;
+          }
+          if (this.data[index] < this.data[minIndex]) {
+            break;
+          }
+
+          this.__swap(index, minIndex);
+          index = minIndex;
+        }
+      }
+
+      // 查看堆顶元素
+      peek() {
+        return this.data[0];
+      }
+    }
+  </script>
+</body>
+
+</html>
