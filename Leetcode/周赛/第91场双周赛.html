@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var distinctAverages = function (nums) {
+      let set = new Set()
+
+      nums.sort()
+      while (nums.length > 0) {
+        let min = nums.shift()
+        let max = nums.pop
+
+        set.add((min + max) / 2)
+      }
+      return set.size
+    };
+
+
+
+    /**
+     * @param {number} low
+     * @param {number} high
+     * @param {number} zero
+     * @param {number} one
+     * @return {number}
+     */
+    var countGoodStrings = function (low, high, zero, one) {
+      let mod = 1e9 + 7
+
+      let dp = Array(high + 1).fill(0)
+      dp[0] = 1
+
+      for (let i = 1; i <= high; i++) {
+        if (i >= zero) {
+          dp[i] += (i - zero >= 0 ? dp[i - zero] : 0)
+        }
+        if (i >= one) {
+          dp[i] += (i - one >= 0 ? dp[i - one] : 0)
+        }
+
+        dp[i] %= mod
+      }
+      console.log(dp)
+      let res = 0
+      for (let i = low; i <= high; i++) {
+        res = (res + dp[i]) % mod
+      }
+      return res
+    };
+    // 00
+
+
+    /**
+     * @param {number[][]} edges
+     * @param {number} bob
+     * @param {number[]} amount
+     * @return {number}
+     */
+    var mostProfitablePath = function (edges, bob, amount) {
+      let n = edges.length
+
+      let graph = Array(n + 1)
+      for (let i = 0; i < graph.length; i++) {
+        graph[i] = new Set()
+      }
+
+      for (let i = 0; i < n; i++) {
+        graph[edges[i][0]].add(edges[i][1])
+        graph[edges[i][1]].add(edges[i][0])
+      }
+
+      let queue = []
+      let bStep = Array(n + 1).fill(0)
+      let bVisited = Array(n + 1).fill(false)
+      queue.push([bob, 0])
+      bVisited[bob] = true
+      let paths = Array(n + 1).fill(-1)
+      paths[bob] = bob
+      while (queue.length) {
+        let len = queue.length
+        for (let i = 0; i < len; i++) {
+          let cur = queue.shift()
+          let p = cur[0]
+          if (p == 0) break
+
+          for (let v of graph[p]) {
+            if (!bVisited[v]) {
+              bStep[v] = cur[1] + 1
+              paths[v] = p
+              bVisited[v] = true
+              queue.push([v, cur[1] + 1])
+            }
+          }
+        }
+      }
+      let vSet = new Set()
+      let cur = 0
+      vSet.add(cur)
+      while (paths[cur] != bob) {
+        cur = paths[cur]
+        vSet.add(cur)
+      }
+      vSet.add(bob)
+
+      for (let i = 0; i < paths.length; i++) {
+        if (!vSet.has(i)) {
+          paths[i] = -1
+        }
+      }
+
+      let res = -Infinity
+      let aVisited = Array(n + 1).fill(false)
+      queue = []
+      queue.push([0, 0, amount[0]])
+      aVisited[0] = true
+      while (queue.length) {
+        let len = queue.length
+        let newQueue = []
+        for (let i = 0; i < len; i++) {
+          let cur = queue[i]
+
+          let hasChild = false
+          for (let v of graph[cur[0]]) {
+            if (!aVisited[v]) {
+              hasChild = true
+              let s
+              if (paths[v] == -1) {
+                s = amount[v]
+              } else {
+                if (cur[1] + 1 < bStep[v]) {
+                  s = amount[v]
+                } else if (cur[1] + 1 == bStep[v]) {
+                  s = amount[v] / 2
+                } else {
+                  s = 0
+                }
+              }
+              console.log(v)
+              console.log(s)
+              newQueue.push([v, cur[1] + 1, cur[2] + s])
+              aVisited[v] = true
+            }
+          }
+          if (!hasChild) {
+            res = Math.max(res, cur[2])
+          }
+
+        }
+        queue = newQueue
+      }
+      return res
+    };
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number} celsius
+     * @return {number[]}
+     */
+    var convertTemperature = function (celsius) {
+      let a = celsius + 273.15
+      return [celsius + 273.15, celsius * 1.80 + 32.00]
+    };
+
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number}
+     */
+    var subarrayLCM = function (nums, k) {
+      let n = nums.length
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        let cur = nums[i]
+        for (let j = i - 1; j >= 0; j--) {
+          cur = lcm(cur, nums[j])
+        }
+        if (cur == k) {
+          res++
+        }
+      }
+      return res
+    };
+
+    function lcm(x, y) {
+      return (x * y) / gcd(x, y);
+    }
+
+    function gcd(x, y) {
+      if (y == 0) return x;
+
+      return gcd(y, x % y);
+    }
+
+
+    /**
+     * Definition for a binary tree node.
+     * function TreeNode(val, left, right) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.left = (left===undefined ? null : left)
+     *     this.right = (right===undefined ? null : right)
+     * }
+     */
+    /**
+     * @param {TreeNode} root
+     * @return {number}
+     */
+    var minimumOperations = function (root) {
+      if (root == null) return 0
+
+      let queue = []
+      queue.push(root)
+      let nums = []
+      while (queue.length) {
+        let len = queue.length
+
+        let newQueue = []
+        let curLevel = []
+        for (let i = 0; i < len; i++) {
+          let cur = queue[i]
+          curLevel.push(cur.val)
+          if (cur.left) {
+            newQueue.push(cur.left)
+          }
+          if (cur.right) {
+            newQueue.push(cur.right)
+          }
+        }
+        nums.push(curLevel)
+        queue = newQueue
+      }
+
+      let res = 0
+      for (let i = 0; i < nums.length; i++) {
+        res += minSwaps(nums[i])
+      }
+      return res
+    };
+
+    function minSwaps(arr) {
+      let n = arr.length;
+
+      let arrpos = [];
+      for (let i = 0; i < n; i++)
+        arrpos.push([arr[i], i]);
+
+      arrpos.sort(function (a, b) {
+        return a[0] - b[0];
+      });
+
+      let vis = new Array(n);
+      for (let i = 0; i < n; i++) {
+        vis[i] = false;
+      }
+      let ans = 0;
+
+      for (let i = 0; i < n; i++) {
+        if (vis[i] || arrpos[i][1] == i)
+          continue;
+        let cycle_size = 0;
+        let j = i;
+        while (!vis[j]) {
+          vis[j] = true;
+
+          j = arrpos[j][1];
+
+          cycle_size++;
+        }
+
+        if (cycle_size > 0) {
+          ans += (cycle_size - 1);
+        }
+      }
+
+      return ans;
+    }
+
+
+    /**
+     * @param {string} s
+     * @param {number} k
+     * @return {number}
+     */
+    var maxPalindromes = function (s, k) {
+      let n = s.length
+
+      let dp = longestPalindrome(s)
+
+      let minR = Array(n).fill(-1)
+      for (let i = 0; i < dp.length; i++) {
+
+        for (let j = i; j < dp.length; j++) {
+          if (dp[i][j]) {
+            if (j - i + 1 >= k) {
+              minR[i] = j
+              break
+            }
+          }
+        }
+      }
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        let cur = 0
+        let nextStart = n
+        for (let j = n - 1; j >= i; j--) {
+          if (minR[j] > 0 && minR[j] < nextStart) {
+            cur++
+            nextStart = j
+          }
+        }
+        // for (let j = i; j < n;) {
+        //   if (minR[j] > 0) {
+        //     cur++
+        //     j = minR[j] + 1
+        //   } else {
+        //     j++
+        //   }
+        // }
+        res = Math.max(res, cur)
+      }
+      return res
+    };
+
+    function longestPalindrome(s) {
+      // 状态定义：dp[i][j]表示字符串s在[i, j]范围是否是回文串
+      let dp = Array(s.length);
+
+      // 状态初始化：i，j相等时，单个字符肯定是回文
+      for (let i = 0; i < s.length; i++) {
+        dp[i] = Array(s.length);
+        dp[i][i] = true;
+      }
+
+      for (let j = 1; j < s.length; j++) {
+        for (let i = 0; i < j; i++) {
+          if (s[i] !== s[j]) {
+            dp[i][j] = false;
+          } else {
+            if (j - i <= 2) {
+              dp[i][j] = true;
+            } else {
+              dp[i][j] = dp[i + 1][j - 1];
+            }
+          }
+        }
+      }
+
+      return dp;
+    }
+
+
+    /**
+     * @param {string} s
+     * @param {number} k
+     * @return {number}
+     */
+    var maxPalindromes = function (s, k) {
+      let n = s.length
+      let map = new Map()
+      for (let i = 0; i < n; i++) {
+        if (!map.has(s[i])) {
+          map.set(s[i], 1)
+        } else {
+          map.set(s[i], map.get(s[i]) + 1)
+        }
+      }
+
+      if (map.size == 1) {
+        return Math.floor(n / k)
+      }
+      let res = 0
+
+      for (let i = 0; i < n; i++) {
+        let start = i
+        let cur = 0
+        for (let j = i; j < n; j++) {
+          if (j - i + 1 < k) {
+            continue
+          }
+          if (check(s, start, j)) {
+            start = j + 1
+            cur++
+          }
+        }
+      }
+      return res
+    };
+
+    function check(s, l, r) {
+      while (l < r) {
+        if (s[l] != s[r]) {
+          return false
+        }
+        l++
+        r--
+      }
+      return true
+    }
+
+
+    /**
+     * @param {string} s
+     * @param {number} k
+     * @return {number}
+     */
+    var maxPalindromes = function (s, k) {
+      let n = s.length
+
+      for (let i = 0; i < n; i++) {
+        let l = i
+        let r = i + k - 1
+        if (r >= n) break
+
+        if (check(s, l, r)) {
+
+        }
+      }
+    };
+
+
+    /**
+     * @param {string} s
+     * @param {number} k
+     * @return {number}
+     */
+    var maxPalindromes = function (s, k) {
+      let n = s.length
+
+      // dp[i][j] 表示前i个字符长度为j的回文串最多有几个
+      let dp = Array(n)
+      for (let i = 0; i < n; i++) {
+        dp[i] = Array(n)
+        
+      }
+
+
+    };
+  </script>
+</body>
+
+</html>
