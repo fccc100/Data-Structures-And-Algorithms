@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number} n
+     * @return {number}
+     */
+    var pivotInteger = function (n) {
+      let sum = 0
+      for (let i = 0; i <= n; i++) {
+        sum += i
+      }
+
+      let psum = 0
+      for (let x = 1; x <= n; x++) {
+        psum += x
+        if (x == sum - x) {
+          return i
+        }
+      }
+      return -1
+    };
+
+    /**
+     * @param {string} s
+     * @param {string} t
+     * @return {number}
+     */
+    var appendCharacters = function (s, t) {
+      let m = s.length
+      let n = t.length
+
+      let i = 0
+      let j = 0
+      let len = 0
+      while (i < m && j < n) {
+        if (s[i] == t[j]) {
+          i++
+          j++
+        } else {
+          i++
+        }
+      }
+      return n - j
+    };
+
+    /**
+     * Definition for singly-linked list.
+     * function ListNode(val, next) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.next = (next===undefined ? null : next)
+     * }
+     */
+    /**
+     * @param {ListNode} head
+     * @return {ListNode}
+     */
+    var removeNodes = function (head) {
+
+      let list = []
+
+      function getList(head) {
+        if (head == null) return
+
+        list.push(head.val)
+        getList(head.next)
+      }
+
+      getList(head)
+
+
+      let rMax = Array(list.length)
+
+      let t = []
+      let max = -1
+      for (let i = list.length - 1; i >= 0; i--) {
+        if (list[i] >= max) {
+          max = list[i]
+          t.push(list[i])
+        } else {
+
+        }
+      }
+      console.log(t)
+
+      let dummyHead = new ListNode(-1)
+      let cur = dummyHead
+      for (let i = t.length - 1; i >= 0; t--) {
+        cur.next = new ListNode(t[i])
+        cur = cur.next
+      }
+      return dummyHead.next
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number}
+     */
+    var countSubarrays = function (nums, k) {
+      let n = nums.length
+      let kIdx = -1
+      for (let i = 0; i < n; i++) {
+        if (nums[i] == k) {
+          kIdx = i
+          break
+        }
+      }
+      if (kIdx < 0) return 0
+
+      let res = 1
+
+      let leftMap = new Map()
+      let min = 0,
+        max = 0
+      for (let i = kIdx - 1; i >= 0; i--) {
+        if (nums[i] > k) {
+          max++
+        } else {
+          min++
+        }
+        if (!leftMap.has(max - min)) {
+          leftMap.set(max - min, 1)
+        } else {
+          leftMap.set(max - min, leftMap.get(max - min) + 1)
+        }
+
+        if (max == min || min == max - 1) {
+          res++
+        }
+      }
+
+      min = 0
+      max = 0
+      let rightMap = new Map()
+      for (let i = kIdx + 1; i < n; i++) {
+        if (nums[i] > k) {
+          max++
+        } else {
+          min++
+        }
+
+        rightMap.set(i, max - min)
+
+        if (max == min || min == max - 1) {
+          res++
+        }
+      }
+
+      for (let i = kIdx + 1; i < n; i++) {
+        let cur = rightMap.get(i)
+        if (leftMap.has(cur)) {
+          res += leftMap.get(cur)
+        }
+        if (leftMap.has(cur + 1)) {
+          res += leftMap.get(cur + 1)
+        }
+        // if (leftMap.has(cur - 1)) {
+        //   res += leftMap.get(cur - 1)
+        // }
+      }
+      return res
+    };
+
+    /**
+     * Definition for singly-linked list.
+     * function ListNode(val, next) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.next = (next===undefined ? null : next)
+     * }
+     */
+    /**
+     * @param {ListNode} head
+     * @return {ListNode}
+     */
+    var removeNodes = function (head) {
+      let max = -Infinity
+
+      function __removeNodes(head) {
+        if (head == null) return
+
+        head.next = __removeNodes(head.next)
+        max = Math.max(max, head.val)
+        if (head.val < max) {
+          return head.next
+        }
+        return head
+      }
+
+      return __removeNodes(head)
+    };
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number} n
+     * @return {number}
+     */
+    var numberOfCuts = function (n) {
+      if (n == 1) return 0
+
+      if (n % 2 == 0) return n / 2
+      if (n % 2 == 1) return n
+    };
+
+    /**
+     * @param {number[][]} grid
+     * @return {number[][]}
+     */
+    var onesMinusZeros = function (grid) {
+      let m = grid.length
+      let n = grid[0].length
+
+      let diffRow = Array(m).fill(0)
+      for (let i = 0; i < m; i++) {
+        let one = 0
+        let zero = 0
+        for (let j = 0; j < n; j++) {
+          if (grid[i][j] == 0) {
+            zero++
+          } else {
+            one++
+          }
+        }
+        diffRow[i] = one - zero
+      }
+      let diffCol = Array(m).fill(0)
+      for (let i = 0; i < n; i++) {
+        let one = 0
+        let zero = 0
+        for (let j = 0; j < m; j++) {
+          if (grid[j][i] == 0) {
+            zero++
+          } else {
+            one++
+          }
+        }
+        diffCol[i] = one - zero
+      }
+
+      let res = Array(m)
+      for (let i = 0; i < n; i++) {
+        res[i] = Array(n).fill(0)
+      }
+
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+          res[i][j] = diffRow[i] + diffCol[j]
+        }
+      }
+      return res;
+    };
+
+    /**
+     * @param {string} customers
+     * @return {number}
+     */
+    var bestClosingTime = function (customers) {
+      let nums = customers.split('')
+      let n = nums.length
+      for (let i = 0; i < n; i++) {
+        nums[i] = nums[i] == 'Y' ? 1 : 0
+      }
+      console.log(nums)
+
+      let lastOne = Array(n)
+      lastOne[n - 1] = nums[n - 1]
+      for (let i = n - 2; i >= 0; i--) {
+        if (nums[i] == 1) {
+          lastOne[i] = lastOne[i + 1] + 1
+        } else {
+          lastOne[i] = lastOne[i + 1]
+        }
+      }
+
+      let preZero = Array(n)
+      preZero[0] = nums[0] == 0 ? 1 : 0
+      for (let i = 1; i < n; i++) {
+        if (nums[i] == 0) {
+          preZero[i] = preZero[i - 1] + 1
+        } else {
+          preZero[i] = preZero[i - 1]
+        }
+      }
+
+      let min = -Infinity
+      let res = -1
+      for (let i = 0; i < n; i++) {
+        if (preZero[i] + lastOne[i] < min) {
+          min = preZero[i] + lastOne[i]
+          res = i
+        }
+      }
+      return res
+    };
+
+    // [ 1, 1, 0, 1 ]
+
+
+    // [ 0, 0, 0, 0, 0 ]
+    // [ 1, 1, 1, 1 ]
+
+
+    var longestPalindromeSubseq = function (s) {
+      const n = s.length;
+      const dp = new Array(n).fill(0).map(() => new Array(n).fill(0));
+      for (let i = n - 1; i >= 0; i--) {
+        dp[i][i] = 1;
+        const c1 = s[i];
+        for (let j = i + 1; j < n; j++) {
+          const c2 = s[j];
+          if (c1 === c2) {
+            dp[i][j] = dp[i + 1][j - 1] + 2;
+          } else {
+            dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+          }
+        }
+      }
+      return dp[0][n - 1];
+    };
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var countPalindromes = function (s) {
+      let n = s.length
+      let dp = Array(n)
+    };
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var countPalindromes = function (s) {
+      const n = s.length;
+      const dp = new Array(n)
+      for (let i = 0; i < n; i++) {
+        dp[i] = Array(n)
+        for (let j = 0; j < n; j++) {
+          dp[i][j] = Array(6).fill(0)
+        }
+      }
+      for (let i = n - 1; i >= 0; i--) {
+        dp[i][i][1] = 1;
+        const c1 = s[i];
+        for (let j = i + 1; j < n; j++) {
+          const c2 = s[j];
+          if (c1 === c2) {
+            dp[i][j] = dp[i + 1][j - 1] + 2;
+          } else {
+            dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+          }
+        }
+      }
+      return dp[0][n - 1];
+    };
+  </script>
+</body>
+
+</html>
