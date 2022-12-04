@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {string} sentence
+     * @return {boolean}
+     */
+    var isCircularSentence = function (s) {
+      let n = s.length
+
+      let cur = s[0][s[0].length - 1]
+      for (let i = 1; i < n; i++) {
+        let c = s[i]
+        if (c[0] != cur) {
+          return false
+        }
+        cur = c[c.length - 1]
+      }
+      return s[0][0] == cur
+    };
+
+    /**
+     * @param {number[]} skill
+     * @return {number}
+     */
+    var dividePlayers = function (s) {
+      let n = s.length
+
+      s.sort((a, b) => a - b)
+      if (n % 2 == 1) return -1
+
+      let res = 0
+      let l = 0
+      let r = n - 1
+
+      let sum = s[l] + s[r]
+      while (l < r) {
+        let ll = s[l]
+        let rr = s[r]
+
+        if (ll + rr != sum) {
+          return -1
+        }
+        res += (ll * rr)
+      }
+      return res
+    };
+
+    /**
+     * @param {number} n
+     * @param {number[][]} roads
+     * @return {number}
+     */
+    var minScore = function (n, roads) {
+      let m = roads.length
+
+      let graph = Array(m + 1)
+      let map = new Map()
+      for (let i = 0; i <= m; i++) {
+        graph[i] = new Set()
+      }
+
+      for (let i = 0; i < m; i++) {
+        let v1 = roads[i][0]
+        let v2 = roads[i][1]
+        graph[roads[i][0]].add(roads[i][1])
+        graph[roads[i][1]].add(roads[i][0])
+
+        map.set(v1 + '-' + v2, roads[i][2])
+      }
+
+      let queue = []
+      queue.push([1, Infinity])
+      let visited = Array(m + 1)
+      visited[1] = true
+
+      let res = Infinity
+      while (queue.length) {
+        let len = queue.length
+
+        let newQueue = []
+        for (let i = 0; i < len; i++) {
+          let cur = queue[i]
+          let v = cur[0]
+
+          for (let k of graph[v]) {
+            if (k == n) {
+              res = Math.min(cur[1], map.get(v + '-' + k))
+            }
+            if (!visited[k]) {
+              newQueue.push([k, Math.min(cur[1], map.get(v + '-' + k))])
+              visited[k] = true
+            }
+          }
+        }
+        queue = newQueue
+      }
+      return res
+    };
+
+
+    /**
+     * @param {number} n
+     * @param {number[][]} roads
+     * @return {number}
+     */
+    var minScore = function (n, roads) {
+      let m = roads.length
+
+      let graph = Array(n + 1)
+      let map = new Map()
+
+      let dis = []
+      for (let i = 0; i <= n; i++) {
+        graph[i] = new Set()
+        dis[i] = new Map()
+      }
+
+      let uf = new UnionFind(n + 1)
+      for (let i = 0; i < m; i++) {
+        let v1 = roads[i][0]
+        let v2 = roads[i][1]
+        uf.union(v1, v2)
+        graph[roads[i][0]].add(roads[i][1])
+        graph[roads[i][1]].add(roads[i][0])
+
+        dis[v1].set(v2, roads[i][2])
+        dis[v2].set(v1, roads[i][2])
+      }
+
+      let res = Infinity
+      for (let i = 1; i < graph.length; i++) {
+        if (uf.isConnected(i, n)) {
+
+          for (let k of graph[i]) {
+            res = Math.min(res, dis[i].get(k))
+          }
+        }
+      }
+      return res
+    };
+
+    class UnionFind {
+      constructor(size) {
+        this.parent = Array(size);
+        this.rank = Array(size);
+        for (let i = 0; i < size; i++) {
+          this.parent[i] = i;
+          this.rank[i] = 1;
+        }
+      }
+
+      // 查询p的根节点
+      find(p) {
+        while (p != this.parent[p]) {
+          p = this.parent[p];
+        }
+        return p;
+      }
+
+      // 判断p q是否联通
+      isConnected(p, q) {
+        return this.find(p) == this.find(q);
+      }
+
+      // 合并
+      union(p, q) {
+        let pRoot = this.find(p);
+        let qRoot = this.find(q);
+        if (pRoot == qRoot) {
+          return;
+        }
+        if (this.rank[pRoot] < this.rank[qRoot]) {
+          this.parent[pRoot] = qRoot;
+        } else if (this.rank[qRoot] < this.rank[pRoot]) {
+          this.parent[qRoot] = pRoot;
+        } else {
+          this.parent[pRoot] = qRoot;
+          this.rank[qRoot] += 1;
+        }
+      }
+
+      // 获取联通分量个数
+      getConnectedComponent() {
+        let res = 0;
+        for (let i = 0; i < this.parent.length; i++) {
+          if (this.parent[i] == i) {
+            res++;
+          }
+        }
+        return res;
+      }
+    }
+
+
+    /**
+     * @param {number} n
+     * @param {number[][]} edges
+     * @return {number}
+     */
+    var magnificentSets = function (n, edges) {
+      let m = edges.length
+      let graph  = Array(n + 1)
+
+      for (let i = 0; i <= n; i++) {
+        graph[i] = new Set()
+      }
+
+      for (let i = 0; i < m; i++) {
+        graph[edges[i][0]].add(edges[i][1])
+        graph[edges[i][1]].add(edges[i][0])
+      }
+
+      function dfs(v) {
+        let res = 1
+        let queue = []
+        let visited = Array(n + 1).fill(false)
+        queue.push(0)
+        visited[0] = true
+        let uf = new UnionFind()
+        while (queue.length) {
+          let len = queue.length
+
+          let newQueue = []
+          for (let i = 0; i < len; i++) {
+            let v = queue[i]
+
+            for (let k of graph[v]) {
+
+            }
+          }
+        }
+      }
+
+      let visited = Array(n + 1).fill(false)
+      for (let i = 1; i <= n; i++) {
+        if (!visited[i]) {
+          dfs(i)
+        }
+      }
+
+      // let res = 1
+      // let queue = []
+      // let visited = Array(n + 1).fill(false)
+      // queue.push(0)
+      // visited[0] = true
+      // while (queue.length) {
+      //   let len = queue.length
+
+      //   let newQueue = []
+      //   for (let i = 0; i < len; i++) {
+      //     let v = queue[i]
+
+      //     for (let k of graph[v]) {
+
+      //     }
+      //   }
+      // }
+    };
+
+  </script>
+</body>
+
+</html>
