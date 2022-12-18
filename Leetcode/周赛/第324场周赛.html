@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {string[]} words
+     * @return {number}
+     */
+    var similarPairs = function (words) {
+      let n = words.length
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        let s = words[i]
+        for (let j = i + 1; j < n; j++) {
+          let s2 = words[j]
+          let isMatch = true
+          for (let k = 0; k < s2.length; k++) {
+            if (s.indexOf(s2[k]) < 0) {
+              isMatch = false
+              break
+            }
+          }
+          for (let k = 0; k < s.length; k++) {
+            if (s2.indexOf(s[k]) < 0) {
+              isMatch = false
+              break
+            }
+          }
+          if (isMatch) res++
+        }
+      }
+      return res
+    };
+
+
+    /**
+     * @param {number} n
+     * @return {number}
+     */
+    var smallestValue = function (n) {
+      let isP = countPrimes(n)
+      let nums = []
+      for (let i = 1; i < isP.length; i++) {
+        nums.push(i)
+      }
+
+      while (true) {
+        for (let i = 0; i < nums.length; i++) {
+          for (let j = i + 1; j < nums.length; j++) {
+
+          }
+        }
+      }
+    };
+    var countPrimes = function (n) {
+      const isPrime = new Array(n).fill(1);
+      let ans = 0;
+      for (let i = 2; i < n; ++i) {
+        if (isPrime[i]) {
+          ans += 1;
+          for (let j = i * i; j < n; j += i) {
+            isPrime[j] = 0;
+          }
+        }
+      }
+      return isPrime;
+    }
+
+
+
+    /**
+     * @param {number} n
+     * @param {number[][]} queries
+     * @return {number[]}
+     */
+    var cycleLengthQueries = function (n, queries) {
+      let m = queries.length
+      let res = Array(m).fill(0)
+      for (let i = 0; i < m; i++) {
+        let x = queries[i][0]
+        let y = queries[i][1]
+
+        let t1 = x
+        let t2 = y
+        while (x != y) {
+          if (x % 2 == 0) {
+            x /= 2
+          } else {
+            x = (x - 1) / 2
+          }
+          if (y % 2 == 0) {
+            y /= 2
+          } else {
+            y = (y - 1) / 2
+          }
+        }
+
+        let cnt = 0
+        while (t1 != x) {
+          if (t1 % 2 == 0) {
+            t1 /= 2
+          } else {
+            t1 = (t1 - 1) / 2
+          }
+          cnt++
+        }
+        let cnt = 0
+        while (t2 != x) {
+          if (t2 % 2 == 0) {
+            t2 /= 2
+          } else {
+            t2 = (t2 - 1) / 2
+          }
+          cnt++
+        }
+        res[i] = cnt
+      }
+      return res
+    };
+
+
+
+    /**
+     * @param {number} n
+     * @param {number[][]} edges
+     * @return {boolean}
+     */
+    var isPossible = function (n, edges) {
+
+      let graph = Array(n + 1)
+      for (let i = 0; i < graph.length; i++) {
+        graph[i] = new Set()
+      }
+
+      for (let i = 0; i < edges.length; i++) {
+        graph[edges[i][0]].add(edges[i][1])
+        graph[edges[i][1]].add(edges[i][0])
+      }
+
+      let degree = Array(n + 1).fill(0)
+      for (let i = 1; i < graph.length; i++) {
+        degree[i] = graph[i].size
+      }
+
+      let cnt = 0
+      let nums = []
+      for (let i = 1; i < degree.length; i++) {
+        if (degree[i] % 2 == 1) {
+          nums.push(i)
+          cnt++
+        }
+      }
+
+      if (cnt > 4) return false
+      if (cnt == 0) return true
+      if (cnt == 2) {
+        let v1 = nums[0]
+        let v2 = nums[1]
+        if (!graph[v1].has(v2)) return true
+
+        for (let i = 1; i < graph.length; i++) {
+          if (!graph[i].has(v1) && !graph[i].has(v2)) {
+            return true
+          }
+        }
+        return false
+      }
+      if (cnt == 4) {
+        let v1 = nums[0]
+        let v2 = nums[1]
+        let v3 = nums[2]
+        let v4 = nums[3]
+        if (!graph[v2].has(v1) && !graph[v4].has(v2)) {
+          return true
+        }
+        if (!graph[v3].has(v1) && !graph[v4].has(v2)) {
+          return true
+        }
+        if (!graph[v4].has(v1) && !graph[v3].has(v2)) {
+          return true
+        }
+        return false
+      }
+      return false
+    };
+  </script>
+</body>
+
+</html>

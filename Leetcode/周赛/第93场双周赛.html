@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {string[]} strs
+     * @return {number}
+     */
+    var maximumValue = function (strs) {
+      let n = strs.length
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        let a = false
+        let b = false
+        if (!isNaN(s[i])) {
+          res = Math.max(res, Number(s[i]))
+          continue
+        }
+        if (isNaN(s[i])) {
+          a = true
+        } else {
+          b = true
+        }
+        if (a && b) {
+          res = Math.max(res, s[i].length)
+        } else {
+
+        }
+      }
+      return res
+    };
+
+
+
+    /**
+     * @param {number[]} vals
+     * @param {number[][]} edges
+     * @param {number} k
+     * @return {number}
+     */
+    var maxStarSum = function (vals, edges, k) {
+      let n = edges.length
+
+      let graph = Array(vals.length)
+      for (let i = 0; i < graph.length; i++) {
+        graph[i] = new Set()
+      }
+      for (let i = 0; i < edges.length; i++) {
+        graph[edges[i][0]].add(edges[i][1])
+        graph[edges[i][1]].add(edges[i][0])
+      }
+
+      let map = new Map()
+      for (let i = 0; i < graph.length; i++) {
+        if (!map.has(i)) {
+          map.set(i, [])
+        }
+        for (let v of graph[i]) {
+          map.get(i).push(vals[v])
+        }
+      }
+
+      let res = -Infinity
+      for (let [k, arr] of map) {
+        arr.sort((a, b) => b - a)
+        let i = 0
+        let cur = 0
+        if (arr.length >= k) {
+          while (i < arr.length && i < k) {
+            cur += arr[i]
+            i++
+          }
+          res = Math.max(res, cur)
+        }
+
+      }
+      return res
+    };
+
+
+    /**
+     * @param {number[]} stones
+     * @return {number}
+     */
+    var maxJump = function (stones) {
+      let n = stones.length
+      let l = 1
+      let r = stones[n - 1] + 1
+
+      // 满足条件的最小值
+      while (l < r) {
+        let mid = l + (r - l >> 1);
+        if (check(stones, mid) || check1(stones, mid)) {
+          r = mid;
+        } else {
+          l = mid + 1
+        }
+      }
+      return l
+    };
+
+    function check1(nums, k) {
+      nums.reverse()
+      let n = nums.length
+      let visited = Array(n).fill(false)
+
+      // visited[0] = true
+      // let map = new Map()
+      // for (let i = 0; i < n; i++) {
+      //   map.set(nums[i], i)
+      // }
+
+      let i = 0
+      let cur = 0
+      let res = true
+      while (i < n) {
+        let j = i + 1
+        while (j < n && nums[j] <= cur + k) {
+
+          j++
+        }
+        console.log(j, 'j')
+        if (j == i + 1) {
+          res = false
+          break
+        }
+        if (j == n - 1) {
+          res = true
+          break
+        }
+
+        i = j - 1
+        visited[i] = true
+        cur = nums[i]
+      }
+      console.log(visited)
+      console.log(k, 'kkkkkkkkkkk')
+      let cur1 = nums[n - 1]
+      for (let i = n - 2; i >= 0; i--) {
+        if (visited[i]) continue
+        if (nums[i] >= cur1 - k) {
+          cur1 = nums[i]
+        } else {
+          return res && false
+        }
+
+      }
+
+      return res && true;
+    }
+    function check(nums, k) {
+      let n = nums.length
+      let visited = Array(n).fill(false)
+
+      // visited[0] = true
+      // let map = new Map()
+      // for (let i = 0; i < n; i++) {
+      //   map.set(nums[i], i)
+      // }
+
+      let i = 0
+      let cur = 0
+      let res = true
+      while (i < n) {
+        let j = i + 1
+        while (j < n && nums[j] <= cur + k) {
+
+          j++
+        }
+        console.log(j, 'j')
+        if (j == i + 1) {
+          res = false
+          break
+        }
+        if (j == n - 1) {
+          res = true
+          break
+        }
+
+        i = j - 1
+        visited[i] = true
+        cur = nums[i]
+      }
+      console.log(visited)
+      console.log(k, 'kkkkkkkkkkk')
+      let cur1 = nums[n - 1]
+      for (let i = n - 2; i >= 0; i--) {
+        if (visited[i]) continue
+        if (nums[i] >= cur1 - k) {
+          cur1 = nums[i]
+        } else {
+          return res && false
+        }
+
+      }
+
+      return res && true;
+    }
+  </script>
+</body>
+
+</html>
