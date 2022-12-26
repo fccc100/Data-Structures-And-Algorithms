@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[]} forts
+     * @return {number}
+     */
+    var captureForts = function (forts) {
+      let n = forts.length
+
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        if (forts[i] == 1 || forts[i] == -1) {
+          for (let j = i + 1; j < n; j++) {
+            if (forts[i] == 1 && forts[j] == -1) {
+              res = Math.max(j - i - 1)
+            }
+            if (forts[i] == -1 && forts[j] == 1) {
+              res = Math.max(j - i - 1)
+            }
+          }
+        }
+      }
+      return res
+    };
+
+
+    /**
+     * @param {string[]} positive_feedback
+     * @param {string[]} negative_feedback
+     * @param {string[]} report
+     * @param {number[]} student_id
+     * @param {number} k
+     * @return {number[]}
+     */
+    var topStudents = function (positive_feedback, negative_feedback, report, student_id, k) {
+      let pos = new Set()
+      for (let i = 0; i < positive_feedback.length; i++) {
+        pos.add(positive_feedback[i])
+      }
+      let neg = new Set()
+      for (let i = 0; i < negative_feedback.length; i++) {
+        neg.add(negative_feedback[i])
+      }
+
+      let res = []
+      report = report.split(' ')
+      for (let i = 0; i < report.length; i++) {
+        let cur = 0
+        for (let j = 0; j < report[i].length; j++) {
+          if (pos.has(report[i][j])) {
+            cur += 3
+          }
+          if (neg.has(report[i][j])) {
+            cur -= 1
+          }
+        }
+        res.push([student_id[i], cur])
+      }
+      res.sort((a, b) => {
+        if (a[1] == b[1]) {
+          return a[0] - b[0]
+        }
+        return b[1] - a[1]
+      })
+      let ans = []
+      for (let i = 0; i < k; i++) {
+        ans.push(res[i][0])
+      }
+      return ans
+    };
+
+
+
+    /**
+     * @param {number} divisor1
+     * @param {number} divisor2
+     * @param {number} uniqueCnt1
+     * @param {number} uniqueCnt2
+     * @return {number}
+     */
+    var minimizeSet = function (divisor1, divisor2, uniqueCnt1, uniqueCnt2) {
+      let l = 1
+      let r = 10 ** 9
+
+      while (l < r) {
+        let mid = l + (r - l >> 1)
+        if (check(divisor1, divisor2, mid, uniqueCnt1, uniqueCnt2)) {
+          r = mid
+        } else {
+          l = mid + 1
+        }
+        console.log(l, r, mid)
+      }
+      return l
+    };
+
+    function check(d1, d2, k, u1, u2) {
+      let l1 = Math.floor(u1 / (d1 - 1))
+      if (u1 % (d1 - 1) == 0) {
+        l1--
+        l1 = d1 * l1 + (u1 - (l1 * (d1 - 1)))
+      } else {
+        l1 = l1 * d1 + (u1 - (l1 * (d1 - 1)))
+      }
+
+      let l2 = Math.floor(u2 / (d2 - 1))
+      if (u2 % (d2 - 1) == 0) {
+        l2--
+        l2 = d2 * l2 + (u2 - (l2 * (d2 - 1)))
+      } else {
+        l2 = l2 * d2 + (u2 - (l2 * (d2 - 1)))
+      }
+
+      if (Math.max(l1, l2) >= k) return true
+      return false
+
+      // let t = d1 * d2
+      // let cnt1 = 0
+      // let set = new Set()
+      // while (t <= k) {
+      //   set.add(t)
+      //   cnt1++
+      //   t += t
+      // }
+      // if (k == 11) {
+      //     console.log(k)
+      //     console.log(set.size)
+      //     console.log(total)
+      // }
+
+
+      // if (k - set.size >= total) return true
+      // return false
+    }
+    // 1 8
+    // 2 4 6 8 
+
+    // 2 4
+    // 2 4 6 8 10
+    // 3 9
+    // 12 45 78 10 11
+
+    // 2 8
+    // 1 3 5 7 9 11 13 15 
+    // 3 8 
+    // 1 2 45 78 10 11
+    // 4 8 
+    // 1 2 3 5 6 7 9 10
+
+
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var countAnagrams = function (s) {
+      s = s.split(' ')
+      for (let i = 0; i < s.length; i++) {
+        let c = s[i]
+        let map = Array(26).fill(0)
+        for (let j = 0; j < c.length; j++) {
+          map[c[j].charCodeAt() - 'a'.charCodeAt()]++
+        }
+        
+      }
+    };
+  </script>
+</body>
+
+</html>
