@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var maximumCount = function (nums) {
+      let pos = 0
+      let neg = 0
+      for (let i = 0; i < nums.length; i++) {
+        if (nums[i] > 0) pos++
+        if (nums[i] < 0) neg++
+      }
+      return Math.max(pos, neg)
+    };
+
+    class PriorityQueue1 {
+      constructor(comparator = this.__defaultComparator) {
+        this.comparator = comparator
+        this.data = []
+      }
+
+      size() {
+        return this.data.length
+      }
+
+      isEmpty() {
+        return this.size() == 0
+      }
+
+      offer(e) {
+        this.data.push(e)
+        this.__siftUp(this.size() - 1)
+      }
+
+      peek() {
+        return this.data[0]
+      }
+
+      poll() {
+        let res = this.peek()
+        this.__swap(0, this.size() - 1)
+        this.data.pop()
+        this.__siftDown(0)
+        return res
+      }
+
+      __defaultComparator(a, b) {
+        return a - b;
+      }
+
+      __leftChild(index) {
+        return 2 * index + 1
+      }
+
+      __rightChild(index) {
+        return 2 * index + 2
+      }
+
+      __parent(index) {
+        return (index - 1) >> 1
+      }
+
+      __swap(i, j) {
+        let temp = this.data[i]
+        this.data[i] = this.data[j]
+        this.data[j] = temp
+      }
+
+      __siftUp(index) {
+        while (index > 0 && this.comparator(this.data[this.__parent(index)], this.data[index]) > 0) {
+          this.__swap(index, this.__parent(index))
+          index = this.__parent(index)
+        }
+      }
+
+      __siftDown(index) {
+        while (this.__leftChild(index) < this.size()) {
+          let targetIndex = this.__leftChild(index)
+          let rightIndex = this.__rightChild(index)
+          if (rightIndex < this.size() && this.comparator(this.data[rightIndex], this.data[targetIndex]) < 0) {
+            targetIndex = rightIndex
+          }
+          if (this.comparator(this.data[index], this.data[targetIndex]) < 0) {
+            break
+          }
+
+          this.__swap(index, targetIndex)
+          index = targetIndex
+        }
+      }
+    }
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number}
+     */
+    var maxKelements = function (nums, k) {
+      let n = nums.length
+      let pq = new PriorityQueue1((a, b) => b - 1)
+      for (let i = 0; i < n; i++) {
+        pq.offer(nums[i])
+      }
+      let res = 0
+      while (k > 0) {
+        let top = pq.poll()
+        res += top
+        pq.offer(Math.ceil(top / 3))
+      }
+      return res
+    };
+
+
+    /**
+     * @param {string} word1
+     * @param {string} word2
+     * @return {boolean}
+     */
+    var isItPossible = function (word1, word2) {
+      let m = word1.length
+      let n = word2.length
+
+      let set1 = new Set()
+      let map1 = Array(26).fill(0)
+      for (let i = 0; i < m; i++) {
+        set1.add(word1[i])
+        map1[word1[i].charCodeAt() - 'a'.charCodeAt()]++
+      }
+
+      let set2 = new Set()
+      let map2 = Array(26).fill(0)
+      for (let i = 0; i < n; i++) {
+        set2.add(word2[i])
+        map2[word2[i].charCodeAt() - 'a'.charCodeAt()]++
+      }
+
+      let size1 = set1.size
+      let size2 = set2.size
+      if (size1 == size2) return true
+
+      if (size1 > size2) {
+        if (size1 - size2 >= 2) return false
+
+        if (size1 - size2 == 1) {
+          for (let i = 0; i < map1.length; i++) {
+            if (map1[i] > 0 && map2[i] > 1) {
+              if (size1 - map1[i] > 0) {
+                return true
+              }
+            }
+          }
+          return false
+        }
+      } else {
+        if (size2 - size1 >= 2) return false
+
+        if (size2 - size1 == 1) {
+          for (let i = 0; i < map2.length; i++) {
+            if (map2[i] > 0 && map1[i] > 1) {
+              if (size2 - map2[i] > 0) {
+                return true
+              }
+            }
+          }
+          return false
+        }
+      }
+    };
+
+
+    /**
+     * @param {string} word1
+     * @param {string} word2
+     * @return {boolean}
+     */
+    var isItPossible = function (word1, word2) {
+      let m = word1.length
+      let n = word2.length
+
+      let set1 = new Set()
+      let map1 = Array(26).fill(0)
+      for (let i = 0; i < m; i++) {
+        set1.add(word1[i])
+        map1[word1[i].charCodeAt() - 'a'.charCodeAt()]++
+      }
+
+      let set2 = new Set()
+      let map2 = Array(26).fill(0)
+      for (let i = 0; i < n; i++) {
+        set2.add(word2[i])
+        map2[word2[i].charCodeAt() - 'a'.charCodeAt()]++
+      }
+
+      for (let i = 0; i < map1.length; i++) {
+        if (map1[i] == map2[i]) {
+          map1[i] = 0
+          map2[i] = 0
+        } else if (map1[i] < map2[i]) {
+          map1[i] = 0
+          map2[i] = map2[i] - map1[i]
+        } else {
+          map1[i] = map1[i] - map2[i]
+          map2[i] = 0
+        }
+      }
+
+      let cnt1 = 0
+      let cnt2 = 0
+      for (let i = 0; i < map1.length; i++) {
+        if (map1[i] > 0) cnt1++
+        if (map2[i] > 0) cnt2++
+      }
+
+      return cnt1 == cnt2
+    };
+    // abccd
+    // aab
+
+
+
+    /**
+     * @param {string} word1
+     * @param {string} word2
+     * @return {boolean}
+     */
+     var isItPossible = function (word1, word2) {
+      let m = word1.length
+      let n = word2.length
+
+      let set1 = new Set()
+      let map1 = Array(26).fill(0)
+      for (let i = 0; i < m; i++) {
+        set1.add(word1[i])
+        map1[word1[i].charCodeAt() - 'a'.charCodeAt()]++
+      }
+
+      let set2 = new Set()
+      let map2 = Array(26).fill(0)
+      for (let i = 0; i < n; i++) {
+        set2.add(word2[i])
+        map2[word2[i].charCodeAt() - 'a'.charCodeAt()]++
+      }
+
+      for (let i = 0; i < map1.length; i++) {
+        for (let j = 0; j < map2.length; j++) {
+          if (map1[i] > 0 && map2[j] > 0) {
+            map1[i]--
+            map1[j]++
+            map2[i]++
+            map2[j]--
+            if (check(map1, map2)) {
+              return true
+            }
+
+            map1[i]++
+            map1[j]--
+            map2[i]--
+            map2[j]++
+          }
+        }
+      }
+      return false
+    };
+
+    function check(m1, m2) {
+      let c1 = 0
+      let c2 = 0
+      for (let i = 0; i < m1.length; i++) {
+        if (m1[i] > 0) c1++
+        if (m2[i] > 0) c2++
+      }
+      return c1 == c2
+    }
+  </script>
+</body>
+
+</html>
