@@ -80,6 +80,100 @@
     var rangeAddQueries = function (n, queries) {
 
     };
+
+    /**
+     * @param {number[]} nums1
+     * @param {number[]} nums2
+     * @return {number}
+     */
+    var getCommon = function (nums1, nums2) {
+      let m = nums1.length
+      let n = nums2.length
+      let res = Infinity
+      let i = 0
+      let j = 0
+      while (i < m && j < n) {
+        if (nums1[i] == nums2[j]) {
+          return nums1[i]
+        } else if (nums1[i] < nums2[j]) {
+          i++
+        } else {
+          j++
+        }
+      }
+      return -1;
+    };
+
+    /**
+     * @param {number[]} nums1
+     * @param {number[]} nums2
+     * @param {number} k
+     * @return {number}
+     */
+    var minOperations = function (nums1, nums2, k) {
+      let m = nums1.length
+      let n = nums2.length
+      let add = 0
+      let de = 0
+      for (let i = 0; i < n; i++) {
+        if (nums1[i] == nums2[i]) continue
+
+        if (nums1[i] > nums2[i]) {
+          let diff = nums1[i] - nums2[i]
+          if (diff % k != 0) return -1
+          de += diff / k
+        }
+        if (nums1[i] < nums2[i]) {
+          let diff = nums2[i] - nums1[i]
+          if (diff % k != 0) return -1
+          add += diff / k
+        }
+      }
+      return add == de ? add : -1
+    };
+
+
+    /**
+     * @param {number[]} nums1
+     * @param {number[]} nums2
+     * @param {number} k
+     * @return {number}
+     */
+    var maxScore = function (nums1, nums2, k) {
+      let m = nums1.length
+      let n = nums2.length
+
+      // 前i个数j位
+      let dp = Array(n)
+      for (let i = 0; i < n; i++) {
+
+      }
+    };
+
+    /**
+     * @param {number} targetX
+     * @param {number} targetY
+     * @return {boolean}
+     */
+    var isReachable = function (targetX, targetY) {
+      let set = new Set()
+
+      function tryMove(curX, curY, targetX, targetY) {
+        if (set.has(curX + '-' + curY)) {
+          return false
+        }
+        set.add(curX + '-' + curY)
+        if (curX == targetX && curY == targetY) {
+          return true
+        }
+        return tryMove(curX, curY - curX, targetX, targetY) || tryMove(curX - curY, curY, targetX, targetY) ||
+          tryMove(2 * curX, targetY) || tryMove(curX, 2 * curY)
+      }
+
+      return tryMove(1, 1, targetX, targetY)
+    };
+
+    
   </script>
 </body>
 
