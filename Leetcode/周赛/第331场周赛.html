@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[]} gifts
+     * @param {number} k
+     * @return {number}
+     */
+    var pickGifts = function (gifts, k) {
+      let n = gifts.length
+      let pq = new PriorityQueue1((a, b) => b - a)
+      for (let i = 0; i < n; i++) {
+        pq.offer(gifts[i])
+      }
+      while (k > 0) {
+        let top = pq.poll()
+        pq.offer(Math.floor(Math.sqrt(top)))
+        k--
+      }
+      let res = 0
+      while (!pq.isEmpty()) {
+        res += pq.poll()
+      }
+      return res
+    };
+    class PriorityQueue1 {
+      constructor(comparator = this.__defaultComparator) {
+        this.comparator = comparator
+        this.data = []
+      }
+
+      size() {
+        return this.data.length
+      }
+
+      isEmpty() {
+        return this.size() == 0
+      }
+
+      offer(e) {
+        this.data.push(e)
+        this.__siftUp(this.size() - 1)
+      }
+
+      peek() {
+        return this.data[0]
+      }
+
+      poll() {
+        let res = this.peek()
+        this.__swap(0, this.size() - 1)
+        this.data.pop()
+        this.__siftDown(0)
+        return res
+      }
+
+      __defaultComparator(a, b) {
+        return a - b;
+      }
+
+      __leftChild(index) {
+        return 2 * index + 1
+      }
+
+      __rightChild(index) {
+        return 2 * index + 2
+      }
+
+      __parent(index) {
+        return (index - 1) >> 1
+      }
+
+      __swap(i, j) {
+        let temp = this.data[i]
+        this.data[i] = this.data[j]
+        this.data[j] = temp
+      }
+
+      __siftUp(index) {
+        while (index > 0 && this.comparator(this.data[this.__parent(index)], this.data[index]) > 0) {
+          this.__swap(index, this.__parent(index))
+          index = this.__parent(index)
+        }
+      }
+
+      __siftDown(index) {
+        while (this.__leftChild(index) < this.size()) {
+          let targetIndex = this.__leftChild(index)
+          let rightIndex = this.__rightChild(index)
+          if (rightIndex < this.size() && this.comparator(this.data[rightIndex], this.data[targetIndex]) < 0) {
+            targetIndex = rightIndex
+          }
+          if (this.comparator(this.data[index], this.data[targetIndex]) < 0) {
+            break
+          }
+
+          this.__swap(index, targetIndex)
+          index = targetIndex
+        }
+      }
+    }
+
+
+    /**
+     * @param {string[]} words
+     * @param {number[][]} queries
+     * @return {number[]}
+     */
+    var vowelStrings = function (words, queries) {
+      let m = words.length
+      let cnts = Array(m).fill(0)
+      let w = ['a', 'e', 'i', 'o', 'u']
+      for (let i = 0; i < m; i++) {
+        if (w.includes(words[i][0]) && w.includes(words[i][words[i].length - 1])) {
+          cnts[i] = 1
+        }
+      }
+      let presum = Array(m + 1).fill(0)
+      for (let i = 1; i <= m; i++) {
+        presum[i] = presum[i - 1] + cnts[i - 1]
+      }
+
+      let res = Array(queries.length)
+      for (let i = 0; i < queries.length; i++) {
+        let l = queries[i][0]
+        let r = queries[i][1]
+        res[i] = presum[r + 1] - presum[l]
+      }
+      return res
+    };
+
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number}
+     */
+    var minCapability = function (nums, k) {
+      let n = nums.length
+      for (let i = 0; i < n; i++) {
+        let x = nums[i]
+        nums[i] = [x, i]
+      }
+      nums.sort((a, b) => a[0] - b[0])
+      let cnt = 0
+      console.log(nums)
+      let set = new Set()
+      for (let i = 0; i < n; i++) {
+        let idx = nums[i][1]
+        if (set.has(idx)) {
+          continue
+        }
+        set.add(idx + 1)
+        set.add(idx - 1)
+        cnt++
+        if (cnt >= k) {
+          return nums[i][0]
+        }
+      }
+    };
+    // [5, 2, 3, 9]
+    // 5 9 9
+
+    [3, 6, 6, 9]
+    2
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number}
+     */
+    var minCapability = function (nums, k) {
+      let n = nums.length
+      let max = 0
+      let min = Infinity
+      for (let i = 0; i < n; i++) {
+        max = Math.max(max, nums[i])
+        min = Math.min(min, nums[i])
+      }
+      let temp = nums.slice()
+      temp.sort((a, b) => a - b)
+
+      let l = 0
+      let r = n - 1
+      while (l < r) {
+
+        let mid = l + (r - l >> 1)
+        if (check(nums, temp[mid], k)) {
+          r = mid
+        } else {
+          l = mid + 1
+        }
+      }
+      console.log(l)
+      return temp[l]
+    };
+
+    function check(nums, n, k) {
+      let idxs = []
+      for (let i = 0; i < nums.length; i++) {
+        if (nums[i] == n) {
+          idxs.push(i)
+          break
+        }
+      }
+
+      for (let i = 0; i < idxs.length; i++) {
+        let idx = idx[i]
+        let cnt = 1
+        let pre = idx
+        for (let i = idx + 1; i < nums.length; i++) {
+          if (i == pre + 1) continue
+          if (nums[i] > n) continue
+          cnt++
+          pre = i
+        }
+        let next = idx
+        for (let i = idx - 1; i >= 0; i--) {
+          if (i == next - 1) continue
+          if (nums[i] > n) continue
+          cnt++
+          next = i
+        }
+        if (cnt >= k) return true
+      }
+
+      return false
+    }
+
+    /**
+     * @param {number[]} basket1
+     * @param {number[]} basket2
+     * @return {number}
+     */
+    var minCost = function (basket1, basket2) {
+      let n = basket1.length
+      let sum = 0
+      for (let i = 0; i < n; i++) {
+        sum += basket1[i]
+        sum += basket2[i]
+      }
+      if (sum % 2 == 1) return -1
+      return 1
+    };
+    // [4,2,2,2]
+    // [1,4,1,2]
+    //  3 -2 1 0
+  </script>
+</body>
+
+</html>
