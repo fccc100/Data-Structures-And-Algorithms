@@ -1,14 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
   <script>
-    
+    /**
+     * @param {number} num
+     * @return {number}
+     */
+    var minMaxDifference = function (num) {
+      let max = -Infinity
+      let min = Infinity
+      let nums = String(num).split('')
+      for (let i = 0; nums.length; i++) {
+        let origin = nums[i]
+        for (let i = 0; i <= 9; i++) {
+          nums[i] = i
+          max = Math.max(max, Number(nums.join('')))
+          min = Math.min(min, Number(nums.join('')))
+        }
+      }
+      return max - min
+    };
+
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var minimizeSum = function (nums) {
+      let n = nums.length
+      let min = nums[0]
+      let max = nums[0]
+      for (let i = 0; i < n; i++) {
+        min = Math.min(min, nums[i])
+        max = Math.max(max, nums[i])
+      }
+
+      let l = 0;
+      let r = max - min
+      while (l < r) {
+        let mid = l + (r - l >> 1)
+        if (check(nums, mid)) {
+          r = mid
+        } else {
+          l = mid + 1
+        }
+      }
+      return l
+    };
+
+    function check(nums, mid) {
+      let minAbs = Infinity
+      let maxAbs = -Infinity
+      let min = nums[0]
+      let max = nums[0]
+      for (let i = 1; i < nums.length; i++) {
+        maxAbs = Math.max(maxAbs, nums[i] - min, nums[i] - max)
+
+      }
+    }
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var minImpossibleOR = function (nums) {
+      let n = nums.length
+
+      nums.sort()
+      let res = 0
+      let max = 0
+      for (let i = 0; i < n; i++) {
+
+        max |= nums[i]
+        if (max > res + 1) return res
+        res |= nums[i]
+      }
+
+      return res
+    };
+    [4, 32, 16, 8, 8, 75, 1, 2]
+    输出：
+    2
+    预期：
+    64
+
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var minimizeSum = function (nums) {
+      let n = nums.length
+      nums.sort()
+      if (n <= 3) return 0
+      let max = Math.min(nums[n - 1] - nums[2], nums[0] - nums[n - 3])
+      return max
+    };
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var minimizeSum = function (nums) {
+      let n = nums.length
+      if (n <= 3) return 0
+      let max1 = nums[0]
+      let max2 = -Infinity
+      let min1 = nums[0]
+      let min2 = Infinity
+      for (let i = 1; i < n; i++) {
+        if (nums[i] > max1) {
+          max2 = max1
+          max1 = nums[i]
+        } else if (nums[i] > max2) {
+          max2 = nums[i]
+        }
+        if (nums[i] < min1) {
+          min2 = min1
+          min1 = nums[i]
+        } else if (nums[i] < min2) {
+          min2 = nums[i]
+        }
+      }
+      return Math.abs(max2 - min2)
+    };
+
+    [59, 27, 9, 81, 33]
+    [9, 27, 33, 59, 81]
+
+    [58, 42, 8, 75, 28]
+    [8, 28, 42, 58, 75]
+
+    // 输入：
+    // [59,27,9,81,33]
+    // 输出：
+    // 32
+    // 预期：
+    // 24\
+
+
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var minImpossibleOR = function (nums) {
+      let n = nums.length
+      nums.sort((a, b) => a - b)
+      if (nums[0] != 1) return 1
+
+      let max = 1
+      for (let i = 1; i < n; i++) {
+        if (nums[i] > max + 1 && nums[i] | max > max + 1) return max
+        max |= nums[i]
+      }
+      return max
+    };
+
+
+
+    /**
+     * @param {number[]} nums1
+     * @param {number[]} nums2
+     * @param {number[][]} queries
+     * @return {number[]}
+     */
+    var handleQuery = function (nums1, nums2, queries) {
+      let n = num1.length
+      let m = queries.length
+      let res = []
+      let add = 0
+      for (let i = 0; i < m; i++) {
+        let t = queries[i][0]
+        if (t == 1) {
+          let l = queries[i][1]
+          let r = queries[i][2]
+          for (let j = l; j <= r; j++) {
+            nums1[j] = 1 - nums1[j]
+          }
+        } else if (t == 2) {
+          let sum = 0
+          for (let j = 0; j < nums1.length; j++) {
+            sum += nums1[j]
+          }
+          add = sum * queries[i][1]
+        } else {
+          let sum = 0
+          for (let j = 0; j < nums2.length; j++) {
+            sum += num2[j]
+          }
+          res.push(sum + add)
+        }
+      }
+      return res
+    };
   </script>
 </body>
+
 </html>
