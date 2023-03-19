@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number} n
+     * @return {number[]}
+     */
+    var evenOddBit = function (n) {
+      let s = n.toString(2)
+      let res = [0, 0]
+      for (let i = 0; i < s.length; i++) {
+        if (s[s.length - 1 - i] == 1) {
+          if (i % 2 == 0) {
+            res[0]++
+          } else {
+            res[1]++
+          }
+        }
+      }
+      return res
+    };
+
+
+    /**
+     * @param {number[][]} grid
+     * @return {boolean}
+     */
+    var checkValidGrid = function (grid) {
+      let m = grid.length
+      let n = grid[0].length
+
+      function check(grid, i, j, val) {
+        if (i < 0 || i >= m) return false
+        if (j < 0 || j >= n) return false
+        if (grid[i][j] != val) return false
+
+        return check(grid, i + 2, j + 1, val++) || check(grid, i + 2, j - 1, val++) || check(grid, i + 1, j + 2,
+          val++) || check(grid, i + 1, j - 2, val++) || check(grid, i - 1, j + 2, val++) || check(grid, i - 1, j -
+          2, val++) || check(grid, i - 2, j + 1, val++) || check(grid, i - 2, j - 1, val++)
+      }
+
+      return check(grid, 0, 0, 0)
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number}
+     */
+    var beautifulSubsets = function (nums, k) {
+      let subSet = subsets(nums, k)
+      console.log(subset)
+    };
+
+    var subsets = function (nums, k) {
+      const ans = [];
+      const n = nums.length;
+      for (let mask = 0; mask < (1 << n); ++mask) {
+        const t = new Set();
+        for (let i = 0; i < n; ++i) {
+          if (mask & (1 << i)) {
+            if (!t.has(nums[i] - k) && !t.has(k - nums[i])) {
+              t.push(nums[i]);
+            }
+          }
+        }
+        ans.push(t);
+      }
+      return ans;
+    };
+
+
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number}
+     */
+    var beautifulSubsets = function (nums, k) {
+      let n = nums.length
+      let cnts = Array(2003).fill(0)
+
+      let allSet = 1
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        let newAdd = allSet
+        res += (allSet - cnts[nums[i] - k + 1000] - cnts[k - nums[i] + 1000])
+        cnts[nums[i] + 1000] += allSet
+        allSet += allSet
+      }
+      return res
+    };
+
+
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number}
+     */
+    var beautifulSubsets = function (nums, k) {
+      let res = 0
+
+      function _subsets(nums, index, path) {
+        res++
+        if (index == nums.length) return;
+
+        for (let i = index; i < nums.length; i++) {
+          if (path.has(nums[i] - k) || path.has(k - nums[i])) continue
+          path.add(nums[i]);
+          _subsets(nums, i + 1, path);
+          path.delete(nums[i]);
+        }
+      }
+      _subsets(nums, 0, new Set())
+      return res
+    };
+
+
+    function subsets(nums) {
+      let res = [];
+
+      function _subsets(nums, index, path) {
+        res.push([...path]);
+        if (index == nums.length) return;
+
+        for (let i = index; i < nums.length; i++) {
+          path.push(nums[i]);
+          _subsets(nums, i + 1, path);
+          path.pop();
+        }
+      }
+
+      _subsets(nums, 0, []);
+      return res;
+    }
+    // [4, 2, 5, 9, 10, 3]
+    // 1
+    // allSet  newAdd
+    // {}      1
+    // {4}     
+
+
+    // 输入：
+    //   [4, 2, 5, 9, 10, 3]
+    // 1
+    // 输出：
+    // 52
+    // 预期：
+    // 23
+
+    // nums[i] - x = k => x = nums[i] - k
+    // x - nums[i] = k => x = k - nums[i]
+    // ：nums = [2,4,6], k = 2
+    //          all    
+    // {}        1
+    // {2}  1    2
+    // {} {2} {4} {2 4}
+
+
+    /**
+     * @param {number[]} nums
+     * @param {number} value
+     * @return {number}
+     */
+    var findSmallestInteger = function (nums, value) {
+      let n = nums.length
+      for (let i = 0; i < n; i++) {
+        nums[i] = (nums[i] + 10000000000 * value) % value
+      }
+
+      let map = new Map()
+      for (let i = 0; i < n; i++) {
+        if (map.set(nums[i])) {
+          map.set(nums[i], map.get(nums[i]) + 1)
+        } else {
+          map.set(nums[i], 1)
+        }
+      }
+
+      let cur = 0
+      while (true) {
+        if (map.has(cur)) {
+          cur = (cur + 1) % value
+          map.set(cur, map.get(cur) - 1)
+          if (map.get(cur) == 0) {
+            map.delete(cur)
+          }
+        } else {
+
+        }
+      }
+      return cur
+    };
+
+
+    // 输入：
+    //   [10, 4, 5, 7, 2, 1]
+    // 3
+    // 输出：
+    // 20
+    // 预期：
+    // 23
+  </script>
+</body>
+
+</html>
