@@ -211,9 +211,12 @@
             if (visited[j]) {
               continue
             }
-            
+            res[j] = cur[1]
+            newQueue.push([j, cur[1] + 1])
+            visited[j] = true
           }
         }
+        queue = newQueue
       }
 
       for (let i = 0; i < res.length; i++) {
@@ -223,8 +226,6 @@
       }
       return res
     };
-
-
 
     // [1, 0, 0, 0]
 
