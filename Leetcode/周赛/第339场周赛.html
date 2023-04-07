@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var findTheLongestBalancedSubstring = function (s) {
+      let n = s.length
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        if (s[i] == 1) continue
+        let zCnt = 1
+        let oneCnt = 0
+        for (let j = i + 1; j < n; j++) {
+          if (s[j] == 0) {
+            if (oneCnt > 0) {
+              break
+            }
+            zCnt++
+          } else {
+            oneCnt++
+          }
+          if (oneCnt == zCnt) {
+            res = Math.max(res, j - i + 1)
+          }
+        }
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @return {number[][]}
+     */
+    var findMatrix = function (nums) {
+      let n = nums.length
+
+      let map = new Map()
+      let max = 0
+      for (let i = 0; i < n; i++) {
+        if (!map.has(nums[i])) {
+          map.set(nums[i], 1)
+        } else {
+          map.set(nums[i], map.get(nums[i]) + 1)
+        }
+        max = Math.max(max, map.get(nums[i]))
+      }
+
+      let res = []
+      for (let i = 0; i < max; i++) {
+        let cur = []
+        for (let entry of map.entries()) {
+          cup.push(entry[0])
+          map.set(entry[0], entry[1] - 1)
+        }
+        res.push(cur)
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} reward1
+     * @param {number[]} reward2
+     * @param {number} k
+     * @return {number}
+     */
+    var miceAndCheese = function (reward1, reward2, k) {
+      let n = reward1.length
+
+      let res = 0
+      let p = []
+      for (let i = 0; i < n; i++) {
+        p.push([reward1[i], reward2[i]])
+      }
+
+      p.sort((a, b) => (b[0] - b[1]) - (a[0] - a[1]))
+
+      console.log(p)
+      for (let i = 0; i < k; i++) {
+        res += p[i][0]
+      }
+      for (let i = k; i < n; i++) {
+        res += p[i][1]
+      }
+      return res
+    };
+
+    /**
+     * @param {number} n
+     * @param {number} p
+     * @param {number[]} banned
+     * @param {number} k
+     * @return {number[]}
+     */
+    var minReverseOperations = function (n, p, banned, k) {
+      let arr = Array(n).fill(0)
+      arr[p] = 1
+
+      let set = new Set()
+      for (let i = 0; i < banned.length; i++) {
+        set.add(banned[i])
+      }
+
+      let res = Array(n).fill(Infinity)
+      let step = 0
+      res[p] = 0
+      if (k == 1) {
+        for (let i = 0; i < n; i++) {
+
+          if (res[i] == Infinity) {
+            res[i] = -1
+          }
+
+        }
+        return res
+      }
+
+      for (let i = p; i < n; i += (k - 1)) {
+
+        if (i == p) continue
+        step++
+        if (!set.has(i)) {
+          res[i] = step
+        } else {
+          break
+        }
+      }
+      step = 0
+      for (let i = p; i >= 0; i -= (k - 1)) {
+        if (i == p) continue
+        step++
+        if (!set.has(i)) {
+          res[i] = step
+        } else {
+          break
+        }
+      }
+      for (let i = 0; i < res.length; i++) {
+        if (res[i] == Infinity) {
+          res[i] = -1
+        }
+      }
+      return res
+    };
+
+    // 输入：
+    // 4
+    // 2
+    //   []
+    // 4
+    // 输出：
+    //   [-1, -1, 0, -1]
+    // 预期：
+    //   [-1, 1, 0, -1]
+
+
+    // [0, 0, 1, 0]
+
+
+    /**
+     * @param {number} n
+     * @param {number} p
+     * @param {number[]} banned
+     * @param {number} k
+     * @return {number[]}
+     */
+    var minReverseOperations = function (n, p, banned, k) {
+      let set = new Set()
+      for (let i = 0; i < banned.length; i++) {
+        set.add(banned[i])
+      }
+
+      let res = Array(n).fill(Infinity)
+      let step = 0
+      res[p] = 0
+      if (k == 1) {
+        for (let i = 0; i < n; i++) {
+          if (res[i] == Infinity) {
+            res[i] = -1
+          }
+        }
+        return res
+      }
+
+
+      let step = 1
+      let queue = []
+      queue.push([p, 0])
+      let visited = Array(n).fill(false)
+      while (queue.length) {
+        let newQueue = []
+
+        for (let i = 0; i < queue.length; i++) {
+          let cur = queue[i]
+          let x = cur[0]
+          
+          for (let j = x + k - 1; j >= x - k + 1; j -= 2) {
+            if (set.has(j)) {
+              continue
+            }
+            if (visited[j]) {
+              continue
+            }
+            res[j] = cur[1]
+            newQueue.push([j, cur[1] + 1])
+            visited[j] = true
+          }
+        }
+        queue = newQueue
+      }
+
+      for (let i = 0; i < res.length; i++) {
+        if (res[i] == Infinity) {
+          res[i] = -1
+        }
+      }
+      return res
+    };
+
+    // [1, 0, 0, 0]
+
+    //        b     b
+    // [0, 0, 0, 1, 0, 0, 0, 0]
+  </script>
+</body>
+
+</html>

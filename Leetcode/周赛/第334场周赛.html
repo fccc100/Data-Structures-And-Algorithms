@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[]} nums
+     * @return {number[]}
+     */
+    var leftRigthDifference = function (nums) {
+      let n = nums.length
+      let lS = Array(n)
+      let rS = Array(n)
+      lS[0] = nums[0]
+      for (let i = 1; i < n; i++) {
+        ls[i] = ls[i - 1] + nums[i]
+      }
+      rS[n - 1] = nums[n - 1]
+      for (let i = n - 2; i >= 0; i--) {
+        rS[i] = rS[i + 1] + nums[i]
+      }
+
+      let res = Array(n)
+      for (let i = 0; i < n; i++) {
+        res[i] = Math.abs(lS[i] - rS[i])
+      }
+      return res
+    };
+
+
+    /**
+     * @param {string} word
+     * @param {number} m
+     * @return {number[]}
+     */
+    var divisibilityArray = function (word, m) {
+      let n = word.length
+      let res = Array(n).fill(0)
+
+      let cur = 0
+      for (let i = 0; i < n; i++) {
+        cur = cur + Number(word[i])
+        if (cur % m == 0) {
+          res[i] = 1
+        }
+      }
+
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var maxNumOfMarkedIndices = function (nums) {
+      let n = nums.length
+      nums.sort((a, b) => a - b)
+
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        // 大于等于nums[i]的最小值
+        let lower = lower_ceil(nums, 2 * nums[i])
+        if (lower < n) {
+          res += 2
+        }
+      }
+      return res
+    };
+
+    function lower_ceil(nums, target) {
+      let l = 0;
+      let r = nums.length;
+      while (l < r) {
+        let mid = l + (r - l >> 1);
+        if (nums[mid] < target) {
+          l = mid + 1;
+        } else {
+          r = mid;
+        }
+      }
+      return l;
+    }
+
+    // [1,78,27,48,14,86,79,68,77,20,57,21,18,67,5,51,70,85,47,56,22,79,41,8,39,81,59,74,14,45,49,15,10,28,16,77,22,65,8,36,79,94,44,80,72,8,96,78,39,92,69,55,9,44,26,76,40,77,16,69,40,64,12,48,66,7,59,10]
+    // 64
+    // [1, 5, 7, 8, 8, 8, 9, 10, 10, 12, 14, 14, 15, 16, 16, 18, 20, 21, 22, 22, 26, 27, 28, 36, 39, 39, 40, 40, 41, 44, 44, 45, 47, 48, 48, 49, 51, 55, 56, 57, 59, 59, 64, 65, 66, 67, 68, 69, 69, 70, 72, 74, 76, 77, 77, 77, 78, 78, 79, 79, 79, 80, 81, 85, 86, 92, 94, 96]
+    // 64
+
+
+    // [42,83,48,10,24,55,9,100,10,17,17,99,51,32,16,98,99,31,28,68,71,14,64,29,15,40]
+
+    // 输入：
+    //   [42, 83, 48, 10, 24, 55, 9, 100, 10, 17, 17, 99, 51, 32, 16, 98, 99, 31, 28, 68, 71, 14, 64, 29, 15, 40]
+    //   [9, 10, 10, 14, 15, 16, 17, 17, 24, 28, 29, 31, 32, 40, 42, 48, 51, 55, 64, 68, 71, 83, 98, 99, 99, 100]
+    // 输出：
+    // 32
+    // 预期：
+    // 26
+
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var maxNumOfMarkedIndices = function (nums) {
+      let n = nums.length
+      nums.sort((a, b) => a - b)
+      let max = nums[n - 1]
+
+      let end = -1
+      for (let i = 0; i < n; i++) {
+        if (nums[i] * 2 > max) break
+        end = i;
+      }
+
+      let j = n - 1
+      let res = 0
+      while (end >= 0 && j > end) {
+        if (nums[end] * 2 <= nums[j]) {
+          res += 2
+          end--
+          j--
+        } else {
+          end--
+        }
+      }
+      return res
+    };
+
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var maxNumOfMarkedIndices = function (nums) {
+      let n = nums.length
+      nums.sort((a, b) => a - b)
+      let max = nums[n - 1]
+
+      let end = -1
+      for (let i = 0; i < n; i++) {
+        if (nums[i] * 2 > max) break
+        end = i;
+      }
+
+      let j = n - 1
+      let res = 0
+      let t = end
+      let l, r
+      if (end + 1 < n - end - 1) {
+        l = 0
+        r = end
+        res += (n - end - 1) * 2
+        let left = (n - res) / 2
+        let ll = l + left - 1
+        while (ll >= l) {
+          if (nums[r] > 2 * nums[ll]) {
+            res += 2
+            ll--
+            r--
+            res += 2
+          } else {
+            ll--
+          }
+        }
+      } else {
+        l = end + 1
+        r = n - 1
+        res += (end + 1) * 2
+        let left = (n - res) / 2
+        let ll = l + left - 1
+
+        while (ll >= l) {
+          if (nums[r] > 2 * nums[ll]) {
+            res += 2
+            ll--
+            r--
+            res += 2
+          } else {
+            ll--
+          }
+        }
+      }
+
+      return res
+    };
+
+
+    /**
+     * @param {number[][]} grid
+     * @return {number}
+     */
+    var minimumTime = function (grid) {
+      let m = grid.length
+      let n = grid[0].length
+
+
+    };
+
+
+    /**
+     * @param {string} left
+     * @param {string} right
+     * @return {number}
+     */
+    var superpalindromesInRange = function (left, right) {
+      let res = 0
+      for (let i = 1; i <= 10000; i++) {
+        let o = String(i)
+        let t1 = o
+        for (let j = o.length - 1; j >= 0; j--) {
+          t1 += o[j]
+        }
+        let m1 = Number(t1) * Number(t1)
+        if (m1 >= Number(left) && m1 <= Number(right) && isValid(m1)) {
+          res++
+        }
+        let t2 = o
+        for (let j = o.length - 2; j >= 0; j--) {
+          t2 += o[j]
+        }
+        let m2 = Number(t2) * Number(t2)
+        if (m2 >= Number(left) && m2 <= Number(right) && isValid(m2)) {
+          res++
+        }
+      }
+      return res
+    };
+
+    function isValid(n) {
+      let s = String(n)
+      let l = 0
+      let r = s.length - 1
+      while (l < r) {
+        if (s[l] != s[r]) return false
+        l++
+        r--
+      }
+      return true
+    }
+  </script>
+</body>
+
+</html>

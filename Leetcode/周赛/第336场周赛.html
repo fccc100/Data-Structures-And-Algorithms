@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {string[]} words
+     * @param {number} left
+     * @param {number} right
+     * @return {number}
+     */
+    var vowelStrings = function (words, left, right) {
+      let n = words.length
+      let arr = ['a', 'e', 'i', 'o', 'u']
+      let res = 0
+      for (let i = left; i <= right; i++) {
+        let w = words[i]
+        if (arr.includs(w[0]) && arr.includs(w[w.length - 1])) {
+          res++
+        }
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var maxScore = function (nums) {
+      let n = nums.length
+      nums.sort((a, b) => b - a)
+      let presum = nums[0]
+      let res = 0
+      if (presum > 0) res++
+      for (let i = 1; i < n; i++) {
+        presum = presum + nums[i]
+        if (presum > 0) res++
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var beautifulSubarrays = function (nums) {
+      // let n = nums.length
+      // let dp = Array(n).fill(0)
+
+      // let map = new Map()
+      // let pre = nums[0]
+      // map.set(nums[0], 1)
+      // let res = 0
+      // for (let i = 1; i < n; i++) {
+        
+      //   pre ^= nums[i]
+      //   if (map.has(pre)) {
+      //     res += map.get(pre)
+      //   }
+      //   if (map.has(nums[i])) {
+      //     map.set(nums[i], map.get(nums[i]) + 1)
+      //   } else {
+      //     map.set(nums[i], 1)
+      //   }
+      // }
+      // return res
+    };
+  </script>
+</body>
+
+</html>
