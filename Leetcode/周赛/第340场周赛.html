@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[][]} nums
+     * @return {number}
+     */
+    var diagonalPrime = function (nums) {
+      let n = nums.length
+
+      let primes = solvePrimes(4000001)
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          if (i == j || i == n - j - 1) {
+            if (primes[nums[i][j]] == 1) {
+              res = Math.max(res, nums[i][j])
+            }
+          }
+        }
+      }
+      return res
+    };
+
+    function solvePrimes(n) {
+      let isPrime = Array(n).fill(1)
+      for (let i = 0; i < 2; i++) {
+        isPrime[i] = 0
+      }
+
+      for (let i = 2; i < n; i++) {
+
+        if (isPrime[i] == 1) {
+          for (let j = i * i; j < n; j += i) {
+            isPrime[j] = 0
+          }
+        }
+      }
+      return isPrime
+    }
+
+    /**
+     * @param {number[]} nums
+     * @return {number[]}
+     */
+    var distance = function (nums) {
+      let n = nums.length
+
+      let left = Array(n).fill(0)
+      let prev = new Map()
+      let cnt = new Map()
+      prev.set(nums[0], 0)
+      for (let i = 1; i < n; i++) {
+        if (!prev.has(nums[i])) {
+          continue
+        }
+        let prevIdx = prev.get(nums[i])
+        let dis = i - prevIdx
+        let preDis = left[prevIdx]
+        let curDis = preDis + dis + ((cnt.get(nums[i]) || 0) * dis)
+        left[i] = curDis
+        prev.set(nums[i], i)
+        if (cnt.has(nums[i])) {
+          cnt.set(nums[i], cnt.get(nums[i]) + 1)
+        } else {
+          cnt.set(nums[i], 1)
+        }
+      }
+
+      let rightMap = new Map()
+      let right = Array(n).fill(0)
+      let cnt1 = new Map()
+      rightMap.set(nums[n - 1], n - 1)
+      for (let i = n - 1; i >= 0; i--) {
+        if (!rightMap.has(nums[i])) continue
+
+        let nextIdx = rightMap.get(nums[i])
+        let dis = nextIdx - i
+        let nextDis = right[nextIdx]
+        let curDis = nextDis + dis + ((cnt1.get(nums[i]) || 0) * dis)
+        right[i] = curDis
+        rightMap.set(nums[i], i)
+        if (cnt1.has(nums[i])) {
+          cnt1.set(nums[i], cnt1.get(nums[i]) + 1)
+        } else {
+          cnt1.set(nums[i], 1)
+        }
+      }
+      for (let i = 0; i < n; i++) {
+        left[i] += right[i]
+      }
+      return left
+    };
+
+    // [1, 3, 1, 1, 2]
+    // [5, 0, 3, 4, 0]
+    // [0, 0, 2, 4, 0]
+    // [5, 0, 1, 0, 0]
+
+
+    /**
+     * @param {number[]} nums
+     * @param {number} p
+     * @return {number}
+     */
+    var minimizeMax = function (nums, p) {
+      let n = nums.length
+
+      let l = 0
+      let r = 1000000001
+      while (l < r) {
+        let mid = l + ((r - l) >> 1)
+        if (check(nums, mid, p)) {
+          r = mid
+        } else {
+          l = mid + 1
+        }
+      }
+      return l
+    };
+
+    function check(nums, mid, p) {
+      nums.sort((a, b) => a - b)
+      let cnt = 0
+      let ok = true
+      for (let i = 1; i < nums.length; i++) {
+        if (nums[i] - nums[i - 1] <= mid) {
+          if (ok) {
+            ok = false
+            cnt++
+          } else {
+            ok = true
+          }
+        } else {
+          ok = true
+        }
+      }
+      return cnt >= p
+    }
+
+    // 输入：
+    //   [3, 4, 2, 3, 2, 1, 2]
+    // 3
+    // 输出：
+    // 0
+    // 预期：
+    // 1
+
+
+    /**
+     * @param {number[][]} grid
+     * @return {number}
+     */
+    var minimumVisitedCells = function (grid) {
+      let m = grid.length
+      let n = grid[0].length
+
+      let dis = Array(m)
+      let visited = Array(m)
+      for (let i = 0; i < m; i++) {
+        dis[i] = Array(n).fill(Infinity)
+        visited[i] = Array(n).fill(false)
+      }
+      dis[0][0] = 1
+      let pq = new PriorityQueue1((a, b) => a[2] - b[2])
+      pq.offer([0, 0, 0])
+
+      while (!pq.isEmpty()) {
+        let cur = pq.poll()
+        let i = cur[0]
+        let j = cur[1]
+        let d = cur[2]
+
+        if (visited[i][j]) continue
+        visited[i][j] = true
+
+        for (let k = n - 1; k >= j + 1; k--) {
+          if (k <= grid[i][j] + j) {
+            if (!visited[i][k] && dis[i][j] + 1 < dis[i][k]) {
+              dis[i][k] = dis[i][j] + 1
+              pq.offer([i, k, dis[i][k]])
+            }
+          }
+        }
+        for (let k = m - 1; k >= i + 1; k--) {
+          if (k <= grid[i][j] + i) {
+            if (!visited[k][j] && dis[i][j] + 1 < dis[k][j]) {
+              dis[k][j] = dis[i][j] + 1
+              pq.offer([k, j, dis[k][j]])
+            }
+          }
+        }
+      }
+
+      return dis[m - 1][n - 1] == Infinity ? -1 : dis[m - 1][n - 1]
+    };
+
+    class PriorityQueue1 {
+      constructor(comparator = this.__defaultComparator) {
+        this.comparator = comparator
+        this.data = []
+      }
+
+      size() {
+        return this.data.length
+      }
+
+      isEmpty() {
+        return this.size() == 0
+      }
+
+      offer(e) {
+        this.data.push(e)
+        this.__siftUp(this.size() - 1)
+      }
+
+      peek() {
+        return this.data[0]
+      }
+
+      poll() {
+        let res = this.peek()
+        this.__swap(0, this.size() - 1)
+        this.data.pop()
+        this.__siftDown(0)
+        return res
+      }
+
+      __defaultComparator(a, b) {
+        return a - b;
+      }
+
+      __leftChild(index) {
+        return 2 * index + 1
+      }
+
+      __rightChild(index) {
+        return 2 * index + 2
+      }
+
+      __parent(index) {
+        return (index - 1) >> 1
+      }
+
+      __swap(i, j) {
+        let temp = this.data[i]
+        this.data[i] = this.data[j]
+        this.data[j] = temp
+      }
+
+      __siftUp(index) {
+        while (index > 0 && this.comparator(this.data[this.__parent(index)], this.data[index]) > 0) {
+          this.__swap(index, this.__parent(index))
+          index = this.__parent(index)
+        }
+      }
+
+      __siftDown(index) {
+        while (this.__leftChild(index) < this.size()) {
+          let targetIndex = this.__leftChild(index)
+          let rightIndex = this.__rightChild(index)
+          if (rightIndex < this.size() && this.comparator(this.data[rightIndex], this.data[targetIndex]) < 0) {
+            targetIndex = rightIndex
+          }
+          if (this.comparator(this.data[index], this.data[targetIndex]) < 0) {
+            break
+          }
+
+          this.__swap(index, targetIndex)
+          index = targetIndex
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>
