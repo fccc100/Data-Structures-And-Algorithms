@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[][]} grid
+     * @return {number[]}
+     */
+    var findColumnWidth = function (grid) {
+      let m = grid.length
+      let n = grid[0].length
+
+      let res = Array(n).fill(0)
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+          let s = String(grid[i][j])
+          res[j] = Math.max(res[j], s.length)
+        }
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @return {number[]}
+     */
+    var findPrefixScore = function (nums) {
+      let n = nums.length
+
+      let res = Array(n).fill(0)
+      let max = -1
+      let presum = 0
+      for (let i = 0; i < n; i++) {
+        max = Math.max(max, nums[i])
+        let cur = nums[i] + max
+        presum += cur
+        res[i] = presum
+      }
+      return res
+    };
+    // [2,3,7,5,10]
+    // [4,]
+
+
+    /**
+     * Definition for a binary tree node.
+     * function TreeNode(val, left, right) {
+     *     this.val = (val===undefined ? 0 : val)
+     *     this.left = (left===undefined ? null : left)
+     *     this.right = (right===undefined ? null : right)
+     * }
+     */
+    /**
+     * @param {TreeNode} root
+     * @return {TreeNode}
+     */
+    var replaceValueInTree = function (root) {
+
+      // parent
+      let map_parent = new Map()
+
+      function dfs(root, parent) {
+        if (root == null) return
+        map.set(root, parent)
+        dfs(root.left, root)
+        dfs(root.right, root)
+      }
+
+      dfs(root, null)
+
+      let queue = []
+      queue.push(root)
+      while (queue.length) {
+        let len = queue.length
+
+        let newQueue = []
+        let curList = []
+        let sum = 0
+        let map_sum = new Map()
+        for (let i = 0; i < len; i++) {
+          let node = queue[i]
+          curList.push(node)
+          sum += node.val
+          let p = map_parent.get(node)
+          if (map_sum.has(p)) {
+            map_sum.set(p, map_sum.get(p) + node.val)
+          } else {
+            map_sum.set(p, node.val)
+          }
+
+          if (node.left) {
+            newQueue.push(node.left)
+          }
+          if (node.right) {
+            newQueue.push(node.right)
+          }
+        }
+
+        for (let i = 0; i < curList.length; i++) {
+          let node = curList[i]
+          let p = map_parent.get(node)
+          let p_val = map_sum.get(p)
+          curList[i].val = sum - p_val
+        }
+
+        queue = newQueue
+      }
+      return root
+    };
+
+
+
+    /**
+     * @param {number} n
+     * @param {number[][]} edges
+     */
+    var Graph = function (n, edges) {
+      this.n = n
+      this.graph = Array(n)
+      for (let i = 0; i < n; i++) {
+        this.graph[i] = new Map()
+      }
+
+      for (let i = 0; i < edges.length; i++) {
+        let x = edges[i][0]
+        let y = edges[i][1]
+        let w = edges[i][2]
+        this.graph[x].set(y, w)
+      }
+    }
+
+    /** 
+     * @param {number[]} edge
+     * @return {void}
+     */
+    Graph.prototype.addEdge = function (edge) {
+      let graph = this.graph
+      graph[edge[0]].set(edge[1], edge[2])
+    }
+
+    /** 
+     * @param {number} node1 
+     * @param {number} node2
+     * @return {number}
+     */
+    Graph.prototype.shortestPath = function (node1, node2) {
+      let res = dijkstra(this.graph, node1, this.n, node2)
+      return res[node2] == Infinity ? -1 : res[node2]
+    }
+
+    // Dijkstra算法求从源点src出发的单源最短路径
+    function dijkstra(graph, src, n, dest) {
+
+      let dis = Array(n).fill(Infinity)
+      dis[src] = 0
+      let visited = Array(n).fill(false)
+      let pq = new PriorityQueue1((a, b) => a[1] - b[1])
+      pq.offer([src, 0])
+
+      while (!pq.isEmpty()) {
+
+        // 找当前最小的值
+        let cur = pq.poll()[0]
+        if (visited[cur]) continue
+
+        // 找到的最小的值一定是最终的答案，对领边进行松弛操作
+        visited[cur] = true
+        if (cur == dest) break
+        for (let w of graph[cur].keys()) {
+          if (!visited[w] && dis[cur] + graph[cur].get(w) < dis[w]) {
+            dis[w] = dis[cur] + graph[cur].get(w)
+            pq.offer([w, dis[w]])
+          }
+        }
+      }
+
+      return dis
+    }
+
+    // 优先队列
+    class PriorityQueue1 {
+      constructor(comparator = this.__defaultComparator) {
+        this.comparator = comparator
+        this.data = []
+      }
+
+      size() {
+        return this.data.length
+      }
+
+      isEmpty() {
+        return this.size() == 0
+      }
+
+      offer(e) {
+        this.data.push(e)
+        this.__siftUp(this.size() - 1)
+      }
+
+      peek() {
+        return this.data[0]
+      }
+
+      poll() {
+        let res = this.peek()
+        this.__swap(0, this.size() - 1)
+        this.data.pop()
+        this.__siftDown(0)
+        return res
+      }
+
+      __defaultComparator(a, b) {
+        return a - b;
+      }
+
+      __leftChild(index) {
+        return 2 * index + 1
+      }
+
+      __rightChild(index) {
+        return 2 * index + 2
+      }
+
+      __parent(index) {
+        return (index - 1) >> 1
+      }
+
+      __swap(i, j) {
+        let temp = this.data[i]
+        this.data[i] = this.data[j]
+        this.data[j] = temp
+      }
+
+      __siftUp(index) {
+        while (index > 0 && this.comparator(this.data[this.__parent(index)], this.data[index]) > 0) {
+          this.__swap(index, this.__parent(index))
+          index = this.__parent(index)
+        }
+      }
+
+      __siftDown(index) {
+        while (this.__leftChild(index) < this.size()) {
+          let targetIndex = this.__leftChild(index)
+          let rightIndex = this.__rightChild(index)
+          if (rightIndex < this.size() && this.comparator(this.data[rightIndex], this.data[targetIndex]) < 0) {
+            targetIndex = rightIndex
+          }
+          if (this.comparator(this.data[index], this.data[targetIndex]) < 0) {
+            break
+          }
+
+          this.__swap(index, targetIndex)
+          index = targetIndex
+        }
+      }
+    }
+
+    /**
+     * Your Graph object will be instantiated and called as such:
+     * var obj = new Graph(n, edges)
+     * obj.addEdge(edge)
+     * var param_2 = obj.shortestPath(node1,node2)
+     */
+  </script>
+</body>
+
+</html>
