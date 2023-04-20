@@ -2,7 +2,7 @@
  * @param {number[]} nums
  * @return {number[]}
  */
- var replaceNonCoprimes = function (nums) {
+var replaceNonCoprimes = function (nums) {
   let n = nums.length
 
   let stack = []
@@ -13,13 +13,13 @@
     } else {
       stack.push(x)
       while (stack.length > 1) {
-          let top1 = stack[stack.length - 1]
-          let top2 = stack[stack.length - 2]
-          let gcdVal = gcd(top1, top2)
-          if (gcdVal <= 1) break
-          stack.pop()
-          stack.pop()
-          stack.push((top1 * top2) / gcdVal)
+        let top1 = stack[stack.length - 1]
+        let top2 = stack[stack.length - 2]
+        let gcdVal = gcd(top1, top2)
+        if (gcdVal <= 1) break
+        stack.pop()
+        stack.pop()
+        stack.push((top1 * top2) / gcdVal)
       }
     }
   }
