@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number} arrivalTime
+     * @param {number} delayedTime
+     * @return {number}
+    */
+    var findDelayedArrivalTime = function (arrivalTime, delayedTime) {
+      return (arrivalTime + delayedTime) % 24
+    };
+
+    /**
+     * @param {number} n
+     * @return {number}
+    */
+    var sumOfMultiples = function (n) {
+      let res = 0
+      for (let i = 1; i <= n; i++) {
+        if (i % 3 == 0 || i % 5 == 0 || i % 7 == 0) {
+          res += i
+        }
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @param {number} x
+     * @return {number[]}
+    */
+    var getSubarrayBeauty = function (nums, k, x) {
+      let n = nums.length
+
+      let precnt = Array(n)
+      for (let i = 0; i < n; i++) {
+        precnt[i] = Array(101).fill(0)
+      }
+
+      for (let i = 0; i < n; i++) {
+        let x = nums[i]
+        if (i == 0) {
+          precnt[0][x + 50]++
+        } else {
+          for (let j = 0; j < 101; j++) {
+            precnt[i][j] = precnt[i - 1][j]
+          }
+          precnt[i][x + 50]++
+        }
+      }
+
+      let l = 0, r = k - 1
+      let res = []
+      while (r < n) {
+        let step = 0
+        for (let i = 0; i < 101; i++) {
+          if (precnt[r + 1][i] - precnt[l][i] > 0) {
+            step++
+            if (step == x) {
+              res.push(i - 50)
+              continue
+            }
+          }
+        }
+        l++
+        r++
+      }
+      return res
+    };
+
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+    */
+    var minOperations = function (nums) {
+      let n = nums.length
+      let set = new Set()
+      function f(nums) {
+        let s = nums.toString()
+        if (set.has(s)) return -1
+        set.add(s)
+        let res = Infinity
+        if (allOne(nums)) return 0
+        for (let i = 0; i < nums.length - 1; i++) {
+          let copy = nums.slice()
+          let copy1 = nums.slice()
+          let g = gcd(copy[i], copy[i + 1])
+          if (g != copy[i]) {
+            res = Math.min(res, f(copy) + 1)
+          }
+
+          let g1 = gcd(copy1[i], copy1[i + 1])
+          if (g1 != copy1[i + 1]) {
+            res = Math.min(res, f(copy1) + 1)
+          }
+
+        }
+        return res
+      }
+
+      return f(nums)
+    };
+
+    function allOne(nums) {
+      for (let i = 0; i < nums.length; i++) {
+        if (nums[i] != 1) return false
+      }
+      return true
+    }
+
+    function gcd(x, y) {
+      while (y) {
+        let t = y;
+        y = x % y;
+        x = t;
+      }
+      return x;
+    }
+
+    // 输入：nums = [2, 6, 3, 4]
+    // 输出：4
+    // 解释：我们可以执行以下操作：
+    // - 选择下标 i = 2 ，将 nums[2] 替换为 gcd(3, 4) = 1 ，得到 nums = [2, 6, 1, 4] 。
+    // - 选择下标 i = 1 ，将 nums[1] 替换为 gcd(6, 1) = 1 ，得到 nums = [2, 1, 1, 4] 。
+    // - 选择下标 i = 0 ，将 nums[0] 替换为 gcd(2, 1) = 1 ，得到 nums = [1, 1, 1, 4] 。
+    // - 选择下标 i = 2 ，将 nums[3] 替换为 gcd(1, 4) = 1 ，得到 nums = [1, 1, 1, 1] 。
+  </script>
+</body>
+
+</html>
