@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[]} supplies
+     * @return {number[]}
+     */
+    var supplyWagon = function (supplies) {
+      let n = supplies.length
+      let cnt = Math.ceil(n / 2)
+
+      while (cnt > 0) {
+        let min = Infinity
+        let minIdx = -1
+        for (let i = 0; i < n - 1; i++) {
+          if (supplies[i] + supplies[i + 1] < min) {
+            min = supplies[i] + supplies[i + 1]
+            minIdx = i
+          }
+        }
+        let newSum = supplies[minIdx] + supplies[minIdx + 1]
+        supplies.splice(minIdx, 2, newSum)
+        cnt--
+      }
+      return supplies
+    };
+
+    /**
+     * @param {string[]} expeditions
+     * @return {number}
+     */
+    var adventureCamp = function (expeditions) {
+      let n = expeditions.length
+      let initSet = new Set()
+      let arr = expeditions[0].split('->')
+      for (let i = 0; i < arr.length; i++) {
+        initSet.add(arr[i])
+      }
+
+      let max = -1
+      let res = -1
+      for (let i = 1; i < n; i++) {
+        let curArr = expeditions[i].split('->')
+        let cnt = 0
+        for (let j = 0; j < curArr.length; j++) {
+          let s = curArr[j]
+          if (!initSet.has(s)) {
+            cnt++
+          }
+        }
+        if (cnt > max) {
+          max = cnt
+          res = i
+        }
+      }
+      return res
+    };
+
+    /**
+     * @param {number[][]} forceField
+     * @return {number}
+     */
+    var fieldOfGreatestBlessing = function (forceField) {
+      let n = forceField.length
+
+      forceField.sort((a, b) => a[0] - b[0])
+      let xDiff = Array(n + 1).fill(0)
+      let intervals = []
+      let intervals2 = []
+      for (let i = 0; i < n; i++) {
+        let x = forceField[i][0]
+        let y = forceField[i][1]
+        let r = forceField[i][2]
+        let x1 = x - (r / 2)
+        let x2 = x + (r / 2)
+        let y1 = y - (r / 2)
+        let y2 = y + (r / 2)
+
+        intervals.push([x1, x2])
+        intervals1.push([y1, y2])
+      }
+
+      intervals.sort((a, b) => a[0] - b[0])
+      let max = -1
+      let end = intervals[0][1]
+      let cur = 1
+      for (let i = 1; i < n; i++) {
+        let start = intervals[i][0]
+        if (start <= end) {
+          cur++
+        } else {
+          if (start > intervals[i - 1][1]) {
+            cur = 1
+            end = intervals[i][1]
+          } else {
+            cur = 2
+            end = Math.min(intervals[i][1], intervals[i - 1][1])
+          }
+          max = Math.max(max, cur)
+        }
+      }
+
+      intervals1.sort((a, b) => a[1] - b[1])
+      let max1 = -1
+      let end1 = intervals1[0][1]
+      let cur1 = 1
+      for (let i = 1; i < n; i++) {
+        let start = intervals[i][0]
+        if (start <= end) {
+          cur1++
+        } else {
+          if (start > intervals[i - 1][1]) {
+            cur1 = 1
+            end1 = intervals[i][1]
+          } else {
+            cur1 = 2
+            end1 = Math.min(intervals[i][1], intervals[i - 1][1])
+          }
+          max1 = Math.max(max1, cur1)
+        }
+      }
+      return Math.max(max1, max)
+    };
+
+
+    /**
+     * @param {number[][]} forceField
+     * @return {number}
+     */
+    var fieldOfGreatestBlessing = function (forceField) {
+      let n = forceField.length
+
+      let idxMap = new Map()
+      let diff = Array(4 * n)
+      for (let i = 0; i < diff.length; i++) {
+        diff[i] = Array(4 * n).fill(0)
+      }
+
+      let queries = []
+      let xs = []
+      let ys = []
+      for (let i = 0; i < n; i++) {
+        let x = forceField[i][0]
+        let y = forceField[i][1]
+        let r = forceField[i][2]
+        let x1 = x - (r / 2)
+        let y1 = y + (r / 2)
+
+        let x2 = x + (r / 2)
+        let y2 = y - (r / 2)
+        queries.push([x1, y1, x2, y2])
+        xs.push(x1)
+        xs.push(x2)
+        ys.push(y1)
+        ys.push(y2)
+      }
+
+      xs.sort((a, b) => a - b)
+      let xMap = new Map()
+      let idx = 1
+      for (let i = 0; i < xs.length; i++) {
+        xMap.set(xs[i], idx)
+        idx++
+      }
+
+      ys.sort((a, b) => a - b)
+      let yMap = new Map()
+      idx = 1
+      for (let i = 0; i < ys.length; i++) {
+        yMap.set(xs[i], idx)
+        idx++
+      }
+
+      for (let i = 0; i < queries.length; i++) {
+        let x1 = queries[i][0];
+        let y1 = queries[i][1];
+        let x2 = queries[i][2];
+        let y2 = queries[i][3];
+        diff[xMap.get(x1) + 1][yMap.get(y1) + 1]++;
+        diff[xMap.get(x1) + 1][yMap.get(y2) + 2]--;
+        diff[xMap.get(x2) + 2][yMap.get(y1) + 1]--;
+        diff[xMap.get(x2) + 2][yMap.get(y2) + 2]++;
+      }
+
+      let res = -1
+      for (let i = 1; i <= diff.length; i++) {
+        for (let j = 1; j <= diff[i].length; j++) {
+            diff[i][j] += diff[i][j - 1] + diff[i - 1][j] - diff[i - 1][j - 1];
+            res = Math.max(res, diff[i][j])
+        }
+      }
+      return res
+    };
+  </script>
+</body>
+
+</html>
