@@ -1,14 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
   <script>
-    
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number}
+     */
+    var maximizeSum = function (nums, k) {
+      let n = nums.length
+      let res = 0
+      while (k > 0) {
+        nums.sort((a, b) => a - b)
+        let c = nums.pop()
+        res += c
+        nums.push(c + 1)
+        k--
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} A
+     * @param {number[]} B
+     * @return {number[]}
+     */
+    var findThePrefixCommonArray = function (A, B) {
+      let n = A.length
+
+      let res = Array(n).fill(0)
+      let cnt1 = Array(n).fill(0)
+      let cnt2 = Array(n).fill(0)
+      for (let i = 0; i < n; i++) {
+        cnt1[A[i]]++
+        cnt2[B[i]]++
+
+        let c = 0
+        for (let j = 0; j < n; j++) {
+          if (cnt1[j] > 0 && cnt2[j] > 0) {
+            c++
+          }
+        }
+        res[i] = c
+      }
+      return res
+    };
+
+    /**
+     * @param {number[][]} grid
+     * @return {number}
+     */
+    var findMaxFish = function (grid) {
+      let m = grid.length
+      let n = grid[0].length
+
+      let visited = Array(m)
+      for (let i = 0; i < m; i++) {
+        visited[i] = Array(n).fill(false)
+      }
+      let dirs = [
+        [-1, 0],
+        [0, 1],
+        [1, 0],
+        [0, -1]
+      ]
+
+      let res = 0
+
+      function dfs(i, j, cnt) {
+        cnt += grid[i][j]
+        visited[i][j] = true
+        res = Math.max(res, cnt)
+        for (let k = 0; k < dirs.length; k++) {
+          let nextX = i + dirs[k][0]
+          let nextY = j + dirs[k][1]
+          if (grid[nextX][nextY] != 0 && !visited[nextX][nextY]) {
+            dfs(i, j, cnt)
+          }
+        }
+      }
+
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+          if (grid[i][j] != 0 && !visited[i][j]) {
+            dfs(i, j, 0)
+          }
+        }
+      }
+      return res
+    };
+
+
+    class PriorityQueue {
+      constructor(comparator = this.__defaultComparator) {
+        this.comparator = comparator
+        this.data = []
+      }
+
+      size() {
+        return this.data.length
+      }
+
+      isEmpty() {
+        return this.size() == 0
+      }
+
+      offer(e) {
+        this.data.push(e)
+        this.__siftUp(this.size() - 1)
+      }
+
+      peek() {
+        return this.data[0]
+      }
+
+      poll() {
+        let res = this.peek()
+        this.__swap(0, this.size() - 1)
+        this.data.pop()
+        this.__siftDown(0)
+        return res
+      }
+
+      __defaultComparator(a, b) {
+        return a - b;
+      }
+
+      __leftChild(index) {
+        return 2 * index + 1
+      }
+
+      __rightChild(index) {
+        return 2 * index + 2
+      }
+
+      __parent(index) {
+        return (index - 1) >> 1
+      }
+
+      __swap(i, j) {
+        let temp = this.data[i]
+        this.data[i] = this.data[j]
+        this.data[j] = temp
+      }
+
+      __siftUp(index) {
+        while (index > 0 && this.comparator(this.data[this.__parent(index)], this.data[index]) > 0) {
+          this.__swap(index, this.__parent(index))
+          index = this.__parent(index)
+        }
+      }
+
+      __siftDown(index) {
+        while (this.__leftChild(index) < this.size()) {
+          let targetIndex = this.__leftChild(index)
+          let rightIndex = this.__rightChild(index)
+          if (rightIndex < this.size() && this.comparator(this.data[rightIndex], this.data[targetIndex]) < 0) {
+            targetIndex = rightIndex
+          }
+          if (this.comparator(this.data[index], this.data[targetIndex]) < 0) {
+            break
+          }
+
+          this.__swap(index, targetIndex)
+          index = targetIndex
+        }
+      }
+    }
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var countOperationsToEmptyArray = function (nums) {
+      const pq = new PriorityQueue1((a, b) => a - b);
+      for (const num of nums) {
+        pq.offer(num);
+      }
+      let res = 0;
+      while (pq.length > 0) {
+        const x = pq.poll();
+        if (pq.length > 0 && pq.peek() === x) {
+          pq.poll();
+          pq.offer(x + 1);
+        }
+        res++;
+      }
+      return res;
+    }
+
+
+
+    // 输入：
+    //   [-15, -19, 5]
+    // 输出：
+    // 4
+    // 预期：
+    // 5
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var countOperationsToEmptyArray = function (nums) {
+      let n = nums.length
+
+      let idxMap = new Map()
+      let pq = new PriorityQueue1((a, b) => a - b)
+      for (let i = 0; i < n; i++) {
+        idxMap.set(nums[i], i)
+        pq.offer(nums[i])
+      }
+
+      let o = Array(n).fill(0)
+      let segTree = new SegmentTree(o, (a, b) => a + b)
+      while (!pq.isEmpty()) {
+        let min = pq.poll()
+        let idx = idxMap.get(min)
+        idx += segTree.query(idx)
+
+        res += idx + 1
+        let diff = n - idx - 1
+        segTree.update(0, idx - 1, diff)
+      }
+      return res
+    };
+
+    class SegmentTree {
+      constructor(data, updateFunc) {
+        this.data = data // 原始数据
+        this.n = data.length
+        this.tree = new Array(4 * this.n) // 线段树数组
+        this.lazy = new Array(4 * this.n).fill(0) // 懒惰标记数组
+        this.build(1, 0, this.n - 1)
+        this.updateFunc = updateFunc // 更新函数
+      }
+
+      build(node, start, end) {
+        if (start === end) {
+          this.tree[node] = this.data[start]
+        } else {
+          const mid = Math.floor((start + end) / 2)
+          this.build(node * 2, start, mid)
+          this.build(node * 2 + 1, mid + 1, end)
+          this.tree[node] = this.updateFunc(
+            this.tree[node * 2],
+            this.tree[node * 2 + 1]
+          )
+        }
+      }
+
+      updateLazy(node, start, end) {
+        if (this.lazy[node] !== 0) {
+          // 如果懒惰标记不为0，说明要对区间进行修改
+          this.tree[node] += this.lazy[node] * (end - start + 1) // 修改节点的值
+          if (start !== end) {
+            // 子节点暂时不修改，先给子节点打上懒惰标记
+            this.lazy[node * 2] += this.lazy[node]
+            this.lazy[node * 2 + 1] += this.lazy[node]
+          }
+          this.lazy[node] = 0 // 将当前节点的懒惰标记清零
+        }
+      }
+
+      update(left, right, value, node = 1, start = 0, end = this.n - 1) {
+        this.updateLazy(node, start, end)
+        if (left > end || right < start) return // 区间不相交，直接返回
+        if (left <= start && right >= end) {
+          // 当前区间被完全覆盖
+          this.tree[node] += value * (end - start + 1)
+          if (start !== end) {
+            // 暂时不更新子节点，打上懒惰标记
+            this.lazy[node * 2] += value
+            this.lazy[node * 2 + 1] += value
+          }
+          return
+        }
+        const mid = Math.floor((start + end) / 2)
+        this.update(left, right, value, node * 2, start, mid)
+        this.update(left, right, value, node * 2 + 1, mid + 1, end)
+        this.tree[node] = this.updateFunc(
+          this.tree[node * 2],
+          this.tree[node * 2 + 1]
+        )
+      }
+
+      query(pos, node = 1, start = 0, end = this.n - 1) {
+        this.updateLazy(node, start, end)
+        if (start === end) return this.tree[node]
+        const mid = Math.floor((start + end) / 2)
+        if (pos <= mid) {
+          return this.query(pos, node * 2, start, mid)
+        } else {
+          return this.query(pos, node * 2 + 1, mid + 1, end)
+        }
+      }
+    }
+
+    class PriorityQueue1 {
+      constructor(comparator = this.__defaultComparator) {
+        this.comparator = comparator
+        this.data = []
+      }
+
+      size() {
+        return this.data.length
+      }
+
+      isEmpty() {
+        return this.size() == 0
+      }
+
+      offer(e) {
+        this.data.push(e)
+        this.__siftUp(this.size() - 1)
+      }
+
+      peek() {
+        return this.data[0]
+      }
+
+      poll() {
+        let res = this.peek()
+        this.__swap(0, this.size() - 1)
+        this.data.pop()
+        this.__siftDown(0)
+        return res
+      }
+
+      __defaultComparator(a, b) {
+        return a - b;
+      }
+
+      __leftChild(index) {
+        return 2 * index + 1
+      }
+
+      __rightChild(index) {
+        return 2 * index + 2
+      }
+
+      __parent(index) {
+        return (index - 1) >> 1
+      }
+
+      __swap(i, j) {
+        let temp = this.data[i]
+        this.data[i] = this.data[j]
+        this.data[j] = temp
+      }
+
+      __siftUp(index) {
+        while (index > 0 && this.comparator(this.data[this.__parent(index)], this.data[index]) > 0) {
+          this.__swap(index, this.__parent(index))
+          index = this.__parent(index)
+        }
+      }
+
+      __siftDown(index) {
+        while (this.__leftChild(index) < this.size()) {
+          let targetIndex = this.__leftChild(index)
+          let rightIndex = this.__rightChild(index)
+          if (rightIndex < this.size() && this.comparator(this.data[rightIndex], this.data[targetIndex]) < 0) {
+            targetIndex = rightIndex
+          }
+          if (this.comparator(this.data[index], this.data[targetIndex]) < 0) {
+            break
+          }
+
+          this.__swap(index, targetIndex)
+          index = targetIndex
+        }
+      }
+    }
   </script>
 </body>
+
 </html>
