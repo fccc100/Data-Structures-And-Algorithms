@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[]} nums
+     * @return {number[]}
+     */
+    var distinctDifferenceArray = function (nums) {
+      let n = nums.length
+      let res = Array(n)
+      let lSet = new Set()
+      for (let i = 0; i < n; i++) {
+        lSet.add(nums[i])
+        let rSet = new Set()
+        for (let j = i + 1; j < n; j++) {
+          rSet.add(nums[j])
+        }
+        res[i] = lSet.size - rSet.size
+      }
+      return res
+    };
+
+
+
+    var FrequencyTracker = function () {
+      this.nums = new Map()
+      this.freq = new Map()
+    };
+
+    /** 
+     * @param {number} number
+     * @return {void}
+     */
+    FrequencyTracker.prototype.add = function (number) {
+      let freq = this.freq
+      let curFreq = nums.get(number)
+
+      freq.set(curFreq, freq.get(curFreq) - 1)
+      if (freq.get(curFreq) == 0) {
+        freq.delete(curFreq)
+      }
+
+      if (freq.has(curFreq + 1)) {
+        freq.set(curFreq + 1, freq.get(curFreq + 1) + 1)
+      } else {
+        freq.set(curFreq + 1, 1)
+      }
+
+
+      let nums = this.nums
+      if (nums.has(number)) {
+        nums.set(number, nums.get(number) + 1)
+      } else {
+        nums.set(number, 1)
+      }
+    };
+
+    /** 
+     * @param {number} number
+     * @return {void}
+     */
+    FrequencyTracker.prototype.deleteOne = function (number) {
+      if (!nums.has(number)) return
+
+      let freq = this.freq
+      let curFreq = nums.get(number)
+
+      freq.set(curFreq, freq.get(curFreq) - 1)
+      if (freq.get(curFreq) == 0) {
+        freq.delete(curFreq)
+      }
+
+      if (freq.has(curFreq - 1)) {
+        freq.set(curFreq - 1, freq.get(curFreq - 1) + 1)
+      } else {
+        freq.set(curFreq - 1, 1)
+      }
+
+      let nums = this.nums
+      nums.set(number, nums.get(number) - 1)
+      if (nums.get(number) == 0) {
+        nums.delete(number)
+      }
+    };
+
+    /** 
+     * @param {number} frequency
+     * @return {boolean}
+     */
+    FrequencyTracker.prototype.hasFrequency = function (frequency) {
+      return this.freq.has(frequency)
+    };
+
+    /**
+     * Your FrequencyTracker object will be instantiated and called as such:
+     * var obj = new FrequencyTracker()
+     * obj.add(number)
+     * obj.deleteOne(number)
+     * var param_3 = obj.hasFrequency(frequency)
+     */
+
+
+    /**
+     * @param {number} n
+     * @param {number[][]} queries
+     * @return {number[]}
+     */
+    var colorTheArray = function (n, queries) {
+      let res = Array(n).fill(0)
+      let nums = Array(n).fill(0)
+      let cur = 0
+      for (let i = 0; i < queries.length; i++) {
+        let idx = queries[i][0]
+        let val = queries[i][1]
+        let curVal = nums[idx]
+        if (curVal != 0) {
+          if (idx - 1 >= 0 && nums[idx - 1] == curVal) {
+            cur--
+          }
+          if (idx + 1 < n && nums[idx + 1] == curVal) {
+            cur--
+          }
+        }
+        if (idx - 1 >= 0 && nums[idx - 1] == val) {
+          cur++
+        }
+        if (idx + 1 < n && nums[idx + 1] == val) {
+          cur++
+        }
+        nums[idx] = val
+        res[i] = cur
+      }
+      return res
+    }
+
+    /**
+     * @param {number} n
+     * @param {number[]} cost
+     * @return {number}
+     */
+    var minIncrements = function (n, cost) {
+      let vals = []
+
+      function dfs(node, val) {
+
+        if (node * 2 - 1 >= n) {
+          vals.push(val)
+          return
+        }
+        if (node * 2 >= n) {
+          vals.push(val)
+          return
+        }
+        dfs(node * 2, val + cost[node * 2 - 1])
+        dfs(node * 2 + 1, val + cost[node * 2])
+      }
+
+      dfs(1, cost[0])
+      console.log(vals)
+      let max = vals[0]
+      for (let x of vals) {
+        max = Math.max(max, x)
+      }
+      let res = 0
+
+      let segTree = new SegmentTree(vals, (a, b) => Math.max(a, b))
+
+      function get(nums, l, r) {
+        if (l >= r) return
+        let mid = Math.floor((l + r) / 2)
+        let lMax = segTree.query(l, mid)
+        let rMax = segTree.query(mid + 1, r)
+        res += Math.abs(lMax - rMax)
+        if (lMax < rMax) {
+          segTree.update(l, mid, rMax - lMax)
+        } else if (rMax < lMax) {
+          segTree.update(mid + 1, r, lMax - rMax)
+        }
+        get(nums, l, mid)
+        get(nums, mid + 1, r)
+      }
+
+      get(vals, 0, vals.length - 1)
+      return res
+    };
+
+    class SegmentTree {
+      constructor(data, updateFunc) {
+        this.data = data // 原始数据
+        this.updateFunc = updateFunc // 更新函数
+        this.n = data.length
+        this.tree = new Array(4 * this.n) // 线段树数组
+        this.lazy = new Array(4 * this.n).fill(0) // 懒惰标记数组
+        this.build(1, 0, this.n - 1)
+      }
+
+      build(node, start, end) {
+        if (start === end) {
+          this.tree[node] = this.data[start]
+        } else {
+          const mid = Math.floor((start + end) / 2)
+          this.build(node * 2, start, mid)
+          this.build(node * 2 + 1, mid + 1, end)
+          this.tree[node] = this.updateFunc(
+            this.tree[node * 2],
+            this.tree[node * 2 + 1]
+          )
+        }
+      }
+
+      updateLazy(node, start, end) {
+        if (this.lazy[node] !== 0) {
+          // 如果懒惰标记不为0，说明要对区间进行修改
+          this.tree[node] += this.lazy[node] * (end - start + 1) // 修改节点的值
+          if (start !== end) {
+            // 子节点暂时不修改，先给子节点打上懒惰标记
+            this.lazy[node * 2] += this.lazy[node]
+            this.lazy[node * 2 + 1] += this.lazy[node]
+          }
+          this.lazy[node] = 0 // 将当前节点的懒惰标记清零
+        }
+      }
+
+      // 更新[left, right]区间的值 + value
+      update(left, right, value, node = 1, start = 0, end = this.n - 1) {
+        this.updateLazy(node, start, end)
+        if (left > end || right < start) return // 区间不相交，直接返回
+        if (left <= start && right >= end) {
+          // 当前区间被完全覆盖
+          this.tree[node] += value * (end - start + 1)
+          if (start !== end) {
+            // 暂时不更新子节点，打上懒惰标记
+            this.lazy[node * 2] += value
+            this.lazy[node * 2 + 1] += value
+          }
+          return
+        }
+        const mid = Math.floor((start + end) / 2)
+        this.update(left, right, value, node * 2, start, mid)
+        this.update(left, right, value, node * 2 + 1, mid + 1, end)
+        this.tree[node] = this.updateFunc(
+          this.tree[node * 2],
+          this.tree[node * 2 + 1]
+        )
+      }
+
+      // 查询[ql, qr]区间的值
+      query(ql, qr, node = 1, start = 0, end = this.n - 1) {
+        if (ql > end || qr < start) {
+          // 当前区间与查询区间不相交
+          return this.unit() // 返回对应的区间单位元素
+        }
+        this.updateLazy(node, start, end)
+        if (ql <= start && qr >= end) {
+          // 当前区间被包含在查询区间内
+          return this.tree[node] // 返回当前节点保存的区间信息
+        }
+        const mid = Math.floor((start + end) / 2)
+        const left = this.query(ql, qr, node * 2, start, mid)
+        const right = this.query(ql, qr, node * 2 + 1, mid + 1, end)
+        return this.updateFunc(left, right) // 合并左右子树区间信息的结果
+      }
+
+      unit() {
+        return 0 // 区间和的单位元素为0
+      }
+    }
+  </script>
+</body>
+
+</html>
