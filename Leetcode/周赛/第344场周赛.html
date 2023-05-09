@@ -44,7 +44,9 @@
       let freq = this.freq
       let curFreq = nums.get(number)
 
-      freq.set(curFreq, freq.get(curFreq) - 1)
+      if (freq.has(curFreq)) {
+        freq.set(curFreq, freq.get(curFreq) - 1)
+      }
       if (freq.get(curFreq) == 0) {
         freq.delete(curFreq)
       }
@@ -54,7 +56,6 @@
       } else {
         freq.set(curFreq + 1, 1)
       }
-
 
       let nums = this.nums
       if (nums.has(number)) {
@@ -74,7 +75,9 @@
       let freq = this.freq
       let curFreq = nums.get(number)
 
-      freq.set(curFreq, freq.get(curFreq) - 1)
+      if (freq.has(curFreq)) {
+        freq.set(curFreq, freq.get(curFreq) - 1)
+      }
       if (freq.get(curFreq) == 0) {
         freq.delete(curFreq)
       }
