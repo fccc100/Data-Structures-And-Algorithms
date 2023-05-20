@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {string[]} details
+     * @return {number}
+     */
+    var countSeniors = function (details) {
+      let n = details.length
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        let d = details[i]
+
+        let idx = details.indexOf('M')
+        if (idx == -1) {
+          idx = details.indexOf('F')
+        }
+        if (Number(details[idx + 1] + details[idx + 2]) > 60) res++
+      }
+      return res
+    };
+
+    /**
+     * @param {number[][]} nums
+     * @return {number}
+     */
+    var matrixSum = function (nums) {
+      let m = nums.length
+      let n = nums[0].length
+      for (let i = 0; i < n; i++) {
+        nums[i].sort((a, b) => b - a)
+      }
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        let max = nums[j][0]
+        for (let j = 0; j < m; j++) {
+          max = Math.max(max, nums[j][i])
+        }
+        res += max
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number}
+     */
+    var maximumOr = function (nums, k) {
+      let n = nums.length
+
+      let bitCnts = Array(32).fill(0)
+      for (let i = 0; i < n; i++) {
+        let s = nums[i].toString(2)
+        s = s.split('').reverse().join('')
+        for (let j = 0; j < s.length; j++) {
+          if (s[j] == '1') {
+            bitCnts[j]++
+          }
+        }
+      }
+
+      for (let i = 0; i < n; i++) {
+        for (let j = 1; j <= k; j++) {
+
+        }
+      }
+    };
+
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var sumOfPower = function (nums) {
+      let n = nums.length
+
+      nums.sort((a, b) => a - b)
+      let res = 0n
+      let MOD = 1000000007n
+      let cnt = 0n
+      let fir = -1
+      let add = 0n
+      
+      for (let i = 0; i < n; i++) {
+        let max = BigInt(nums[i])
+        
+        if (fir > -1) {
+          cnt = (cnt - fir) * 2
+        }
+        cnt += BigInt(nums[i])
+        
+        let cur = (((max * max) % MOD) * cnt) % MOD
+        
+        res = (res + cur) % MOD
+        fir = nums[i]
+      }
+      return res
+    };
+    // [76,24,96,82,97] 13928461
+    // [24,76,82,96,97]
+    // 24*24**2
+    // (24+76)*76**2
+    // (24+76+24+82)*82**2
+    // (24+76+82 + 24+24+76 + 24+96)*96**2
+    // (24+76+82+96 + 24+24+24+76+76+82 + 24+24+24+76 + 24 + 97)*97**2
+
+    // [2,1,4]
+    // [1 2 4]
+
+    // 1  3 
+    // 1*1=1
+    // 1*2^2+2*2^2   3*2^2
+    // 1*4^2+2*4^2+1*4^2+4*4^2   8
+
+    // [1, 2, 4, 6]
+    //  1
+    //  1 2  => 3
+    //  1 2 1 4   => 8
+    //  1 2 4 1 1 2 6 => 17
+  </script>
+</body>
+
+</html>
