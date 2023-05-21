@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var minLength = function (s) {
+      function f(s) {
+        let n = s.length
+        if (s.indexOf('AB') < 0 && s.indexOf('CD') < 0) {
+          return s.length
+        }
+
+        s.replaceAll('AB', '')
+        s.replaceAll('CD', '')
+        return f(s)
+      }
+
+      return f(s)
+    };
+
+    /**
+     * @param {string} s
+     * @return {string}
+     */
+    var makeSmallestPalindrome = function (s) {
+      let n = s.length
+
+      let map = new Map()
+      let l = 0
+      let r = n - 1
+      while (l < r) {
+        if (s[l] == s[r]) {
+          l++
+          r--
+        } else {
+          if (s[l] < s[r]) {
+            map.set(r, s[l])
+          } else {
+            map.set(l, s[r])
+          }
+        }
+      }
+      let res = ''
+      for (let i = 0; i < n; i++) {
+        if (!map.has(i)) {
+          res += s[i]
+        } else {
+          res += map.get(i)
+        }
+      }
+      return res
+    };
+
+    /**
+     * @param {number} n
+     * @return {number}
+     */
+    var punishmentNumber = function (n) {
+
+      let res = 0
+      for (let i = 1; i <= n; i++) {
+        let s = String(i * i)
+        if (check(s, i)) {
+          res += i * i
+        }
+      }
+      return res
+    };
+    function check(s, t) {
+      if (Number(s) == Number(t)) {
+        return true
+      }
+      
+      function f(s, c, t, idx) {
+        if (idx > s.length && c == t) {
+          return true
+        }
+        if (c > t) return false
+        if (idx > s.length) return false
+
+        let res = false
+        for (let i = idx; i < s.length; i++) {
+          let m = s.substring(idx, i + 1)
+          if (Number(m) < t) {
+            res = res || f(s, c + Number(m), t, i + 1)
+          }
+        }
+        return res
+      }
+      return f(s, 0, t, 0)
+    }
+  </script>
+</body>
+
+</html>
