@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[][]} grid
+     * @return {number[][]}
+     */
+    var differenceOfDistinctValues = function (grid) {
+      let m = grid.length
+      let n = grid[0].length
+
+      let res = Array(m)
+      for (let i = 0; i < m; i++) {
+        res[i] = Array(n).fill(0)
+      }
+
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+
+          let l_set = new Set()
+          let l_i = i - 1
+          let l_j = j - 1
+          while (l_i >= 0 && l_j >= 0) {
+            l_set.add(grid[l_i][l_j])
+            l_i--
+            l_j--
+          }
+
+          let r_set = new Set()
+          let r_i = i + 1
+          let r_j = j + 1
+          while (r_i < m && r_j < n) {
+            r_set.add(grid[r_i][r_j])
+            r_i++
+            r_j++
+          }
+          res[i][j] = Math.abs(l_set.size - r_set.size)
+        }
+      }
+      return res
+    };
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var minimumCost = function (s) {
+      let n = s.length
+      let oneCnt = 0
+      let zeroCnt = 0
+
+      let leftOne = Array(n).fill(0)
+      let leftZero = Array(n).fill(0)
+
+      for (let i = 0; i < n; i++) {
+        leftOne[i] = oneCnt
+        leftZero[i] = zeroCnt
+        if (s[i] == '0') {
+          zeroCnt++
+        } else oneCnt++
+      }
+
+      let res1 = 0
+      let res2 = 0
+      for (let i = 0; i < n; i++) {
+        if (s[i] == '0') {
+          let leftDis = i * leftOne[i]
+          let rightDis = (n - i) * oneCnt - leftOne[i]
+          res1 += Math.min(leftDis, rightDis)
+        } else {
+          let leftDis = i * leftZero[i]
+          let rightDis = (n - i) * zeroCnt - leftZero[i]
+          res2 += Math.min(leftDis, rightDis)
+        }
+      }
+      return Math.min(res1, res2)
+    };
+    // "010101" 6
+    // 0: 0  2 8
+    // r: 18 8 2
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var minimumCost = function (s) {
+      let n = s.length
+      // dp[i][j]: 前i个字符有j个1的最小成本
+      let dp = Array(n + 1)
+      for (let i = 0; i <= n; i++) {
+        dp[i] = Array(n + 1).fill(0)
+      }
+
+
+    };
+    //     0 1 2 3 4 5
+    //     0 1 0 1 0 1
+
+    //   0 1 2 3 4 5 6
+    // 0 0 0 1 2 4 
+    // 1 0
+    // 2 0
+    // 3 0
+    // 4 0
+    // 5 0
+    // 6 0
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var minimumCost = function (s) {
+      let n = s.length
+
+      let mid = Math.floor((l + r) / 2)
+      let next3 = '1'
+      let res3 = 0
+      for (let i = mid; i >= 0; i--) {
+        if (s[i] == next3) {
+          res3 += (i + 1)
+          next3 = next3 == '0' ? '1' : '0'
+        }
+      }
+
+      let next4 = '0'
+      let res4 = 0
+      for (let i = mid + 1; i < n; i++) {
+        if (s[i] == next4) {
+          res4 += (n - i)
+          next4 = next3 == '0' ? '1' : '0'
+        }
+      }
+      let res1 = res3 + res4
+
+      next3 = '0'
+      res3 = 0
+      for (let i = mid; i >= 0; i--) {
+        if (s[i] == next3) {
+          res3 += (i + 1)
+          next3 = next3 == '0' ? '1' : '0'
+        }
+      }
+
+      next4 = '1'
+      res4 = 0
+      for (let i = mid + 1; i < n; i++) {
+        if (s[i] == next4) {
+          res4 += (n - i)
+          next4 = next3 == '0' ? '1' : '0'
+        }
+      }
+      return Math.min(res1, res3 + res4)
+    };
+
+    //     0 1 2 3 4 5
+    //     0 1 0 1 0 1
+    //     1 2 3   2 1
+
+
+    /**
+     * @param {number[][]} mat
+     * @return {number}
+     */
+    var maxIncreasingCells = function (mat) {
+      let m = mat.length
+      let n = mat[0].length
+
+      let memo = Array(m)
+      for (let i = 0; i < m; i++) {
+        memo[i] = Array(n).fill(-1)
+      }
+
+      function bfs(x, y) {
+        let queue = [[x, y, 1]]
+        while (queue.length) {
+          let len = queue.length
+          let newQueue = []
+
+          for (let i = 0; i < len; i++) {
+            let cur = queue[i]
+
+            for (let j = 0; j < m; j++) {
+              if (mat[j][cur[1]] > mat[cur[0]][cur[1]]) {
+                newQueue.push([j, cur[1], cur[2] + 1])
+              }
+            }
+          }
+        }
+      }
+
+      let res = 0
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; i < n; i++) {
+          if (memo[i][j] < 0) {
+            bfs(i, j)
+          }
+        }
+      }
+    };
+  </script>
+</body>
+
+</html>

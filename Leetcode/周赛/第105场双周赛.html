@@ -1,14 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
   <script>
-    
+    /**
+     * @param {number[]} prices
+     * @param {number} money
+     * @return {number}
+     */
+    var buyChoco = function (prices, money) {
+      let n = prices.length
+      prices.sort((a, b) => a - b)
+      let c = prices[0] + prices[1]
+      if (c > money) return money
+      return money - c
+    };
+
+    /**
+     * @param {string} s
+     * @param {string[]} dictionary
+     * @return {number}
+     */
+    var minExtraChar = function (s, dictionary) {
+      let n = s.length
+
+      function f(s, l, r) {
+        let res = 0
+        for (let i = l; i <= r; i++) {
+          let c = ''
+          for (let j = i; j <= r; j++) {
+            c = c + s[j]
+            if (dictionary.includes(c)) {
+              res = Math.max(c.length + f(s, j + 1, r) + f(s, 0, l - 1), res)
+            }
+          }
+        }
+        return res
+      }
+
+      return n - f(s, 0, n - 1)
+    };
+    // [[0, 3], [5, 8]]
+    // [[0, 4], [4, 8]]
+
+    // [[0, 5], [3, 8], [6, 12]]
+    // [[0, 6], [6, ]]
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var maxStrength = function (nums) {
+      let n = nums.length
+      let res = 0
+
+      function f(idx, cur) {
+        if (idx >= n) {
+          res = Math.max(res, cur)
+          return
+        }
+        let c
+        for (let i = idx + 1; i < n; i++) {
+          c = Math.max(f(idx, cur), f(idx, cur * nums[i]))
+        }
+        return c
+      }
+      return Math.max(f(0, 1), f(0, nums[0]))
+    };
+
+
+    /**
+     * @param {number[]} nums
+     * @return {boolean}
+     */
+    var canTraverseAllPairs = function (nums) {
+      const n = nums.length
+
+      function gcd(a, b) {
+        if (b === 0) {
+          return a
+        }
+        return gcd(b, a % b)
+      }
+
+      let left = new Set()
+      for (let i = 1; i < n; i++) {
+        left.add(i)
+      }
+      const queue = [0]
+      while (queue.length) {
+        let len = queue.length
+        let newQueue = []
+
+        for (let i = 0; i < len; i++) {
+          let cur = queue[i]
+
+          for (let idx of left) {
+            if (gcd(nums[cur], nums[idx]) > 1) {
+              newQueue.push(idx)
+              left.delete(idx)
+            }
+          }
+        }
+        queue = newQueue
+      }
+
+      return left.size == 0
+    };
   </script>
 </body>
+
 </html>
