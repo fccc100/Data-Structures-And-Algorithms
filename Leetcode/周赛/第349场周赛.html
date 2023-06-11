@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var findNonMinOrMax = function (nums) {
+      let n = nums.length
+      let min = nums[0],
+        max = nums[0]
+      for (let i = 0; i < n; i++) {
+        min = Math.min(min, nums[i])
+        max = Math.max(max, nums[i])
+      }
+
+      let res = -1
+      for (let i = 0; i < n; i++) {
+        if (nums[i] != min && nums[i] != max) {
+          res = nums[i]
+          break
+        }
+      }
+      return res
+    };
+
+    /**
+     * @param {string} s
+     * @return {string}
+     */
+    var smallestString = function (s) {
+      let n = s.length
+
+      let start = 0
+      while (start < n && s[start] == 'a') {
+        start++
+      }
+      if (start >= n) {
+        return s.substring(0, n - 1) + 'z'
+      }
+
+      let end = start
+      for (let i = start + 1; i < n; i++) {
+        if (s[i] == 'a') {
+          break
+        }
+        end = i
+      }
+      s = s.split('')
+      for (let i = start; i <= end; i++) {
+        s[i] = String.fromCharCode(s[i].charCodeAt() - 1)
+      }
+      return s.join('')
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number} x
+     * @return {number}
+     */
+    var minCost = function (nums, x) {
+      let n = nums.length
+
+      let pairs = Array(n)
+      for (let i = 0; i < n; i++) {
+        pairs[i] = [nums[i], i]
+      }
+      console.log(pairs)
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number} x
+     * @return {number}
+     */
+    var minCost = function (nums, x) {
+      let n = nums.length
+
+      let dp = nums.slice()
+      let steps = Array(n).fill(0)
+      for (let i = 0; i < n; i++) {
+        let j = i
+        let cost = 0
+        let step = 0
+        while (true) {
+          j = (j - 1 + n) % n
+          console.log(j, cost, i)
+          step++
+          cost += x
+          if (cost >= nums[j] || j == i) break
+          steps[j] = step
+          dp[j] = Math.min(dp[j], cost + nums[i])
+        }
+        console.log('-----')
+
+      }
+
+      let maxStep = steps[0]
+      for (let x of steps) maxStep = Math.max(maxStep, x)
+
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        res += dp[i] - (steps[i] * x)
+      }
+      res += maxStep * x
+
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number} x
+     * @return {number}
+     */
+    var minCost = function (nums, x) {
+      let n = nums.length
+
+      let types = Array(n)
+      for (let i = 0; i < n; i++) types[i] = i
+
+      let step = n
+      let res = 0
+      let mnCost = nums.slice()
+      while (step > 0) {
+        types.push(types.shift())
+        for (let i = 0; i < n; i++) {
+          mnCost[types[i]] = Math.min(mnCost[types[i]], nums[i])
+        }
+        step--
+      }
+      let res = 0
+      for (let x of mnCost) res += x
+      return res
+    };
+
+    // 输入：
+    // [31,25,18,59]
+    // 27
+    // 输出：
+    // 105
+    // 预期：
+    // 119
+
+    /**
+     * @param {number[]} nums
+     * @param {number} x
+     * @return {number}
+     */
+    var minCost = function (nums, x) {
+      let n = nums.length
+
+      // dp[i][j]: 前i个操作j步
+      let dp = Array(n)
+      for (let i = 0; i < n; i++) dp[i] = Array(n + 1).fill(0)
+
+      for (let i = 0; i < n; i++) {
+        dp[0][i] = nums[0]
+      }
+      for (let i = 0; i <= n; i++) {
+        if (i == 0) {
+          dp[i][0] = nums[0]
+        } else {
+          dp[i][0] = dp[i - 1][0] + nums[i]
+        }
+      }
+
+
+    };
+
+
+    /**
+     * @param {number[]} nums1
+     * @param {number[]} nums2
+     * @param {number[][]} queries
+     * @return {number[]}
+     */
+    var maximumSumQueries = function (nums1, nums2, queries) {
+      let m = queries.length
+      let n = nums1.length
+
+      let res = Array(m).fill(-1)
+      for (let i = 0; i < m; i++) {
+        let xi = queries[i][0]
+        let yi = queries[i][1]
+
+        let max = -1
+        for (let j = 0; j < n; j++) {
+          if (nums1[j] > xi && nums2[j] > yi) {
+            max = Math.max(max, nums1[j] + nums2[j])
+          }
+        }
+        res[i] = max
+      }
+      return res
+    };
+  </script>
+</body>
+
+</html>

@@ -1,14 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
   <script>
-    
+    /**
+     * @param {number} n
+     * @return {boolean}
+     */
+    var isFascinating = function (n) {
+      let s = n + '' + (2 * n) + '' + (3 * n)
+      let used = Array(10).fill(0)
+      for (let i = 0; i < s.length; i++) {
+        used[Number(s[i])]++
+      }
+      if (used[0] > 0) return false
+      for (let i = 1; i <= 9; i++) {
+        if (used[i] != 1) return false
+      }
+      return true
+    };
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var longestSemiRepetitiveSubstring = function (s) {
+      let n = s.length
+      let pre = 0
+      let res = 0
+      for (let i = 0; i < n - 1; i++) {
+        if (s[i] == s[i + 1]) {
+          let j
+          for (j = i + 2; j < n; j++) {
+            if (s[j] == s[j - 1]) break
+          }
+          res = Math.max(res, j - i + i - pre)
+          pre = i + 1
+        }
+      }
+      return res
+    };
+
+
+    /**
+     * @param {number[]} nums
+     * @param {string} s
+     * @param {number} d
+     * @return {number}
+     */
+    var sumDistance = function (nums, s, d) {
+      let mod = 1000000007
+      let n = nums.length
+      let pairs = Array(n)
+
+      for (let i = 0; i < n; i++) {
+        pairs[i] = [nums[i], s[i]]
+      }
+
+      pairs.sort((a, b) => a[0] - b[0])
+      
+      let left = pairs[0][0]
+      if (pairs[0][1] == 'L') {
+        left = left - d
+      } else {
+        let firstL = -1
+        for (let i = 0; i < n; i++) {
+          if (pairs[i][1] == 'L') firstL = i
+        }
+        if (firstL != -1) {
+          let second = Math.floor((pairs[0][0] + pairs[firstL][0]) / 2)
+          if (second >= d) {
+            left = left + d
+          } else {
+            left = left + second - d
+          }
+        }
+      }
+
+      let right = pairs[n - 1][0]
+      if (pairs[n - 1][1] == 'R') {
+        right = right + d
+      } else {
+        let firstR = -1
+        for (let i = n - 1; i >= 0; i--) {
+          if (pairs[i][1] == 'R') firstR = i
+        }
+        if (firstR != -1) {
+          let second = Math.floor((pairs[n - 1][0] + pairs[firstR][0]) / 2)
+          if (second >= d) {
+            right = right - d
+          } else {
+            right = right - second + d
+          }
+        }
+      }
+      return (((left + right) % mod) * d) % mod
+    };
   </script>
 </body>
+
 </html>
