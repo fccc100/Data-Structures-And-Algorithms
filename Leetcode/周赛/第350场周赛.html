@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number} mainTank
+     * @param {number} additionalTank
+     * @return {number}
+     */
+    var distanceTraveled = function (mainTank, additionalTank) {
+      let res = 0
+      while (mainTank >= 5 && additionalTank > 0) {
+        res += 5 * 10
+        mainTank -= 5
+        additionalTank -= 1
+        mainTank += 1
+      }
+      res += mainTank * 10
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var findValueOfPartition = function (nums) {
+      let n = nums.length
+      nums.sort((a, b) => a - b)
+
+      let res = Infinity
+      for (let i = 1; i < n; i++) {
+        res = Math.min(res, nums[i] - nums[i - 1])
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+     var specialPerm = function (nums) {
+      let n = nums.length
+      let mod = 1000000007
+      let memo = new Map()
+
+      function f(nums, used, cols) {
+        if (cols.length == n) {
+          return 1
+        }
+
+        let top = cols[cols.length - 1]
+        let res = 0
+        for (let i = 0; i < n; i++) {
+          if ((used & (1 << i)) == 0 && (top % nums[i] == 0 || nums[i] % top == 0)) {
+            used |= (1 << i)
+            cols.push(nums[i])
+            res += f(nums, used, cols)
+            res %= 1000000007
+            used &= ~(1 << i)
+            cols.pop()
+          }
+        }
+        res %= 1000000007
+        
+        return res
+      }
+
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        let set = new Set()
+        set.add(i)
+        res += f(nums, 1 << i, [nums[i]])
+        res %= 1000000007
+      }
+      return res % 1000000007
+    };
+
+    // [667868691,222622897,890491588,445245794,31803271,318032710,63606542,190819626,572458878,95409813,381639252,763278504,127213084]
+  </script>
+</body>
+
+</html>
