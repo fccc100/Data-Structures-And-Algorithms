@@ -11,103 +11,113 @@
 <body>
   <script>
     /**
-     * @param {string[]} words
+     * @param {number[]} nums
+     * @param {number} threshold
      * @return {number}
      */
-    var maximumNumberOfStringPairs = function (words) {
-      let n = words.length
+    var longestAlternatingSubarray = function (nums, threshold) {
+      let n = nums.length
+
       let res = 0
-      let set = new Set()
       for (let i = 0; i < n; i++) {
-        let w = words[i]
+        if (nums[i] % 2 != 0) continue
+        let len = 0
         for (let j = i + 1; j < n; j++) {
-          let w1 = words[j]
-          if (set.has(j)) continue
-          if (w.split('').reverse().join('') == w1) {
-            res++
-            set.add(i)
-            set.add(j)
+          if (nums[i] > threshold) {
+            res = Math.max(res, len)
             break
           }
+          if (nums[j - 1] % 2 == nums[j] % 2) {
+            res = Math.max(res, len)
+            break
+          }
+          len++
         }
       }
       return res
     };
 
     /**
-     * @param {number} x
-     * @param {number} y
-     * @param {number} z
-     * @return {number}
+     * @param {number} n
+     * @return {number[][]}
      */
-    var longestString = function (x, y, z) {
-      let ab = Math.min(x, y)
-      if (x == y) {
-        return (x + y) * 2 + z * 2
-      } else {
-        return ((ab + ab + 1) * 2) + z * 2
-      }
-    };
-
-    /**
-     * @param {string[]} words
-     * @return {number}
-     */
-    var minimizeConcatenatedLength = function (words) {
-      let n = words.length
-
-      let s0 = words[0]
-      let join1 = Array(n)
-      join1[0] = [s0]
-      for (let i = 0; i < n; i++) join1[i] = []
-
-      for (let i = 1; i < n; i++) {
-        let w = words[i]
-
-        for (let j = 0; j < join1[i - 1].length; j++) {
-          join1[i].push(join(join1[i - 1][j], w))
-          join1[i].push(join(w, join1[i - 1][j]))
+    var findPrimePairs = function (n) {
+      let primes = solvePrimes(n)
+      let p = []
+      for (let i = 0; i < primes.length; i++) {
+        if (primes[i] == 1) {
+          p.push(i)
         }
       }
-      console.log(join1)
+
+      let m = p.length
+      let l = 0,
+        r = m - 1
+      let res = []
+      while (l <= r) {
+        let c = p[l] + p[r]
+        if (c == n) {
+          res.push([p[l], p[r]])
+          l++
+          r--
+        } else if (c < n) {
+          l++
+        } else {
+          r--
+        }
+      }
+      return res
     };
 
-    function join(s1, s2) {
-      if (s1[s1.length - 1] == s2[0]) {
-        return s1 + s2.substring(1)
-      } else {
-        return s1 + s2
+    function solvePrimes(n) {
+      let isPrime = Array(n).fill(1)
+      for (let i = 0; i < 2; i++) {
+        isPrime[i] = 0
       }
+
+      for (let i = 2; i < n; i++) {
+        if (isPrime[i] == 1) {
+          for (let j = i * i; j < n; j += i) {
+            isPrime[j] = 0
+          }
+        }
+      }
+      return isPrime
     }
 
-
     /**
-     * @param {number} n
-     * @param {number[][]} logs
-     * @param {number} x
-     * @param {number[]} queries
-     * @return {number[]}
+     * @param {number[]} nums
+     * @return {number}
      */
-    var countServers = function (n, logs, x, queries) {
-      let map = {}
-      for (let i = 0; i < logs.length; i++) {
-        let id = logs[i][0]
-        let time = logs[i][1]
+    var continuousSubarrays = function (nums) {
+      let n = nums.length
 
-        if (!map[time]) {
-          map[time] = new Set()
+      let minSeg = new SegmentTree(nums, (a, b) => Math.min(a, b))
+      let maxSeg = new SegmentTree(nums, (a, b) => Math.max(a, b))
+
+      let prev = 0
+      let l = 0,
+        r = 0
+      let min = nums[l],
+        max = nums[l]
+      let res = 0
+      while (l < n) {
+        r++
+        if (r >= n) break
+        min = minSeg.query(l, r)
+        max = maxSeg.query(l, r)
+        if (Math.abs(min - max) <= 2) {
+
+        } else {
+          console.log(l, r)
+          res += r - l
+          l++
+          min = minSeg.query(l, r)
+          max = maxSeg.query(l, r)
         }
-        map[time].add(id)
       }
 
-      let 
-
-      let res = Array(queries.length).fill(0)
-      for (let i = 0; i < queries.length; i++) {
-        let l = queries[i] - x, r = queries[i]
-
-
-      }
+      return res
     };
 
     class SegmentTree {
@@ -191,6 +201,43 @@
         return 0 // 区间和的单位元素为0
       }
     }
+
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var sumImbalanceNumbers = function (nums) {
+      let n = nums.length
+
+      function get(arr) {
+        let n = arr.length
+
+        let prev = -1, res = 0
+        for (let i = 0; i < n; i++) {
+          if (arr[i]) {
+            if (prev == -1) {
+              prev = i
+            } else {
+              if (i - prev > 1) res++
+              prev = i
+            }
+          }
+        }
+        return res
+      }
+
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        let p = []
+        p[nums[i]] ? p[nums[i]]++ : p[nums[i]] = 1
+        for (let j = i + 1; j < n; j++) {
+          p[nums[j]] ? p[nums[j]]++ : p[nums[j]] = 1
+          res += get(p)
+        }
+      }
+      return res
+    };
   </script>
 </body>
 
