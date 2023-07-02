@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+ * @param {number[]} nums
+ * @return {number}
+ */
+    var countBeautifulPairs = function (nums) {
+      let n = nums.length
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        let s1 = String(nums[i])
+        for (let j = i + 1; j < n; j++) {
+          let s2 = String(nums[j])
+
+          if (gcd(Number(s1[0], s2[s2.length - 1])) == 1) {
+            res++
+          }
+        }
+      }
+      return res
+    };
+
+    function gcd(x, y) {
+      if (y == 0) return x;
+
+      return gcd(y, x % y);
+    }
+
+    /**
+ * @param {number} num1
+ * @param {number} num2
+ * @return {number}
+ */
+    var makeTheIntegerZero = function (num1, num2) {
+      // nums1 - nums2 * k
+      num1 = BigInt(num1)
+      num2 = BigInt(num2)
+      for (let k = 0n; k <= num1 - num2 * k; k++) {
+        if (k >= bitCount(num1 - num2 * k)) {
+          return k
+        }
+      }
+      return -1
+    };
+
+    function bitCount(n) {
+      let res = 0n
+      while (n > 0) {
+        n &= (n - 1n)
+        res++
+      }
+      return res
+    }
+    // 输入：
+    // 5
+    // -21
+    // 输出：
+    // 16
+    // 预期：
+    // 3
+
+    /**
+ * @param {number[]} nums
+ * @return {number}
+ */
+    var numberOfGoodSubarraySplits = function (nums) {
+      let n = nums.length
+      let mod = 1000000007n
+
+      let prev = -1
+      let dis = []
+      let cnt = 0
+      for (let i = 0; i < n; i++) {
+        if (prev == -1 && nums[i] == 0) continue
+        if (nums[i] == 1) {
+          cnt++
+          if (prev != -1) {
+            dis.push(i - prev)
+            prev = i
+          } else {
+            prev = i
+          }
+        }
+      }
+      if (cnt == 0) return 0
+      if (cnt == 1) return 1
+
+      let res = 1n
+      for (let i = 0; i < dis.length; i++) {
+        res = (res * dis[i]) % mod
+      }
+      return res % mod
+    };
+    // [0,1,0,0,1, 0, 0, 0, 1, 0]
+    //  0 1 1 1 3          
+    // 输入：
+    // [1,0,0,0,0,0,1,0,1]
+    // 输出：
+    // 48
+    // 预期：
+    // 12
+
+    /**
+ * @param {number[]} positions
+ * @param {number[]} healths
+ * @param {string} directions
+ * @return {number[]}
+ */
+    var survivedRobotsHealths = function (positions, healths, directions) {
+      let n = positions.length
+
+      let robs = Array(n)
+      for (let i = 0; i < n; i++) {
+        robs[i] = [positions[i], healths[i], directions[i], i]
+      }
+
+      robs.sort((a, b) => a[0] - b[0])
+      console.log(robs)
+
+      let stack = []
+
+      let map = new Map()
+      for (let i = 0; i < robs.length; i++) {
+        let cr = robs[i]
+        if (stack.length == 0) {
+          if (cr[2] == 'L') {
+            map.set(cr[3], cr[1])
+          } else {
+            stack.push(cr)
+          }
+        } else {
+          if (cr[2] == 'R') {
+            stack.push(cr)
+          } else {
+            while (stack.length) {
+              let top = stack.pop()
+
+              if (top[1] == cr[1]) {
+                break
+              } else if (top[1] < cr[1]) {
+                cr[1] -= 1
+              } else if (top[1] > cr[1]) {
+                top[1] -= 1
+                stack.push(top)
+              }
+            }
+            if (!stack.length) {
+              map.set(cr[3], cr[1])
+            }
+          }
+        }
+      }
+      for (let i = 0; i < stack.length; i++) {
+        let cr = stack[i]
+        map.set(cr[3], cr[1])
+      }
+
+      let p = []
+      for (let entry of map.entries()) {
+        p.push(entry)
+      }
+      p.sort((a, b) => a[0] - b[0])
+      let res = []
+      for (let i = 0; i < p.length; i++) {
+        res.push(p[1])
+      }
+      return res
+    };
+    // [ [ 1, 10 ], [ 2, 15 ], [ 3, 9 ], [ 4, 17 ], [ 5, 2 ] ]
+
+    // 输入：
+    // [5,46,12]
+    // [3,27,43]
+    // "RLL"
+    // 输出：
+    // [41]
+    // 预期：
+    // [27,42]
+
+    // R     L       L
+    // 5，3  12，43  46，27
+    // 
+  </script>
+</body>
+
+</html>
