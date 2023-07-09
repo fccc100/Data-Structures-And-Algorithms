@@ -1,14 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
   <script>
-    
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var alternatingSubarray = function (nums) {
+      let n = nums.length
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        let len = 1
+        let d = 1
+        for (let j = i + 1; j < n; j++) {
+          if (nums[j] - nums[j - 1] == d) {
+            len++
+          } else {
+            break
+          }
+          d = d == 1 ? -1 : 1
+        }
+        res = Math.max(res, len)
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number[]} moveFrom
+     * @param {number[]} moveTo
+     * @return {number[]}
+     */
+    var relocateMarbles = function (nums, moveFrom, moveTo) {
+      let n = nums.length
+      let ftMap = new Map()
+      let tfMap = new Map()
+
+      for (let i = 0; i < moveFrom.length; i++) {
+        let f = moveFrom[i]
+        let t = moveTo[i]
+
+        if (tfMap.has(f)) {
+          if (!tfMap.has(t)) {
+            tfMap.set(t, [])
+          }
+          tfMap.get(t).push(f)
+
+          let tf = tfMap.get(f)
+
+          for (let i = 0; i < tf.length; i++) {
+            ftMap.set(tf[i], t)
+          }
+          ftMap.set(f, t)
+
+        } else {
+
+          ftMap.set(f, t)
+          if (!tfMap.has(t)) {
+            tfMap.set(t, [])
+          }
+          tfMap.get(t).push(f)
+        }
+      }
+      console.log(ftMap)
+      let set = new Set()
+      for (let i = 0; i < n; i++) {
+        if (ftMap.has(nums[i])) {
+          nums[i] = ftMap.get(nums[i])
+        }
+        set.add(nums[i])
+      }
+      nums = [...set]
+      nums.sort((a, b) => a - b)
+
+      return nums
+    };
+    /*
+
+        /**
+         * @param {number[]} nums
+         * @param {number[]} moveFrom
+         * @param {number[]} moveTo
+         * @return {number[]}
+         */
+    var relocateMarbles = function (nums, moveFrom, moveTo) {
+      let n = nums.length
+      let max = moveFrom[0]
+      for (let x of moveFrom) max = Math.max(max, x)
+
+      let pos = Array(max + 1).fill(0)
+      for (let i = 0; i < pos.length; i++) {
+        pos[i] = i
+      }
+
+      for (let i = 0; i < moveFrom.length; i++) {
+        pos[moveFrom[i]] = moveTo[i]
+      }
+
+      console.log(pos)
+      let map = new Map()
+      let visited = Array(max + 1).fill(false)
+      for (let i = 0; i < pos.length; i++) {
+        if (visited[i]) continue
+        let t = pos[i]
+        let cur = [t]
+        visited[t] = true
+        let target = [t]
+        map.set(t, target)
+        while (t != pos[t]) {
+          t = pos[t]
+          visited[t] = true
+          map.set(t, target)
+          cur.push(t)
+        }
+        target[0] = t
+      }
+      console.log(map)
+    };
+
+    // 输入：
+    //   [4, 6, 6, 9, 18]
+    //   [18, 6, 17, 4, 9, 19, 2]
+    //   [23, 17, 20, 19, 11, 2, 20]
+    // 输出：
+    //   [2, 11, 20, 23]
+    // 预期：
+    //   [11, 20, 23]
+
+
+    /**
+     * @param {string} s
+     * @return {number}
+     */
+    var minimumBeautifulSubstrings = function (s) {
+      let n = s.length
+
+      function f(s) {
+        if (!s) return 0
+        if (s[0] == '0') return Infinity
+
+        let res = Infinity
+        let c = ''
+        for (let i = 0; i < s.length; i++) {
+          c += s[i]
+
+          if (parseInt(c, 2) % 5 == 0) {
+            res = Math.min(res, 1 + f(s.substring(i + 1)))
+          }
+        }
+        return res
+      }
+      let res = f(s)
+      return res == Infinity ? -1 : res
+    };
+
+    /**
+     * @param {number} m
+     * @param {number} n
+     * @param {number[][]} coordinates
+     * @return {number[]}
+     */
+    var countBlackBlocks = function (m, n, coordinates) {
+      let grid = Array(m)
+      for (let i = 0; i < m; i++) {
+        grid[i] = Array(n).fill(0)
+      }
+
+      for (let i = 0; i < coordinates.length; i++) {
+        grid[coordinates[i][0]][coordinates[i][1]] = 1
+      }
+
+      let res = Array(5).fill(0)
+      for (let i = 0; i < m - 1; i++) {
+        for (let j = 0; j < n - 1; j++) {
+          let cnt = 0
+          if (grid[i][j] == 1) cnt++
+          if (grid[i + 1][j] == 1) cnt++
+          if (grid[i][j + 1] == 1) cnt++
+          if (grid[i + 1][j + 1] == 1) cnt++
+
+          res[cnt]++
+        }
+      }
+      return res
+    };
+
+    /**
+     * @param {number} m
+     * @param {number} n
+     * @param {number[][]} coordinates
+     * @return {number[]}
+     */
+    var countBlackBlocks = function (m, n, coordinates) {
+      let all = (m - 1) * (n - 1)
+
+      let set = new Set()
+      for (let i = 0; i < coordinates.length; i++) {
+        let x = coordinates[i][0]
+        let y = coordinates[i][1]
+        set.add(x + ',' + y)
+      }
+
+      for (let i = 0; i < coordinates.length; i++) {
+        let x = coordinates[i][0]
+        let y = coordinates[i][1]
+        let cnt = 0
+
+      }
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number[]} moveFrom
+     * @param {number[]} moveTo
+     * @return {number[]}
+     */
+    var relocateMarbles = function (nums, moveFrom, moveTo) {
+      let n = nums.length
+
+      let s1 = new Set()
+      let s2 = new Set()
+      for (let i = 0; i < moveTo.length; i++) {
+        s1.add(moveFrom[i])
+        s2.add(moveTo[i])
+        if (moveFrom[i] != moveTo[i]) {
+          s2.delete(moveFrom[i])
+        }
+      }
+
+      let res = []
+      for (let i = 0; i < n; i++) {
+        if (s1.has(nums[i])) continue
+        res.push(nums[i])
+      }
+      for (let x of s2) res.push(x)
+      return res.sort((a, b) => a - b)
+    };
   </script>
 </body>
+
 </html>

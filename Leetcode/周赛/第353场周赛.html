@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number} num
+     * @param {number} t
+     * @return {number}
+     */
+    var theMaximumAchievableX = function (num, t) {
+      return num + t * 2
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number} target
+     * @return {number}
+     */
+    var maximumJumps = function (nums, target) {
+      let n = nums.length
+
+      let dp = Array(n).fill(0)
+      for (let i = 1; i < n; i++) {
+        for (let j = i - 1; j >= 0; j--) {
+          let diff = Math.abs(nums[i] - nums[j])
+          if (diff <= target && diff >= -target) {
+            dp[i] = Math.max(dp[i], dp[j] + 1)
+          }
+        }
+      }
+      return dp[n - 1]
+    };
+
+    /**
+     * @param {number[]} nums1
+     * @param {number[]} nums2
+     * @return {number}
+     */
+    var maxNonDecreasingLength = function (nums1, nums2) {
+      let n = nums1.length
+
+      let res = 0
+      let cur = 1
+      let prev = Math.min(nums1[0], nums2[0])
+      for (let i = 1; i < n; i++) {
+        let min = Math.min(nums1[i], nums2[i])
+        if (min <= prev) {
+          cur++
+        } else {
+          res = Math.max(res, cur)
+          cur = 1
+        }
+        prev = min
+      }
+      return res
+    };
+
+    // [8,7,4]
+    // [13,4,4]
+    // 2
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {boolean}
+     */
+    var checkArray = function (nums, k) {
+
+    };
+
+    /**
+     * @param {number[]} nums1
+     * @param {number[]} nums2
+     * @return {number}
+     */
+    var maxNonDecreasingLength = function (nums1, nums2) {
+      let n = nums1.length
+
+      let dp = Array(n)
+      for (let i = 0; i < n; i++) {
+        dp[i] = Array(2).fill(0)
+      }
+      dp[0][0] = 1
+      dp[0][1] = 1
+
+      for (let i = 1; i < n; i++) {
+        let preMin = Math.min(nums2[i - 1], nums1[i - 1])
+        let preMax = Math.max(nums2[i - 1], nums1[i - 1])
+
+        let min = Math.min(nums2, nums1)
+        let max = Math.max(nums2, nums1)
+
+        if (min >= preMin) {
+          dp[i][0] = Math.max(dp[i - 1][0] + 1, 1)
+        } else if (max >= preMax) {
+          dp[i][1] = Math.max(dp[i - 1][1] + 1, 1)
+        } else {
+          dp[i][0] = 1
+          dp[i][1] = 1
+        }
+      }
+      console.log(dp)
+    };
+    // [1,3,2,1]
+    // [2,2,3,4]
+    // 
+
+    // [5,16,15]
+    // [12,1,14]
+
+    // [5, 16, 15]
+    // [12, 1, 14]
+    // 2
+
+    // [60,72,87,89,63,52,64,62,31,37,57,83,98,94,92,77,94,91,87,100,91,91,50,26]
+    // 4
+    // true
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {boolean}
+     */
+    var checkArray = function (nums, k) {
+      let n = nums.length
+
+      let minSeg = new minSegmentTree(nums, (a, b) => Math.min(a, b))
+      let maxSeg = new maxSegmentTree(nums, (a, b) => Math.max(a, b))
+      for (let i = 0; i < n - k; i++) {
+        let l = i, r = l + k - 1
+        if (maxSeg.query(l, r) - minSeg.query(l, r) > 2) return false
+      }
+      return true
+    };
+
+    class maxSegmentTree {
+      constructor(data, updateFunc) {
+        this.data = data // 原始数据
+        this.updateFunc = updateFunc // 更新函数
+        this.n = data.length
+        this.tree = new Array(4 * this.n) // 线段树数组
+        this.lazy = new Array(4 * this.n).fill(0) // 懒惰标记数组
+        this.build(1, 0, this.n - 1)
+      }
+
+      build(node, start, end) {
+        if (start === end) {
+          this.tree[node] = this.data[start]
+        } else {
+          const mid = Math.floor((start + end) / 2)
+          this.build(node * 2, start, mid)
+          this.build(node * 2 + 1, mid + 1, end)
+          this.tree[node] = this.updateFunc(
+            this.tree[node * 2],
+            this.tree[node * 2 + 1]
+          )
+        }
+      }
+
+      updateLazy(node, start, end) {
+        if (this.lazy[node] !== 0) {
+          // 如果懒惰标记不为0，说明要对区间进行修改
+          this.tree[node] += this.lazy[node] * (end - start + 1) // 修改节点的值
+          if (start !== end) {
+            // 子节点暂时不修改，先给子节点打上懒惰标记
+            this.lazy[node * 2] += this.lazy[node]
+            this.lazy[node * 2 + 1] += this.lazy[node]
+          }
+          this.lazy[node] = 0 // 将当前节点的懒惰标记清零
+        }
+      }
+
+      // 更新[left, right]区间的值 + value
+      update(left, right, value, node = 1, start = 0, end = this.n - 1) {
+        this.updateLazy(node, start, end)
+        if (left > end || right < start) return // 区间不相交，直接返回
+        if (left <= start && right >= end) {
+          // 当前区间被完全覆盖
+          this.tree[node] += value * (end - start + 1)
+          if (start !== end) {
+            // 暂时不更新子节点，打上懒惰标记
+            this.lazy[node * 2] += value
+            this.lazy[node * 2 + 1] += value
+          }
+          return
+        }
+        const mid = Math.floor((start + end) / 2)
+        this.update(left, right, value, node * 2, start, mid)
+        this.update(left, right, value, node * 2 + 1, mid + 1, end)
+        this.tree[node] = this.updateFunc(
+          this.tree[node * 2],
+          this.tree[node * 2 + 1]
+        )
+      }
+
+      // 查询[ql, qr]区间的值
+      query(ql, qr, node = 1, start = 0, end = this.n - 1) {
+        if (ql > end || qr < start) {
+          // 当前区间与查询区间不相交
+          return this.unit() // 返回对应的区间单位元素
+        }
+        this.updateLazy(node, start, end)
+        if (ql <= start && qr >= end) {
+          // 当前区间被包含在查询区间内
+          return this.tree[node] // 返回当前节点保存的区间信息
+        }
+        const mid = Math.floor((start + end) / 2)
+        const left = this.query(ql, qr, node * 2, start, mid)
+        const right = this.query(ql, qr, node * 2 + 1, mid + 1, end)
+        return this.updateFunc(left, right) // 合并左右子树区间信息的结果
+      }
+
+      unit() {
+        return 0 // 区间和的单位元素为0
+      }
+    }
+
+    class minSegmentTree {
+      constructor(data, updateFunc) {
+        this.data = data // 原始数据
+        this.updateFunc = updateFunc // 更新函数
+        this.n = data.length
+        this.tree = new Array(4 * this.n) // 线段树数组
+        this.lazy = new Array(4 * this.n).fill(0) // 懒惰标记数组
+        this.build(1, 0, this.n - 1)
+      }
+
+      build(node, start, end) {
+        if (start === end) {
+          this.tree[node] = this.data[start]
+        } else {
+          const mid = Math.floor((start + end) / 2)
+          this.build(node * 2, start, mid)
+          this.build(node * 2 + 1, mid + 1, end)
+          this.tree[node] = this.updateFunc(
+            this.tree[node * 2],
+            this.tree[node * 2 + 1]
+          )
+        }
+      }
+
+      updateLazy(node, start, end) {
+        if (this.lazy[node] !== 0) {
+          // 如果懒惰标记不为0，说明要对区间进行修改
+          this.tree[node] += this.lazy[node] * (end - start + 1) // 修改节点的值
+          if (start !== end) {
+            // 子节点暂时不修改，先给子节点打上懒惰标记
+            this.lazy[node * 2] += this.lazy[node]
+            this.lazy[node * 2 + 1] += this.lazy[node]
+          }
+          this.lazy[node] = 0 // 将当前节点的懒惰标记清零
+        }
+      }
+
+      // 更新[left, right]区间的值 + value
+      update(left, right, value, node = 1, start = 0, end = this.n - 1) {
+        this.updateLazy(node, start, end)
+        if (left > end || right < start) return // 区间不相交，直接返回
+        if (left <= start && right >= end) {
+          // 当前区间被完全覆盖
+          this.tree[node] += value * (end - start + 1)
+          if (start !== end) {
+            // 暂时不更新子节点，打上懒惰标记
+            this.lazy[node * 2] += value
+            this.lazy[node * 2 + 1] += value
+          }
+          return
+        }
+        const mid = Math.floor((start + end) / 2)
+        this.update(left, right, value, node * 2, start, mid)
+        this.update(left, right, value, node * 2 + 1, mid + 1, end)
+        this.tree[node] = this.updateFunc(
+          this.tree[node * 2],
+          this.tree[node * 2 + 1]
+        )
+      }
+
+      // 查询[ql, qr]区间的值
+      query(ql, qr, node = 1, start = 0, end = this.n - 1) {
+        if (ql > end || qr < start) {
+          // 当前区间与查询区间不相交
+          return this.unit() // 返回对应的区间单位元素
+        }
+        this.updateLazy(node, start, end)
+        if (ql <= start && qr >= end) {
+          // 当前区间被包含在查询区间内
+          return this.tree[node] // 返回当前节点保存的区间信息
+        }
+        const mid = Math.floor((start + end) / 2)
+        const left = this.query(ql, qr, node * 2, start, mid)
+        const right = this.query(ql, qr, node * 2 + 1, mid + 1, end)
+        return this.updateFunc(left, right) // 合并左右子树区间信息的结果
+      }
+
+      unit() {
+        return Infinity // 区间和的单位元素为0
+      }
+    }
+  </script>
+</body>
+
+</html>
