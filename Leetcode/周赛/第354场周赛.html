@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var sumOfSquares = function (nums) {
+      let res = 0
+      let n = nums.length
+      for (let i = 0; i < n; i++) {
+        if (n % (i + 1) == 0) res += nums[i] * nums[i]
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number} k
+     * @return {number}
+     */
+    var maximumBeauty = function (nums, k) {
+      let n = nums.length
+      let max = nums[0]
+      for (let x of nums) max = Math.max(max, x)
+      let diff = Array(max + k + k + 2).fill(0)
+      for (let i = 0; i < n; i++) {
+        let l = nums[i] - k + k,
+          r = nums[i] + k + k
+        diff[l]++
+        diff[r + 1]--
+      }
+      let res = -1
+      for (let i = 1; i < diff.length; i++) {
+        diff[i] += diff[i - 1]
+        res = Math.max(res, diff[i])
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var minimumIndex = function (nums) {
+      let n = nums.length
+      let map = new Map()
+      let max = 0
+      for (let i = 0; i < n; i++) {
+        if (!map.has(nums[i])) {
+          map.set(nums[i], 1)
+        } else {
+          map.set(nums[i], map.get(nums[i]) + 1)
+        }
+      }
+
+      let lmap = new Map()
+      for (let i = 0; i < n; i++) {
+        if (!lmap.has(nums[i])) {
+          lmap.set(nums[i], 1)
+        } else {
+          lmap.set(nums[i], lmap.get(nums[i]) + 1)
+        }
+        let lc = lmap.get(nums[i])
+        let ac = map.get(nums[i])
+        let rc = ac - lc
+        if (lc * 2 > (i + 1) && rc * 2 > (n - i - 1)) return i
+      }
+      return -1
+    };
+  </script>
+</body>
+
+</html>

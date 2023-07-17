@@ -135,7 +135,8 @@
       let minSeg = new minSegmentTree(nums, (a, b) => Math.min(a, b))
       let maxSeg = new maxSegmentTree(nums, (a, b) => Math.max(a, b))
       for (let i = 0; i < n - k; i++) {
-        let l = i, r = l + k - 1
+        let l = i,
+          r = l + k - 1
         if (maxSeg.query(l, r) - minSeg.query(l, r) > 2) return false
       }
       return true
@@ -302,6 +303,97 @@
 
       unit() {
         return Infinity // 区间和的单位元素为0
+      }
+    }
+
+    /**
+     * @param {string} word
+     * @param {string[]} forbidden
+     * @return {number}
+     */
+    var longestValidSubstring = function (word, forbidden) {
+      let n = word.length
+      let m = forbidden.length
+
+      let trie = new Trie()
+      let revTrie = new Trie()
+      for (let i = 0; i < m; i++) {
+        trie.add(forbidden[i])
+
+        let revs = forbidden[i].split('').reverse().join()
+        revTrie.add(revs)
+      }
+
+      let res = 0
+      for (let i = 0; i < n; i++) {
+        let s = ''
+        let len = 0
+        for (let j = i; j < n; j++) {
+          s += word[j]
+          if (trie.search(s) || revTrie.search(s)) {
+            break
+          }
+          len++
+          res = Math.max(res, len)
+        }
+      }
+      return res
+    };
+
+    class Node {
+      constructor(isWord) {
+        this.isWord = isWord;
+        this.next = new Map();
+      }
+    }
+
+    // 非递归
+    class Trie {
+      constructor() {
+        this.root = new Node();
+        this.size = 0;
+      }
+
+      // 添加单词
+      add(word) {
+        let cur = this.root;
+        for (let i = 0; i < word.length; i++) {
+          if (!cur.next.has(word[i])) {
+            cur.next.set(word[i], new Node());
+          }
+          cur = cur.next.get(word[i]);
+        }
+
+        if (!cur.isWord) {
+          cur.isWord = true;
+          this.size++;
+        }
+      }
+
+      // 查询是否存在单词
+      search(word) {
+        let cur = this.root;
+        for (let i = 0; i < word.length; i++) {
+          if (!cur.next.has(word[i])) {
+            return false;
+          } else {
+            cur = cur.next.get(word[i]);
+          }
+        }
+        return !!cur.isWord;
+      }
+
+      // 查询是否有以prefix为前缀的单词
+      startsWith(prefix) {
+        let cur = this.root;
+        for (let i = 0; i < prefix.length; i++) {
+          if (!cur.next.has(prefix[i])) {
+            return false;
+          } else {
+            cur = cur.next.get(prefix[i]);
+          }
+        }
+        return true;
       }
     }
   </script>
