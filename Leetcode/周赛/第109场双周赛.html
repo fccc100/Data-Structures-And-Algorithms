@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {number[]} nums
+     * @return {boolean}
+     */
+    var isGood = function (nums) {
+      let n = nums.length
+      nums.sort((a, b) => a - b)
+      for (let i = 0; i < n; i++) {
+        if (i == n - 1) {
+          if (nums[i] != i) return false
+        } else {
+          if (nums[i] != i + 1) return false
+        }
+      }
+      return true
+    };
+
+    /**
+     * @param {string} s
+     * @return {string}
+     */
+    var sortVowels = function (s) {
+      let n = s.length
+      let set = new Set()
+      set.add('a')
+      set.add('e')
+      set.add('i')
+      set.add('o')
+      set.add('u')
+      set.add('A')
+      set.add('E')
+      set.add('I')
+      set.add('O')
+      set.add('U')
+
+      let v = []
+      let arr = s.split('')
+      for (let i = 0; i < n; i++) {
+        if (set.has(arr[i])) {
+          v.push(arr[i])
+        }
+      }
+      v.sort((a, b) => a - b)
+      let idx = 0
+      for (let i = 0; i < n; i++) {
+        if (set.has(arr[i])) {
+          arr[i] = v[idx]
+          idx++
+        }
+      }
+      return arr.join('')
+    };
+
+    /**
+     * @param {number[]} nums
+     * @param {number} x
+     * @return {number}
+     */
+    var maxScore = function (nums, x) {
+      let n = nums.length
+      let dp = Array(n).fill(0)
+      dp[0] = nums[0]
+
+      let preOdd = nums[0] % 2 == 1 ? nums[0] : 0
+      let preEven = nums[0] % 2 == 0 ? nums[0] : 0
+      let idx = 1
+      let res = 0
+      while (true) {
+        if (nums[idx] % 2 != nums[0] % 2) {
+          break
+        }
+        if (idx >= n) break
+        dp[idx] = dp[idx - 1] + nums[idx]
+        if (nums[idx] % 2 == 0) {
+          preEven = Math.max(preEven, dp[idx])
+        } else {
+          preOdd = Math.max(preOdd, dp[idx])
+        }
+        res = Math.max(dp[idx], res)
+      }
+      
+      for (let i = idx; i < n; i++) {
+        if (i == idx) {
+          if (nums[i] % 2 == 0) {
+            dp[i] = preOdd + nums[i] - x
+            preEven = dp[i]
+          } else {
+            dp[i] = preEven + nums[i] - x
+            preOdd = dp[i]
+          }
+        } else {
+          if (nums[i] % 2 == 0) {
+            dp[i] = Math.max(preOdd + nums[i] - x, preEven + nums[i])
+            preEven = Math.max(preEven, dp[i])
+          } else {
+            dp[i] = Math.max(preEven + nums[i] - x, preOdd + nums[i])
+            preOdd = Math.max(preOdd, dp[i])
+          }
+        }
+        res = Math.max(dp[i], res)
+      }
+      return res
+    };
+
+    // [2,    3,    6,    1,    9,  2]
+    // [[-1,2],[0,2],[4,8],[5,8],[]]
+    // [2,   0,     8     4     13  ]
+
+    /**
+     * @param {number} n
+     * @param {number} x
+     * @return {number}
+     */
+    var numberOfWays = function (n, x) {
+      let mod = 1000000007
+      function f(t) {
+        if (t == 1) {
+          return 1
+        }
+
+        let res = 0
+        for (let i = 1; i < t; i++) {
+          res += f(t - i ** x)
+          res %= mod
+        }
+        return res % mod
+      }
+      return f(n)
+    };
+  </script>
+</body>
+
+</html>
