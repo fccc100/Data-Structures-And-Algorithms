@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     * @param {string[]} words
+     * @param {character} separator
+     * @return {string[]}
+     */
+    var splitWordsBySeparator = function (words, separator) {
+      let res = []
+      for (let i = 0; i < words.length; i++) {
+        let arr = words[i].split(separator)
+        for (let j = 0; j < arr.length; j++) {
+          res.push(arr[j])
+        }
+      }
+      return res
+    };
+
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    var maxArrayValue = function (nums) {
+      let n = nums.length
+      let next = 0
+      let stack = []
+      for (let i = n - 1; i > 0; i--) {
+        if (!stack.length) {
+          stack.push(nums[i])
+        } else {
+          if (stack[stack.length - 1] >= nums[i]) {
+            stack[stack.length - 1] += nums[i]
+          } else {
+            stack.push(nums[i])
+          }
+        }
+      }
+      let res = stack[0]
+      for (let i = 0; i < stack.length; i++) {
+        res = Math.max(res, stack[i])
+      }
+      return res
+    };
+  </script>
+</body>
+
+</html>
